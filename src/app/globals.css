@@ -1,8 +1,14 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+}
+
+* {
+  font-family: 'Work Sans', sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
 }
 
 @theme inline {
@@ -19,8 +25,310 @@
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Large Desktop (1600px and up) */
+@media (min-width: 1600px) {
+  .padding-common,
+  .main-layout-client .header-layout-client,
+  .main-layout-client .footer-layout-client {
+    padding: 40px 40px;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+  .padding-common-layout {
+    padding: 0 40px;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+}
+
+/* Desktop (1200px to 1599px) */
+@media (min-width: 1200px) and (max-width: 1599px) {
+  .padding-common,
+  .main-layout-client .header-layout-client,
+  .main-layout-client .footer-layout-client {
+    padding: 40px 40px;
+    max-width: 100%;
+  }
+  .padding-common-layout {
+    padding: 0 40px;
+    max-width: 100%;
+  }
+}
+
+/* Desktop (992px to 1199px) */
+@media (min-width: 992px) and (max-width: 1199px) {
+  .padding-common,
+  .main-layout-client .header-layout-client,
+  .main-layout-client .footer-layout-client {
+    padding: 40px 40px;
+    max-width: 100%;
+  }
+  .padding-common-layout {
+    padding: 0 40px;
+    max-width: 100%;
+  }
+}
+
+/* Tablet (768px to 991px) */
+@media (min-width: 768px) and (max-width: 991px) {
+  .padding-common,
+  .main-layout-client .header-layout-client,
+  .main-layout-client .footer-layout-client {
+    padding: 60px 30px;
+    max-width: 100%;
+  }
+  .padding-common-layout {
+    padding: 0 30px;
+    max-width: 100%;
+  }
+}
+
+/* Mobile Landscape (576px to 767px) */
+@media (max-width: 767px) {
+  .padding-common,
+  .main-layout-client .header-layout-client,
+  .main-layout-client .footer-layout-client {
+    padding: 60px 30px;
+    max-width: 100%;
+  }
+  .padding-common-layout {
+    padding: 0 30px;
+    max-width: 100%;
+  }
+}
+
+/* Mobile Portrait (under 576px) */
+@media (max-width: 576px) {
+  .padding-common,
+  .main-layout-client .header-layout-client,
+  .main-layout-client .footer-layout-client {
+    padding: 20px 20px;
+    max-width: 100%;
+  }
+  .padding-common-layout {
+    padding: 0 20px;
+    max-width: 100%;
+  }
+}
+
+/* scroll custom */
+::-webkit-scrollbar {
+  width: 2px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 0px grey;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ffd700;
+  border-radius: 10px;
+}
+
+.home-page-loading {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(255, 255, 255);
+  z-index: 99999;
+}
+
+.text-truncate,
+.text-truncate-2,
+.text-truncate-3,
+.text-truncate-4 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal; /* Sửa từ 'initial' để giữ xuống dòng đúng */
+}
+
+.text-truncate {
+  -webkit-line-clamp: 1;
+}
+
+.text-truncate-2 {
+  -webkit-line-clamp: 2;
+}
+
+.text-truncate-3 {
+  -webkit-line-clamp: 3;
+}
+
+.text-truncate-4 {
+  -webkit-line-clamp: 4;
+}
+
+/* Header */
+.pageHeader {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.pageHeader .badge {
+  display: inline-block;
+  background: linear-gradient(90deg, #ffd700, #ffa500);
+  padding: 8px 16px;
+  border-radius: 20px;
+}
+
+.pageHeader .badgeText {
+  color: #0d0d0d;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.pageHeader .headerTitle {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.2;
+  color: #0d0d0d;
+}
+
+.pageHeader .headerTitle .highlight {
+  color: #ffd700;
+  position: relative;
+}
+
+.pageHeader .headerTitle .highlight::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 0;
+  width: 100%;
+  height: 4px;
+}
+
+@media (max-width: 1600px) {
+  .pageHeader .headerTitle {
+    font-size: 2.8rem;
+  }
+}
+
+@media (max-width: 1200px) {
+  .pageHeader .headerTitle {
+    font-size: 2.5rem;
+  }
+}
+@media (max-width: 992px) {
+  .pageHeader .headerTitle {
+    font-size: 2.2rem;
+  }
+}
+@media (max-width: 576px) {
+  .pageHeader .headerTitle {
+    font-size: 2rem;
+  }
+}
+
+.agency-popup {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #374151;
+}
+
+.agency-popup strong {
+  display: block;
+  margin-bottom: 8px;
+  color: #111827;
+  font-size: 15px;
+}
+
+.popup-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 6px 0;
+}
+
+.popup-icon {
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: #4f46e5;
+  opacity: 0.8;
+}
+
+.youtube-thumbnail {
+  aspect-ratio: 16/9;
+  width: 100%;
+  object-fit: cover;
+}
+
+/* Title Header Section */
+
+.section-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  gap: 16px;
+}
+
+.section-header .article-badge {
+  display: inline-block;
+  background: linear-gradient(90deg, #ffd700, #ffa500);
+  padding: 8px 16px;
+  border-radius: 20px;
+}
+
+.section-header .badge-text {
+  color: #000;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.section-header .article-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #000;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.section-header .article-title .highlight {
+  color: #ffd700;
+  position: relative;
+}
+
+.section-header .article-title .highlight::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #ffd700, transparent);
+  z-index: -1;
+}
+
+.section-header .article-subtitle {
+  font-size: 1rem;
+  color: #666;
+  line-height: 1.5;
+  margin: 0;
+  max-width: 500px;
+  text-align: center;
+}
+
+.section-header .news-article-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
 }

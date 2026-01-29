@@ -1,0 +1,297 @@
+.introduceContainer {
+  padding: 30px 20px;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.introduceContainer .pageHeader {
+  text-align: center;
+  margin-bottom: 30px;
+  position: relative;
+  padding: 0 10px;
+}
+
+.introduceContainer .mainTitle {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin: 0 0 8px 0;
+  line-height: 1.2;
+}
+
+.introduceContainer .mainTitle .highlight {
+  color: #ffd700;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+  display: inline-block;
+}
+
+.introduceContainer .subtTitle {
+  font-size: 1rem;
+  color: #aaa;
+  font-weight: 300;
+  letter-spacing: 0.8px;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.introduceContainer .introduceContent {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .introduceContainer .introduceContent {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+}
+
+.introduceContainer .introduceContent .card {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  height: 100%;
+  min-height: 400px;
+  max-height: 500px;
+  position: relative;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.introduceContainer .introduceContent .card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.introduceContainer .introduceContent .imageContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 32px 24px;
+  overflow: hidden;
+  transition: all 0.5s ease;
+}
+
+/* Overlay gradient với hiệu ứng hover */
+.introduceContainer .introduceContent .imageContainer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.1) 0%,
+    rgba(0, 0, 0, 0.4) 40%,
+    rgba(0, 0, 0, 0.8) 100%
+  );
+  z-index: 1;
+  transition: all 0.5s ease;
+}
+
+.introduceContainer .introduceContent .card:hover .imageContainer::before {
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.2) 0%,
+    rgba(0, 0, 0, 0.6) 40%,
+    rgba(0, 0, 0, 0.95) 100%
+  );
+}
+
+/* Hiệu ứng phóng to hình ảnh khi hover */
+.introduceContainer .introduceContent .imageContainer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: inherit;
+  background-size: cover;
+  background-position: center;
+  transform: scale(1);
+  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  z-index: 0;
+}
+
+.introduceContainer .introduceContent .card:hover .imageContainer::after {
+  transform: scale(1.1);
+}
+
+.introduceContainer .introduceContent .textContent {
+  position: relative;
+  z-index: 2;
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: translateY(0);
+}
+
+.introduceContainer .introduceContent .card:hover .textContent {
+  transform: translateY(-15px);
+}
+
+.introduceContainer .introduceContent .title {
+  color: white;
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 2;
+  line-height: 1.3;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+  transition: all 0.5s ease;
+  transform: translateY(0);
+}
+
+.introduceContainer .introduceContent .card:hover .title {
+  transform: translateY(-10px);
+  margin-bottom: 1.2rem;
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
+}
+
+.introduceContainer .introduceContent .content {
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 1.1rem;
+  font-weight: 400;
+  position: relative;
+  z-index: 2;
+  line-height: 1.6;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transform: translateY(20px);
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.introduceContainer .introduceContent .card:hover .content {
+  opacity: 1;
+  max-height: 200px;
+  transform: translateY(0);
+  margin-bottom: 8px;
+}
+
+/* Hiệu ứng đường kẻ dưới tiêu đề */
+.introduceContainer .introduceContent .title::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #ff6b6b, #4ecdc4);
+  transition: width 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.introduceContainer .introduceContent .card:hover .title::after {
+  width: 60px;
+}
+
+/* Hiệu ứng nút Learn More */
+.introduceContainer .introduceContent .readMore {
+  position: relative;
+  z-index: 2;
+  color: white;
+  font-size: 0.95rem;
+  font-weight: 600;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.4s ease 0.1s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  margin-top: 12px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+.introduceContainer .introduceContent .readMore::after {
+  content: '→';
+  transition: transform 0.3s ease;
+}
+
+.introduceContainer .introduceContent .card:hover .readMore {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.introduceContainer .introduceContent .card:hover .readMore:hover::after {
+  transform: translateX(5px);
+}
+
+@media (min-width: 1600px) {
+  .introduceContainer {
+    max-width: 1600px;
+    padding: 80px 60px;
+  }
+
+  .introduceContainer .introduceContent .title {
+    font-size: 2rem;
+  }
+
+  .introduceContainer .introduceContent .content {
+    font-size: 1.15rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .introduceContainer .introduceContent .title {
+    font-size: 1.85rem;
+  }
+
+  .introduceContainer .introduceContent .content {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .introduceContainer .introduceContent .card {
+    min-height: 350px;
+    max-height: 450px;
+  }
+
+  .introduceContainer .introduceContent .title {
+    font-size: 1.5rem;
+  }
+
+  .introduceContainer .introduceContent .content {
+    font-size: 1rem;
+  }
+
+  .introduceContainer .introduceContent .imageContainer {
+    padding: 24px 20px;
+  }
+}
+
+/* Thêm hiệu ứng ánh sáng khi hover */
+.introduceContainer .introduceContent .card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0) 70%
+  );
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.introduceContainer .introduceContent .card:hover::before {
+  opacity: 1;
+}

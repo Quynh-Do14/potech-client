@@ -1,0 +1,846 @@
+.relationProductSection {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Fixed Background */
+.fixedBackground {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%),
+    url('https://quadfilm.vn/wp-content/uploads/2025/12/z7317993247830_c7dcc36c91d89b844b6baa1033eab734.jpg')
+      center/cover no-repeat;
+}
+
+.bgOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    45deg,
+    rgba(255, 215, 0, 0.05) 0%,
+    rgba(0, 0, 0, 0.8) 50%,
+    rgba(255, 215, 0, 0.05) 100%
+  );
+}
+
+.bgPattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(
+      circle at 25% 25%,
+      rgba(255, 215, 0, 0.05) 2px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at 75% 75%,
+      rgba(255, 215, 0, 0.05) 1px,
+      transparent 1px
+    );
+  background-size: 50px 50px;
+  opacity: 0.3;
+}
+
+/* Content Container */
+.galleryContainer {
+  position: relative;
+  z-index: 1;
+  max-width: 1600px;
+  margin: 20px auto;
+}
+
+/* Header Section */
+.galleryHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 60px;
+}
+
+.headerLeft {
+  flex: 1;
+}
+
+.titleGroup {
+  margin-bottom: 40px;
+}
+
+.relationProductSection .mainTitle {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.titlePart {
+  font-size: 4rem;
+  font-weight: 900;
+  color: white;
+  letter-spacing: 2px;
+}
+
+.titleHighlight {
+  font-size: 4rem;
+  font-weight: 900;
+  background: linear-gradient(90deg, #ffd700, #ffa500);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.sectionTitle {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin: 0;
+  position: relative;
+  padding-left: 20px;
+}
+
+.sectionTitle::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 80%;
+  background: #ffd700;
+  border-radius: 4px;
+}
+
+.introText {
+  margin-bottom: 40px;
+  max-width: 800px;
+}
+
+.introParagraph {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  margin-bottom: 20px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.brandName {
+  font-weight: 700;
+  color: #ffd700;
+}
+
+.companyStats {
+  display: flex;
+  gap: 40px;
+  padding: 30px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.statItem {
+  text-align: center;
+}
+
+.statNumber {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #ffd700;
+  margin-bottom: 5px;
+  line-height: 1;
+}
+
+.statLabel {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+}
+
+.viewAllBtn {
+  background: transparent;
+  border: 2px solid #ffd700;
+  color: white;
+  padding: 16px 32px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.viewAllBtn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 215, 0, 0.2),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.viewAllBtn:hover::before {
+  left: 100%;
+}
+
+.viewAllBtn:hover {
+  background: rgba(255, 215, 0, 0.1);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(255, 215, 0, 0.2);
+}
+
+.btnCounter {
+  background: #ffd700;
+  color: #000;
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 4px 10px;
+  border-radius: 4px;
+  margin-left: 4px;
+}
+
+.btnIcon svg {
+  transition: transform 0.3s ease;
+}
+
+.viewAllBtn:hover .btnIcon svg {
+  transform: translateX(5px);
+}
+
+/* Category Filter */
+.categoryFilter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 50px;
+  padding: 20px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.filterScroll {
+  display: flex;
+  gap: 15px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  scrollbar-width: none;
+}
+
+.filterScroll::-webkit-scrollbar {
+  display: none;
+}
+
+.filterBtn {
+  flex-shrink: 0;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 12px 24px;
+  border-radius: 25px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.filterBtn:hover {
+  border-color: #ffd700;
+  color: white;
+  background: rgba(255, 215, 0, 0.05);
+}
+
+.filterBtn.active {
+  background: #ffd700;
+  border-color: #ffd700;
+  color: #000;
+  font-weight: 600;
+}
+
+.filterCount {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+}
+
+.filterBtn.active .filterCount {
+  background: rgba(0, 0, 0, 0.3);
+  color: #000;
+}
+
+.filterActions {
+  display: flex;
+  gap: 10px;
+}
+
+.filterIconBtn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 12px;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.filterIconBtn:hover {
+  background: rgba(255, 215, 0, 0.2);
+  border-color: #ffd700;
+}
+
+.goldGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+/* Gold Card */
+.goldCard {
+  background: white;
+  overflow: hidden;
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  animation: goldCardFadeIn 0.6s ease-out forwards;
+  opacity: 0;
+  transform: translateY(20px);
+  border: 1px solid rgba(212, 175, 55, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.goldCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(212, 175, 55, 0.2);
+  border-color: rgba(212, 175, 55, 0.3);
+}
+
+@keyframes goldCardFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Gold Sale Badge */
+.goldSaleBadge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 10;
+  background: linear-gradient(135deg, #d4af37 0%, #ffd700 100%);
+  color: #000;
+  padding: 6px 16px;
+  border-radius: 0 16px 16px 0;
+  font-weight: 900;
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
+}
+
+.goldSaleBadge::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -8px;
+  width: 0;
+  height: 0;
+  border-top: 8px solid #d4af37;
+  border-left: 8px solid transparent;
+}
+
+.goldSaleBadge::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: -8px;
+  width: 0;
+  height: 0;
+  border-bottom: 8px solid #ffd700;
+  border-left: 8px solid transparent;
+}
+
+.goldBadgeCorner {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 12px;
+  height: 12px;
+  background: #000;
+  transform: rotate(45deg);
+  box-shadow: 1px -1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Card Media with Gold Border - Tỷ lệ 1:1 */
+.cardGoldMedia {
+  position: relative;
+  width: 100%;
+  padding-top: 100%; /* Tạo tỷ lệ 1:1 */
+  overflow: hidden;
+}
+
+.goldMediaWrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Image Container với tỷ lệ 1:1 */
+.goldCardImage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #f5f5f5;
+}
+
+/* Next/Image component styling */
+.goldCardImage img {
+  object-fit: cover;
+  width: 100% !important;
+  height: 100% !important;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.goldCard:hover .goldCardImage img {
+  transform: scale(1.05);
+}
+
+.goldImageOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    transparent 40%,
+    rgba(0, 0, 0, 0.1) 100%
+  );
+  pointer-events: none;
+}
+
+.goldMediaBorder {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #d4af37,
+    #ffd700,
+    #d4af37,
+    transparent
+  );
+  z-index: 2;
+}
+
+.goldQuickViewBtn {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  background: linear-gradient(135deg, #d4af37, #ffd700);
+  color: #000;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateX(20px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
+  z-index: 3;
+}
+
+.goldCard:hover .goldQuickViewBtn {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.goldQuickViewBtn:hover {
+  transform: translateX(0) scale(1.05);
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
+}
+
+.goldEyeIcon {
+  width: 16px;
+  height: 16px;
+}
+
+/* Card Content */
+.cardGoldContent {
+  padding: 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.goldContentWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+}
+
+.goldCardTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.goldFeatures {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.goldFeatureChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(212, 175, 55, 0.08);
+  color: #b8860b;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+/* Price Section */
+.goldPriceSection {
+  margin-top: auto;
+  border-top: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+.goldPriceRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.goldCurrentPrice {
+  font-size: 20px;
+  font-weight: 800;
+  color: #d4af37;
+}
+
+.goldDiscountBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: linear-gradient(135deg, #ff6b6b, #ff4757);
+  color: white;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.discountIcon {
+  font-size: 11px;
+}
+
+.goldOriginalPriceWrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.goldOriginalPrice {
+  font-size: 14px;
+  color: #999;
+  text-decoration: line-through;
+  font-weight: 500;
+}
+
+.goldNormalPrice {
+  font-size: 20px;
+  font-weight: 800;
+  color: #333;
+}
+
+/* Gold Corner Accents */
+.goldCornerTl,
+.goldCornerTr,
+.goldCornerBl,
+.goldCornerBr {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.goldCornerTl {
+  top: 0;
+  left: 0;
+  border-top: 2px solid #d4af37;
+  border-left: 2px solid #d4af37;
+}
+
+.goldCornerTr {
+  top: 0;
+  right: 0;
+  border-top: 2px solid #d4af37;
+  border-right: 2px solid #d4af37;
+}
+
+.goldCornerBl {
+  bottom: 0;
+  left: 0;
+  border-bottom: 2px solid #d4af37;
+  border-left: 2px solid #d4af37;
+}
+
+.goldCornerBr {
+  bottom: 0;
+  right: 0;
+  border-bottom: 2px solid #d4af37;
+  border-right: 2px solid #d4af37;
+}
+
+/* Gold Hover Effects */
+.goldCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(212, 175, 55, 0) 0%,
+    rgba(212, 175, 55, 0.05) 50%,
+    rgba(212, 175, 55, 0) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  border-radius: 12px;
+  z-index: 1;
+}
+
+.goldCard:hover::before {
+  opacity: 1;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .goldGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (max-width: 992px) {
+  .productGoldSection {
+    padding: 40px 16px;
+  }
+
+  .goldTitleGradient {
+    font-size: 24px;
+  }
+
+  .goldTitleHighlight {
+    font-size: 28px;
+  }
+
+  .goldGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .goldGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .goldTitleWrapper {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .goldTitleLine {
+    width: 80px;
+  }
+
+  .goldTitleGradient {
+    font-size: 20px;
+  }
+
+  .goldTitleHighlight {
+    font-size: 24px;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .goldCardTitle {
+    font-size: 15px;
+  }
+
+  .goldCurrentPrice,
+  .goldNormalPrice {
+    font-size: 18px;
+  }
+
+  .cardGoldContent {
+    padding: 12px;
+  }
+
+  .goldFeatureChip {
+    font-size: 11px;
+    padding: 3px 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .productGoldSection {
+    padding: 32px 12px;
+  }
+
+  .goldGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .goldCardTitle {
+    font-size: 14px;
+  }
+
+  .goldTitleGradient {
+    font-size: 18px;
+    letter-spacing: 1px;
+  }
+
+  .goldTitleHighlight {
+    font-size: 20px;
+  }
+
+  .goldCurrentPrice,
+  .goldNormalPrice {
+    font-size: 16px;
+  }
+
+  .goldOriginalPrice {
+    font-size: 13px;
+  }
+
+  .goldDiscountBadge {
+    font-size: 10px;
+    padding: 2px 6px;
+  }
+
+  .goldQuickViewBtn {
+    padding: 6px 12px;
+    font-size: 11px;
+    bottom: 12px;
+    right: 12px;
+  }
+
+  .goldSaleBadge {
+    padding: 4px 12px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 360px) {
+  .goldGrid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .goldCardTitle {
+    font-size: 15px;
+  }
+}
+
+/* Touch Device Optimization */
+@media (hover: none) {
+  .goldCard:hover {
+    transform: none;
+  }
+
+  .goldQuickViewBtn {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .goldCard:hover .goldCardImage img {
+    transform: none;
+  }
+}
+
+/* Loading state for image */
+.goldCardImage::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+  z-index: -1;
+}
+
+@keyframes loading {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}

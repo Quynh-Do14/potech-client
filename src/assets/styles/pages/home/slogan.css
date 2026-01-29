@@ -1,0 +1,344 @@
+/* Base Styles - Mobile First */
+.car-tech-slider-container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 30px 20px;
+  background: linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 100%);
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(255, 215, 0, 0.1);
+  overflow: hidden;
+}
+
+/* Header Styles */
+.car-tech-slider-container .slider-header {
+  text-align: center;
+  margin-bottom: 30px;
+  position: relative;
+  padding: 0 10px;
+}
+
+.car-tech-slider-container .main-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin: 0 0 8px 0;
+  line-height: 1.2;
+}
+
+.car-tech-slider-container .main-title .highlight {
+  color: #ffd700;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+  display: inline-block;
+}
+
+.car-tech-slider-container .subtitle {
+  font-size: 1rem;
+  color: #aaa;
+  font-weight: 300;
+  letter-spacing: 0.8px;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Slider Wrapper */
+.car-tech-slider-container .slider-wrapper {
+  position: relative;
+  padding: 0 5px;
+  margin-bottom: 40px;
+}
+
+.car-tech-slider-container .car-slide-item {
+  padding: 8px;
+}
+
+/* Sửa lại car-slide-content để hỗ trợ layout column trên mobile và row trên desktop */
+.car-tech-slider-container .car-slide-content {
+  display: flex;
+  flex-direction: column;
+  min-height: auto;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid #ffd700;
+  position: relative;
+  background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+  transition: all 0.3s ease;
+}
+
+.car-tech-slider-container .car-slide-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #ffd700, #ffa500);
+}
+
+/* CẬP NHẬT: car-slide-left và car-slide-right chia đôi màn hình */
+.car-tech-slider-container .car-slide-left {
+  flex: 1;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.car-tech-slider-container .car-slide-right {
+  flex: 1;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+/* Mobile: Xếp dọc, chia tỷ lệ tự động */
+@media (max-width: 767px) {
+  .car-tech-slider-container .car-slide-content {
+    flex-direction: column;
+  }
+
+  .car-tech-slider-container .car-slide-left,
+  .car-tech-slider-container .car-slide-right {
+    width: 100%;
+    min-height: 300px;
+  }
+
+  .car-tech-slider-container .car-slide-left {
+    order: 2;
+  }
+
+  .car-tech-slider-container .car-slide-right {
+    order: 1;
+  }
+}
+
+/* Tablet và Desktop: Xếp ngang, chia đôi màn hình */
+@media (min-width: 768px) {
+  .car-tech-slider-container .car-slide-content {
+    flex-direction: row;
+    min-height: 400px;
+  }
+
+  .car-tech-slider-container .car-slide-left,
+  .car-tech-slider-container .car-slide-right {
+    width: 50%;
+  }
+
+  .car-tech-slider-container .car-slide-left {
+    padding: 35px 30px;
+  }
+
+  .car-tech-slider-container .car-slide-right {
+    padding: 35px 30px;
+  }
+}
+
+/* Nội dung bên trái */
+.car-tech-slider-container .product-badge {
+  display: inline-block;
+  background: #ffd700;
+  padding: 6px 16px;
+  border-radius: 16px;
+  margin-bottom: 20px;
+  align-self: flex-start;
+  font-size: 0.9rem;
+}
+
+.car-tech-slider-container .badge-text {
+  color: #000;
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.8px;
+}
+
+.car-tech-slider-container .car-slide-title {
+  margin: 0 0 15px 0;
+  line-height: 1.2;
+}
+
+.car-tech-slider-container .title-text {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #fff;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, #ffd700, #ffa500);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: block;
+}
+
+.car-tech-slider-container .car-slide-description {
+  font-size: 1rem;
+  color: #ccc;
+  line-height: 1.5;
+  margin-bottom: 25px;
+  max-width: 100%;
+}
+
+/* Nội dung bên phải - Hình ảnh */
+.car-tech-slider-container .car-image-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.car-tech-slider-container .car-image-placeholder {
+  width: 100%;
+  height: 250px;
+  background: linear-gradient(135deg, #222 0%, #333 100%);
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid rgba(255, 215, 0, 0.3);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Responsive cho hình ảnh */
+@media (min-width: 768px) {
+  .car-tech-slider-container .car-image-placeholder {
+    height: 300px;
+  }
+}
+
+@media (min-width: 992px) {
+  .car-tech-slider-container .car-image-placeholder {
+    height: 320px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .car-tech-slider-container .car-image-placeholder {
+    height: 350px;
+  }
+}
+
+/* Slider Navigation */
+.car-tech-slider-container .slick-dots {
+  bottom: -40px !important;
+  position: absolute !important;
+}
+
+.car-tech-slider-container .slick-dots li {
+  width: 10px !important;
+  height: 10px !important;
+  margin: 0 4px !important;
+}
+
+.car-tech-slider-container .slick-dots li button {
+  width: 10px !important;
+  height: 10px !important;
+  padding: 0 !important;
+}
+
+.car-tech-slider-container .slick-dots li button:before {
+  font-size: 10px !important;
+  color: #ffd700 !important;
+  opacity: 0.3 !important;
+  width: 10px !important;
+  height: 10px !important;
+  line-height: 10px !important;
+}
+
+.car-tech-slider-container .slick-dots li.slick-active button:before {
+  color: #ffd700 !important;
+  opacity: 1 !important;
+}
+
+/* Ẩn arrows trên mobile */
+.car-tech-slider-container .slick-prev,
+.car-tech-slider-container .slick-next {
+  display: none !important;
+}
+
+@media (min-width: 768px) {
+  .car-tech-slider-container .slick-prev,
+  .car-tech-slider-container .slick-next {
+    display: block !important;
+    width: 45px !important;
+    height: 45px !important;
+    background: rgba(255, 215, 0, 0.1) !important;
+    border-radius: 50% !important;
+    border: 2px solid #ffd700 !important;
+    z-index: 2 !important;
+  }
+
+  .car-tech-slider-container .slick-prev:hover,
+  .car-tech-slider-container .slick-next:hover {
+    background: rgba(255, 215, 0, 0.2) !important;
+  }
+
+  .car-tech-slider-container .slick-prev:before,
+  .car-tech-slider-container .slick-next:before {
+    font-size: 20px !important;
+    color: #ffd700 !important;
+  }
+
+  .car-tech-slider-container .slick-prev {
+    left: -25px !important;
+  }
+
+  .car-tech-slider-container .slick-next {
+    right: -25px !important;
+  }
+}
+
+/* Các responsive khác giữ nguyên */
+/* ... (giữ nguyên các phần responsive khác) ... */
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+  .car-tech-slider-container {
+    padding: 80px 60px;
+    max-width: 1200px;
+    border-radius: 20px;
+  }
+
+  .car-tech-slider-container .car-slide-content {
+    min-height: 450px;
+  }
+
+  .car-tech-slider-container .car-slide-left {
+    padding: 50px 40px;
+  }
+
+  .car-tech-slider-container .car-slide-right {
+    padding: 50px 40px;
+  }
+
+  .car-tech-slider-container .title-text {
+    font-size: 2.2rem;
+  }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+  .car-tech-slider-container {
+    max-width: 1600px;
+    padding: 80px 60px;
+  }
+
+  .car-tech-slider-container .car-slide-content {
+    min-height: 500px;
+  }
+
+  .car-tech-slider-container .car-slide-left {
+    padding: 60px 50px;
+  }
+
+  .car-tech-slider-container .car-slide-right {
+    padding: 60px 50px;
+  }
+
+  .car-tech-slider-container .title-text {
+    font-size: 2.5rem;
+  }
+}

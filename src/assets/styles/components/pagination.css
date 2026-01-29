@@ -1,0 +1,200 @@
+/* Container chính */
+.container-pagination {
+  overflow: hidden;
+  background: #ffffff;
+  padding: 16px 0;
+}
+
+/* Nút Previous/Next */
+.container-pagination .btn-previous-next {
+  color: #f0c420;
+  background: #2d2d2d;
+  border: 1px solid #444;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.container-pagination .btn-previous-next:hover {
+  color: #ffdb4d;
+  background: #3a3a3a;
+  border-color: #f0c420;
+}
+
+.container-pagination .btn-previous-next.ant-btn[disabled] {
+  background-color: #2d2d2d !important;
+  color: #666 !important;
+  border-color: #444 !important;
+  opacity: 0.5;
+}
+
+/* Nút số trang active */
+.container-pagination .btn-active {
+  height: 32px;
+  width: 32px;
+  color: #000 !important;
+  background: #f0c420 !important;
+  border-radius: 4px;
+  font-size: 12px;
+  line-height: 22px;
+  font-weight: 600;
+  border: 1px solid #f0c420 !important;
+  margin: auto;
+}
+
+/* Select dropdown */
+.container-pagination .ant-select-selector {
+  border-radius: 6px !important;
+  border-color: #f0c420 !important;
+  color: #f0c420 !important;
+  background: #2d2d2d !important;
+}
+
+.container-pagination .ant-select-arrow {
+  color: #f0c420 !important;
+}
+
+/* Các item pagination */
+.container-pagination .ant-pagination li {
+  color: #f0c420 !important;
+  border-radius: 4px;
+  background: #2d2d2d;
+  border: 1px solid #444;
+  margin: 0 4px;
+}
+
+.container-pagination .ant-pagination li a {
+  color: #f0c420 !important;
+}
+
+/* Nút số trang bình thường */
+.container-pagination .ant-pagination .ant-pagination-item {
+  background: #2d2d2d;
+  border: 1px solid #444;
+}
+
+.container-pagination .ant-pagination .ant-pagination-item a {
+  color: #f0c420;
+}
+
+.container-pagination .ant-pagination .ant-pagination-item:hover {
+  background: #3a3a3a !important;
+  border-color: #f0c420;
+}
+
+.container-pagination .ant-pagination .ant-pagination-item:hover a {
+  color: #ffdb4d !important;
+}
+
+/* Nút số trang active */
+.container-pagination .ant-pagination .ant-pagination-item-active {
+  font-weight: 600;
+  background: #f0c420 !important;
+  border-color: #f0c420 !important;
+  transition: 0.3s;
+  -webkit-transition: 0.3s;
+}
+
+.container-pagination .ant-pagination .ant-pagination-item-active:hover {
+  background: #ffdb4d !important;
+  border-color: #ffdb4d !important;
+}
+
+.container-pagination .ant-pagination .ant-pagination-item-active a {
+  color: #000 !important;
+}
+
+/* Nút điều hướng (previous/next) */
+.container-pagination .ant-pagination .ant-pagination-prev,
+.container-pagination .ant-pagination .ant-pagination-next {
+  background: #2d2d2d;
+  border: 1px solid #444;
+  border-radius: 4px;
+}
+
+.container-pagination .ant-pagination .ant-pagination-prev:hover,
+.container-pagination .ant-pagination .ant-pagination-next:hover {
+  background: #3a3a3a;
+  border-color: #f0c420;
+}
+
+.container-pagination .ant-pagination .ant-pagination-prev:hover button,
+.container-pagination .ant-pagination .ant-pagination-next:hover button {
+  color: #ffdb4d !important;
+}
+
+/* Nút disabled */
+.container-pagination .ant-pagination .ant-pagination-disabled {
+  background: #2d2d2d !important;
+  border-color: #444 !important;
+  opacity: 0.5;
+}
+
+.container-pagination .ant-pagination .ant-pagination-disabled button {
+  color: #666 !important;
+}
+
+/* Jumpers và các nút đặc biệt */
+.container-pagination .ant-pagination .ant-pagination-jump-prev,
+.container-pagination .ant-pagination .ant-pagination-jump-next {
+  color: #f0c420 !important;
+}
+
+.container-pagination
+  .ant-pagination
+  .ant-pagination-jump-prev:hover
+  .ant-pagination-item-container,
+.container-pagination
+  .ant-pagination
+  .ant-pagination-jump-next:hover
+  .ant-pagination-item-container {
+  color: #ffdb4d !important;
+}
+
+/* Select options */
+.container-pagination .ant-select-dropdown {
+  background: #2d2d2d;
+  border: 1px solid #444;
+}
+
+.container-pagination .ant-select-item {
+  color: #f0c420 !important;
+}
+
+.container-pagination .ant-select-item:hover {
+  background: #3a3a3a !important;
+}
+
+.container-pagination .ant-select-item-option-selected {
+  background: #f0c42020 !important; /* Màu vàng với opacity 20% */
+  color: #ffdb4d !important;
+}
+
+/* Hiển thị số lượng item per page */
+.container-pagination .show-title {
+  color: #f0c420;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: 0.75px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .container-pagination {
+    padding: 12px 0;
+  }
+
+  .container-pagination .ant-pagination .ant-pagination-item,
+  .container-pagination .ant-pagination .ant-pagination-prev,
+  .container-pagination .ant-pagination .ant-pagination-next {
+    margin: 0 2px;
+    min-width: 28px;
+    height: 28px;
+    font-size: 12px;
+  }
+
+  .container-pagination .show-title {
+    font-size: 14px;
+  }
+}
