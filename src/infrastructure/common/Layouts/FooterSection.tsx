@@ -45,7 +45,7 @@ const FooterSection = () => {
     const policy = [
         {
             id: "terms",
-            label: "Thông tin về điều kiện giao dịch chung",
+            label: "THÔNG TIN VỀ ĐIỀU KIỆN GIAO DỊCH CHUNG",
             href: ROUTE_PATH.TERMS_AND_CONDITIONS,
             icon: "fa-file-text"
         },
@@ -69,13 +69,13 @@ const FooterSection = () => {
         },
         {
             id: "shipping",
-            label: "Thông tin về vận chuyển và giao nhận",
+            label: "HÔNG TIN VỀ VẬN HÀNH VÀ GIAO NHẬN",
             href: ROUTE_PATH.SHIPPING_DELIVERY_INFO,
             icon: "fa-truck"
         },
         {
             id: "payment",
-            label: "Thông tin về các phương thức thanh toán",
+            label: "THÔNG TIN VỀ CÁC PHƯƠNG THỨC THANH TOÁN",
             href: ROUTE_PATH.PAYMENT_METHODS_INFO,
             icon: "fa-credit-card"
         },
@@ -92,13 +92,16 @@ const FooterSection = () => {
                         </div>
                         <div className={styles.contactInfo}>
                             <div className={styles.companyInfo}>
-                                Công ty TNHH Thương Mại XNK Nội Thất Ô Tô Quang Minh
+                                Công ty TNHH Thương Mại Xuất Nhập Khẩu Nội Thất Ô Tô Quang Minh
                             </div>
                             <div className={styles.companyInfo}>
-                                GPKD số 0107801299 do Sở KH và ĐT TP Hà Nội cấp ngày 12/04/2017
+                                Mã số doanh nghiệp: 0107801299 - Sở KH và ĐT TP Hà Nội cấp ngày 12/04/2017
                             </div>
                             <div className={styles.companyInfo}>
-                                Người đại diện: Ông Nguyễn Văn Ty
+                                Đại diện công ty: Ông Nguyễn Văn Ty
+                            </div>
+                            <div className={styles.companyInfo}>
+                                POTECH Hà Nội
                             </div>
                             <div className={styles.contactDetails}>
                                 <div className={styles.contactItem}>
@@ -108,58 +111,72 @@ const FooterSection = () => {
                                     </span>
                                 </div>
                                 <div className={styles.contactItem}>
-                                    <i className={`fa fa-map-marker ${styles.contactIcon}`}></i>
+                                    <i className={`fa fa-phone ${styles.contactIcon}`}></i>
                                     <span className={styles.contactText}>
-                                        Địa chỉ: Số 15 Tùng Thiện Vương – Phường Phú Định – Thành phố Hồ Chí Minh
+                                        1900.8113
                                     </span>
+                                </div>
+                                <div className={styles.companyInfo}>
+                                    POTECH TP. HCM
                                 </div>
                                 <div className={styles.contactItem}>
-                                    <i className={`fa fa-envelope ${styles.contactIcon}`}></i>
+                                    <i className={`fa fa-map-marker ${styles.contactIcon}`}></i>
                                     <span className={styles.contactText}>
-                                        inmax.quangminh@gmail.com
+                                        Số 145 - Trần Nhân Tôn - Phường 2 - Quận 10 - TP. Hồ Chí Minh
                                     </span>
                                 </div>
+
                                 <div className={styles.contactItem}>
                                     <i className={`fa fa-phone ${styles.contactIcon}`}></i>
                                     <span className={styles.contactText}>
                                         1900.8113
                                     </span>
                                 </div>
+                                {/* <div className={styles.contactItem}>
+                                    <i className={`fa fa-envelope ${styles.contactIcon}`}></i>
+                                    <span className={styles.contactText}>
+                                        inmax.quangminh@gmail.com
+                                    </span>
+                                </div> */}
+
                             </div>
                         </div>
                     </div>
 
                     {/* Quick Links */}
-                    <div className={styles.footerSection}>
-                        <div className={styles.sectionTitle}>
-                            LIÊN KẾT NHANH
+                    <div className={styles.gridLink}>
+                        <div className={styles.footerSection}>
+                            <div className={styles.sectionTitle}>
+                                LIÊN KẾT NHANH
+                            </div>
+                            <ul className={styles.linksList}>
+                                {menuItems.map((item) => (
+                                    <li className={styles.linkItem} key={item.id}>
+                                        <Link href={item.href} className={styles.link}>
+                                            {item.label}
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
                         </div>
-                        <ul className={styles.linksList}>
-                            {menuItems.map((item) => (
-                                <li className={styles.linkItem} key={item.id}>
-                                    <Link href={item.href} className={styles.link}>
-                                        {item.label}
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
+
+                        {/* Policies */}
+                        <div className={styles.footerSection}>
+                            <div className={styles.sectionTitle}>
+                                CHÍNH SÁCH
+                            </div>
+                            <ul className={styles.linksList}>
+                                {policy.map((item) => (
+                                    <li className={styles.linkItem} key={item.id}>
+                                        <Link href={item.href} className={styles.link}>
+                                            {item.label}
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
                     </div>
 
-                    {/* Policies */}
-                    <div className={styles.footerSection}>
-                        <div className={styles.sectionTitle}>
-                            CHÍNH SÁCH
-                        </div>
-                        <ul className={styles.linksList}>
-                            {policy.map((item) => (
-                                <li className={styles.linkItem} key={item.id}>
-                                    <Link href={item.href} className={styles.link}>
-                                        {item.label}
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
                 </div>
             </div>
 

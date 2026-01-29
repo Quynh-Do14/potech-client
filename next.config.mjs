@@ -39,11 +39,16 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'api.autofusion.vn',
         pathname: '/api/uploads/**'
+      },
+      {
+        protocol: 'https',
+        hostname: 'img.youtube.com',
+        pathname: '/**'
       }
     ]
   },
   transpilePackages: ['react-slick', 'slick-carousel'],
-  reactCompiler: true,
-};
+  reactCompiler: true
+}
 
-export default nextConfig;
+export default nextConfig

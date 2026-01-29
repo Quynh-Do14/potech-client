@@ -3,6 +3,7 @@
   width: 100%;
   position: relative;
   overflow: hidden;
+  background: linear-gradient(135deg, #0c1a2d 0%, #0f2442 50%, #091423 100%);
 }
 
 .slider-wrapper {

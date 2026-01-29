@@ -47,20 +47,19 @@ export class Endpoint {
         static Update = "/blog"
         static Delete = "/blog"
     }
-    static AgencyCategory = class {
-        static Get = "/agency-category"
-        static GetById = "/agency-category"
-        static Add = "/agency-category"
-        static Update = "/agency-category"
-        static Delete = "/agency-category"
-    }
-
     static Agency = class {
         static Get = "/agency"
         static GetById = "/agency"
         static Add = "/agency"
         static Update = "/agency"
         static Delete = "/agency"
+    }
+    static AgencyCategory = class {
+        static Get = "/agency-category"
+        static GetById = "/agency-category"
+        static Add = "/agency-category"
+        static Update = "/agency-category"
+        static Delete = "/agency-category"
     }
     static BlogCategory = class {
         static Get = "/blog-category"
@@ -85,5 +84,17 @@ export class Endpoint {
     }
     static APIDistrict = class {
         static Get = "https://provinces.open-api.vn/api/v1/p/"
+    }
+    static Video = class {
+        static Get = "/video"
+        static GetById = "/video"
+        static Add = "/video"
+        static Update = "/video"
+        static Delete = "/video"
+    }
+    static Contact = class {
+        static Get = "/contact"
+        static GetById = "/contact"
+        static Add = "/contact"
     }
 }

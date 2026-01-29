@@ -223,7 +223,7 @@ const ProductContent = () => {
                                 <span className="highlight">Danh Sách</span> Sản Phẩm
                             </h1>
                         </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-2">
                             {/* Search Input */}
                             <div className="sm:col-span-3">
                                 <InputSearchCommon

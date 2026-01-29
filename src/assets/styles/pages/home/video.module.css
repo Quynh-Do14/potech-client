@@ -1,0 +1,202 @@
+/* PromotionSection.module.css */
+
+.videoSection {
+  color: #1a1a1a;
+  position: relative;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 30px 20px;
+  background: #fff;
+}
+
+/* Video Content - 2 video side by side */
+.videoContent {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+/* Right Video - Customer Testimonial */
+.mainVideo {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  cursor: pointer;
+}
+
+.testimonialTitle {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #ff8c00;
+  line-height: 1.3;
+}
+
+.testimonialTitle::before {
+  content: '"';
+}
+
+.testimonialTitle::after {
+  content: '"';
+}
+
+.testimonialVideoContainer {
+  position: relative;
+  border-radius: 12px;
+  background: #000;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.testimonialVideo {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #333, #222);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.smallPlayButton {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  background: #fff;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.smallPlayButton svg {
+  color: #ff8c00e6;
+}
+.smallPlayButton:hover {
+  transform: scale(1.2);
+  transition-duration: 0.3s;
+}
+.testimonialQuote {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #444;
+  margin: 0;
+}
+
+.testimonialFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 15px;
+  border-top: 1px solid #e5e5e5;
+}
+
+.rating {
+  display: flex;
+  gap: 4px;
+}
+
+.datePosted {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+/* Footer Stats */
+.footer {
+  padding-top: 40px;
+  border-top: 1px solid #e5e5e5;
+}
+
+.statsContainer {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+}
+
+.statItem {
+  text-align: center;
+}
+
+.statValue {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #ff8c00;
+  margin-bottom: 8px;
+}
+
+.statLabel {
+  font-size: 0.95rem;
+  color: #666;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .promotionTitle {
+    font-size: 2rem;
+  }
+
+  .testimonialTitle {
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .dateInfo {
+    text-align: left;
+  }
+
+  .statsContainer {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+  }
+
+  .promotionTitle {
+    font-size: 1.8rem;
+  }
+
+  .actionButton {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .videoSection {
+    padding: 32px 15px;
+  }
+  .videoContent {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .statsContainer {
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .statValue {
+    font-size: 1.8rem;
+  }
+
+  .promotionTitle {
+    font-size: 1.5rem;
+  }
+
+  .taglineHighlight {
+    font-size: 1.2rem;
+  }
+
+  .playButton {
+    width: 60px;
+    height: 60px;
+  }
+
+  .smallPlayButton {
+    width: 50px;
+    height: 50px;
+  }
+}

@@ -5,7 +5,7 @@ import React from 'react'
 import styles from '@/assets/styles/pages/policy.module.css'
 import TocClient from '../tocClient'
 import BannerCommon from '@/infrastructure/common/banner/BannerCommon'
-import banner from '@/assets/images/banner/Banner-Menu-GIoi-thieu.jpg';
+import banner from '@/assets/images/banner/banner-daily.jpg';
 
 const PolicyPage = () => {
 

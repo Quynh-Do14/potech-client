@@ -138,7 +138,7 @@ const BlogContent = () => {
                                 <span className={styles.highlight}>Tin Tức</span> Mới Nhất
                             </h1>
                         </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-2">
                             {/* Search Input - 5/12 columns on desktop, full on mobile */}
                             <div className="sm:col-span-5">
                                 <InputSearchCommon

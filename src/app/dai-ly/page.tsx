@@ -17,7 +17,7 @@ import InputSearchCommon from '@/infrastructure/common/input/input-search-common
 import SelectSearchProvince from '@/infrastructure/common/input/select-search-province';
 import { AgencyInterface, AgencyParams } from '@/infrastructure/interface/agency/agency.interface';
 import BannerCommon from '@/infrastructure/common/banner/BannerCommon';
-import banner from '@/assets/images/banner/Banner-Menu-GIoi-thieu.jpg';
+import banner from '@/assets/images/banner/banner-daily.jpg';
 import GoogleMapView from './ggmap';
 import AgencySkeleton from './skeleton';
 

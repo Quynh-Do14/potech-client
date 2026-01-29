@@ -332,3 +332,93 @@
   grid-template-columns: 1fr 1fr;
   gap: 24px;
 }
+
+/* Video  */
+.video-container {
+  position: relative;
+  width: 100%;
+  max-width: 1920px;
+  margin: 0 auto;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+  transform: scale(0.98);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+  border: 4px solid rgba(255, 255, 255, 0.2);
+}
+
+@media only screen and (min-width: 577px) {
+  .video-container {
+    padding-bottom: 40.25%; /* 16:9 Aspect Ratio */
+  }
+}
+
+@media only screen and (max-width: 576px) {
+  .video-container {
+    padding-bottom: 60.25%; /* 16:9 Aspect Ratio */
+  }
+}
+
+.video-container:hover {
+  transform: scale(0.99);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+}
+
+.video-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0) 50%
+  );
+  z-index: 1;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.video-container #youtube-player {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: inherit;
+  z-index: 2;
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Loading State */
+.video-container.loading {
+  background: linear-gradient(-45deg, #f0f0f0, #e0e0e0, #f0f0f0, #e0e0e0);
+  background-size: 400% 400%;
+  animation: gradientLoading 2s ease infinite;
+}
+
+@keyframes gradientLoading {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.video-container {
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+}
+
+.bg-gradient-dark-blue {
+  background: linear-gradient(135deg, #0c1a2d 0%, #0f2442 50%, #091423 100%);
+}
