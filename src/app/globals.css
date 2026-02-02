@@ -405,6 +405,9 @@
 .bg-gradient-dark-blue {
   background: linear-gradient(135deg, #0c1a2d 0%, #0f2442 50%, #091423 100%);
 }
+.bg-gradient-dark {
+  background: #1a1a1a;
+}
 
 /* Gold Corner Accents */
 .gold-corner-tl,

@@ -5,20 +5,16 @@ const AchievementSection = () => {
         <div className={styles.achievement}>
             <div className={styles.statsContainer}>
                 <div className={styles.statItem}>
-                    <div className={styles.statValue}>2.500+</div>
-                    <div className={styles.statLabel}>Khách hàng tham gia</div>
+                    <div className={styles.statValue}>LỖI 1 ĐỔI 1</div>
+                    <div className={styles.statLabel}>Trong 12 tháng</div>
                 </div>
                 <div className={styles.statItem}>
-                    <div className={styles.statValue}>50+</div>
-                    <div className={styles.statLabel}>Giải thưởng</div>
+                    <div className={styles.statValue}>BẢO HÀNH 18 THÁNG</div>
+                    <div className={styles.statLabel}>Kể từ ngày mua</div>
                 </div>
                 <div className={styles.statItem}>
-                    <div className={styles.statValue}>5.8K</div>
-                    <div className={styles.statLabel}>Lượt chia sẻ</div>
-                </div>
-                <div className={styles.statItem}>
-                    <div className={styles.statValue}>98%</div>
-                    <div className={styles.statLabel}>Hài lòng</div>
+                    <div className={styles.statValue}>SẢN PHẨM CHÍNH HÃNG</div>
+                    <div className={styles.statLabel}>Đại lý toàn quốc</div>
                 </div>
             </div>
         </div>

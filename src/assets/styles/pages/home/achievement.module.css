@@ -1,47 +1,64 @@
+/* Minimal Achievement Section */
 .achievement {
   position: relative;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 30px 20px;
+  padding: 40px 20px;
 }
 
 .statsContainer {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 30px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
 }
 
 .statItem {
   text-align: center;
+  padding: 20px 15px;
+  border-bottom: 3px solid #f2df20;
 }
 
 .statValue {
-  font-size: 2.2rem;
-  font-weight: 800;
-  color: #ff8c00;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #f2df20;
   margin-bottom: 8px;
+  text-transform: uppercase;
 }
 
 .statLabel {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: #ffffff;
+  opacity: 0.8;
 }
 
+/* Responsive */
 @media (max-width: 768px) {
-
   .statsContainer {
     grid-template-columns: repeat(2, 1fr);
-    gap: 25px;
+    gap: 15px;
+  }
+  
+  .statValue {
+    font-size: 1.2rem;
   }
 }
 
 @media (max-width: 480px) {
-  .statsContainer {
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
+  .achievement {
+    padding: 30px 15px;
   }
-
+  
+  .statsContainer {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .statItem {
+    padding: 15px;
+  }
+  
   .statValue {
-    font-size: 1.8rem;
+    font-size: 1.1rem;
   }
 }

@@ -11,7 +11,7 @@ export default function Home() {
     <ClientLayout>
       <div>
         <FullWidthSlider />
-        <div className="bg-gradient-dark-blue">
+        <div className="bg-gradient-dark">
           <AchievementSection />
         </div>
         <ProductSection />
