@@ -4,21 +4,10 @@
   background: linear-gradient(180deg, #1a1a1a 0%, #262626 100%);
   color: #fff;
   padding: 20px 0;
-  border-top: 4px solid #ff6b00;
+  border-top: 4px solid #eec715;
   position: relative;
   width: 100%;
   overflow-x: hidden;
-}
-
-.footer::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #ff6b00, #ff9500, #ff6b00);
-  z-index: 1;
 }
 
 .footerContainer {
@@ -37,7 +26,7 @@
 .sectionTitle {
   font-size: 18px;
   font-weight: 700;
-  color: #ff9500;
+  color: #eec715;
   margin-bottom: 20px;
   padding-bottom: 10px;
   position: relative;
@@ -52,7 +41,7 @@
   left: 0;
   width: 50px;
   height: 3px;
-  background: #ff6b00;
+  background: #eec715;
   border-radius: 2px;
 }
 
@@ -78,7 +67,7 @@
 }
 
 .contactIcon {
-  color: #ff9500;
+  color: #eec715;
   font-size: 16px;
   width: 20px;
   text-align: center;
@@ -121,7 +110,7 @@
 }
 
 .link:hover {
-  color: #ff9500;
+  color: #eec715;
 }
 
 .link::before {
@@ -134,7 +123,7 @@
 
 .link:hover::before {
   transform: translateX(3px);
-  color: #ff9500;
+  color: #eec715;
 }
 
 /* Footer Bottom */
@@ -247,7 +236,7 @@
 
 /* Hover effects */
 .linkItem:hover .link {
-  color: #ff9500;
+  color: #eec715;
 }
 
 /* Animation cho link */

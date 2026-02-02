@@ -6,7 +6,9 @@ import { VideoInterface } from '@/infrastructure/interface/video/video.interface
 import YouTubeThumbnail from '@/infrastructure/common/thumbnailYoutube/thumbnailYoutube'
 import YoutubeVideo from '@/infrastructure/common/thumbnailYoutube/youtube'
 import { Modal } from 'antd'
-const VideoSection = () => {
+import dynamic from 'next/dynamic'
+import { PageLoading } from '@/infrastructure/common/loading/loadingPage'
+const VideoContent = () => {
     const [listVideo, setListVideo] = useState<Array<VideoInterface>>([]);
     const [selectedVideo, setSelectedVideo] = useState<string>('');
     const [isOpenModalVideo, setIsOpenModalVide] = useState<boolean>(false);
@@ -34,8 +36,6 @@ const VideoSection = () => {
     const onOpenModalVideo = (item: VideoInterface, videoId: string) => {
         setSelectedVideo(videoId);
         setIsOpenModalVide(true);
-        console.log('vao');
-
     };
 
     return (
@@ -43,13 +43,13 @@ const VideoSection = () => {
             <div className={styles.container}>
                 {/* Header với logo và thông tin */}
                 <div className="section-header">
-                    <div className="article-badge">
+                    <div className="section-badge">
                         <span className="badge-text">VIDEO GIỚI THIỆU</span>
                     </div>
-                    <h2 className="article-title">
-                        Trải Nghiệm <span className="highlight">Sản Phẩm </span>  Qua Video
+                    <h2 className="section-title">
+                        Trải Nghiệm <span className="highlight">Sản Phẩm </span> Qua Video
                     </h2>
-                    <p className="article-subtitle">
+                    <p className="section-subtitle">
                         Khám phá sản phẩm của chúng tôi qua những video chất lượng cao,
                         mang đến cái nhìn chân thực và đầy đủ nhất
                     </p>
@@ -71,13 +71,19 @@ const VideoSection = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <h3 className={`${styles.testimonialTitle} text-truncate-2`}>
-                                        {item.name}
-                                    </h3>
+                                    <div className={styles.testimonialVideoContent}>
+                                        <h3 className={`${styles.testimonialTitle} text-truncate-2`}>
+                                            {item.name}
+                                        </h3>
 
-                                    <p className={`${styles.testimonialQuote} text-truncate-3`}>
-                                        {item.description}
-                                    </p>
+                                        <p className={`${styles.testimonialQuote} text-truncate-3`}>
+                                            {item.description}
+                                        </p>
+                                    </div>
+                                    <div className="gold-corner-tl"></div>
+                                    <div className="gold-corner-tr"></div>
+                                    <div className="gold-corner-bl"></div>
+                                    <div className="gold-corner-br"></div>
                                 </div>
                             )
                         })
@@ -93,7 +99,7 @@ const VideoSection = () => {
                 onCancel={() => setIsOpenModalVide(false)}
                 footer={null}
                 centered
-                destroyOnClose
+                destroyOnHidden
             >
                 <YoutubeVideo
                     videoId={selectedVideo}
@@ -103,4 +109,10 @@ const VideoSection = () => {
     )
 }
 
-export default VideoSection 
+
+const VideoSection = dynamic(() => Promise.resolve(VideoContent), {
+    ssr: false,
+    loading: () => <PageLoading />
+});
+
+export default VideoSection;

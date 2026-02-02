@@ -7,6 +7,7 @@
   display: flex;
   flex-direction: column;
   gap: 40px;
+  margin: 20px 0;
 }
 
 .agencyMain {
@@ -47,7 +48,7 @@
 .agencyCard:hover {
   transform: translateY(-4px);
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
-  border-color: #ff9500;
+  border-color: #eec715;
 }
 
 .agencyCard.active {
@@ -63,7 +64,7 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #ff6b00, #ff9500);
+  background: linear-gradient(90deg, #ff6b00, #eec715);
   z-index: 2;
 }
 
@@ -206,7 +207,7 @@
   align-items: center;
   gap: 8px;
   padding: 10px 20px;
-  background: linear-gradient(135deg, #ff9500, #ff6b00);
+  background: linear-gradient(135deg, #eec715, #ff6b00);
   color: white;
   border: none;
   border-radius: 10px;
@@ -295,7 +296,7 @@
 }
 
 .leftSide::-webkit-scrollbar-thumb {
-  background: #ff9500;
+  background: #eec715;
   border-radius: 3px;
 }
 
@@ -429,7 +430,7 @@
   top: 16px;
   left: 16px;
   z-index: 2;
-  background: linear-gradient(135deg, #ff6b00, #ff9500);
+  background: linear-gradient(135deg, #ff6b00, #eec715);
   color: white;
   padding: 6px 12px;
   border-radius: 20px;
@@ -445,7 +446,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02), 0 4px 8px rgba(0, 0, 0, 0.04),
     0 8px 16px rgba(0, 0, 0, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  border-left: 4px solid #ff9500;
+  border-left: 4px solid #eec715;
   height: 70vh;
 }
 

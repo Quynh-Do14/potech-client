@@ -8,16 +8,12 @@ import Link from 'next/link';
 import Image from 'next/image';
 import SearchBoxHeader from './SearchBox';
 import authService from '@/infrastructure/repository/auth/auth.service';
-import { ProductInterface } from '@/infrastructure/interface/product/product.interface';
-import { convertSlug } from '@/infrastructure/helper/helper';
-import productService from '@/infrastructure/repository/product/product.service';
 import brandService from '@/infrastructure/repository/brand/brand.service';
 import categoryBlogService from '@/infrastructure/repository/category/categoryBlog.service';
 import { CategoryProductInterface } from '@/infrastructure/interface/category/categoryProduct.interface';
 import categoryProductService from '@/infrastructure/repository/category/categoryProduct.service';
 import { isTokenStoraged } from '@/infrastructure/utils/storage';
 import { useRecoilState } from 'recoil';
-import { ProductState } from '@/core/common/atoms/product/productState';
 import { ProfileState } from '@/core/common/atoms/profile/profileState';
 import { BrandState } from '@/core/common/atoms/brand/brandState';
 import { CategoryAgencyState, CategoryBlogState, CategoryProductHrefState, CategoryProductState } from '@/core/common/atoms/category/categoryState';
@@ -25,14 +21,11 @@ import { usePathname } from 'next/navigation';
 import categoryAgencyService from '@/infrastructure/repository/category/categoryAgency.service';
 
 const HeaderSection = () => {
-    const [searchQuery, setSearchQuery] = useState('');
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
     const pathname = usePathname(); // Lấy đường dẫn hiện tại
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
-    const [showDropdown, setShowDropdown] = useState<boolean>(false);
 
     const [, setCategoryProductState] = useRecoilState(CategoryProductState);
     const [categoryProductHrefState, setCategoryProductHrefState] = useRecoilState(CategoryProductHrefState);
@@ -40,7 +33,6 @@ const HeaderSection = () => {
     const [, setCategoryAgencyState] = useRecoilState(CategoryAgencyState);
     const [, setBrandState] = useRecoilState(BrandState);
     const [, setProfileState] = useRecoilState(ProfileState);
-    const [productState, setProductState] = useRecoilState(ProductState);
     const token = isTokenStoraged();
 
     // Xác định menu active dựa trên URL
@@ -49,6 +41,9 @@ const HeaderSection = () => {
         if (pathname.startsWith(ROUTE_PATH.PRODUCT)) return "products";
         if (pathname.startsWith(ROUTE_PATH.BLOG)) return "blog";
         if (pathname.includes(ROUTE_PATH.AGENCY)) return "agency";
+        if (pathname.includes(ROUTE_PATH.INTRODUCE)) return "introduce";
+        if (pathname.includes(ROUTE_PATH.CONTACT)) return "contact";
+
         return "";
     };
 
@@ -149,35 +144,10 @@ const HeaderSection = () => {
         }
     }
 
-    const onGetListProductAsync = async () => {
-        try {
-            await productService.GetProduct(
-                {},
-                () => { }
-            ).then((res) => {
-                const data = res.data?.map((item: ProductInterface) => {
-                    const result = {
-                        href: `${ROUTE_PATH.PRODUCT}/${convertSlug(item.name)}-${item.id}.html`,
-                        label: item.name,
-                    }
-                    return result;
-                })
-
-                setProductState({
-                    data: data
-                })
-            })
-        }
-        catch (error) {
-            console.error(error)
-        }
-    }
-
     useEffect(() => {
         onGetListCategoryAsync().then(_ => { });
         onGetListBlogCategoryAsync().then(_ => { });
         onGetListBrandAsync().then(_ => { });
-        onGetListProductAsync().then(_ => { });
         onGetListAgencyCategoryAsync().then(_ => { });
     }, []);
 
@@ -186,18 +156,6 @@ const HeaderSection = () => {
             onGetProfileAsync().then(_ => { });
         }
     }, [token]);
-
-
-    // Close mobile menu on resize
-    useEffect(() => {
-        const handleResize = () => {
-            if (window.innerWidth >= 992) {
-                setIsMobileMenuOpen(false);
-            }
-        };
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-    }, []);
 
     const handleLogout = async () => {
         try {
@@ -276,7 +234,7 @@ const HeaderSection = () => {
                 <div className={styles.container}>
                     <Link href={ROUTE_PATH.HOME_PAGE} className={styles.logo}>
                         <div className={styles.logoIcon}>
-                            <Image src={logo} alt="RIMO" width={50} height={50} />
+                            <Image src={logo} alt="POTECH" width={140} height={120} />
                         </div>
                     </Link>
 
@@ -300,8 +258,7 @@ const HeaderSection = () => {
                                             onMouseLeave={() => toggleDropdown(null)}
                                         >
                                             <Link href={item.href}
-                                                className={styles.menuLink}
-
+                                                className={`${styles.menuLink} ${activeMenu === item.id ? styles.active : ''}`}
                                                 aria-expanded={activeDropdown === item.id}
                                             >
                                                 {item.label}
@@ -330,7 +287,7 @@ const HeaderSection = () => {
                                     ) : (
                                         <Link
                                             href={item.href}
-                                            className={styles.menuLink}
+                                            className={`${styles.menuLink} ${activeMenu === item.id ? styles.active : ''}`}
                                             onClick={() => setIsMenuOpen(false)}
                                         >
                                             {item.label}
@@ -341,15 +298,15 @@ const HeaderSection = () => {
                         </ul>
 
                         {/* Nút đăng nhập cho mobile */}
-                        <div className={styles.mobileActions}>
+                        {/* <div className={styles.mobileActions}>
                             <button className={styles.loginButtonMobile}>Đăng nhập</button>
-                        </div>
+                        </div> */}
                     </nav>
 
                     {/* Phần bên phải (tìm kiếm + đăng nhập) cho desktop */}
                     <div className={styles.rightSection}>
                         <SearchBoxHeader />
-                        <button className={styles.loginButton}>Đăng nhập</button>
+                        {/* <button className={styles.loginButton}>Đăng nhập</button> */}
                     </div>
 
                     {/* Nút menu mobile */}

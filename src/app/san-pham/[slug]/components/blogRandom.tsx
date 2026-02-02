@@ -58,12 +58,6 @@ const BlogInProductSlug = () => {
                                 </div>
 
                                 <div className={styles.recentContent}>
-                                    <div className={styles.articleMeta}>
-                                        <span className={styles.category}>{article.category_name}</span>
-                                        <span className={styles.divider}>•</span>
-                                        <span className={styles.date}>{convertDateOnlyShow(article.created_at)}</span>
-                                    </div>
-
                                     <h4 className={styles.recentTitle}>
                                         {article.title}
                                     </h4>

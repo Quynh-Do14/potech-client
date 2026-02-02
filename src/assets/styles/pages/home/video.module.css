@@ -20,14 +20,22 @@
 .mainVideo {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
   cursor: pointer;
-}
+  position: relative;
 
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.05);
+}
+.testimonialVideoContent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px;
+}
 .testimonialTitle {
   font-size: 1.6rem;
   font-weight: 700;
-  color: #ff8c00;
+  color: #eec715;
   line-height: 1.3;
 }
 
@@ -89,16 +97,6 @@
   align-items: center;
   padding-top: 15px;
   border-top: 1px solid #e5e5e5;
-}
-
-.rating {
-  display: flex;
-  gap: 4px;
-}
-
-.datePosted {
-  font-size: 0.85rem;
-  color: #666;
 }
 
 /* Footer Stats */

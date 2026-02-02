@@ -14,8 +14,8 @@ export default function Home() {
         <div className="bg-gradient-dark-blue">
           <AchievementSection />
         </div>
-        <VideoSection />
         <ProductSection />
+        <VideoSection />
         <ArticleSection />
       </div>
     </ClientLayout>

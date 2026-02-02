@@ -10,6 +10,8 @@ import ProductAdvantageComponent from './components/advantage';
 import RelationProductComponent from './components/relationProduct';
 import { ProductInterface } from '@/infrastructure/interface/product/product.interface';
 import BlogInProductSlug from './components/blogRandom';
+import dynamic from 'next/dynamic';
+import { PageLoading } from '@/infrastructure/common/loading/loadingPage';
 
 type Props = {
     params: { slug: string };
@@ -81,7 +83,7 @@ export async function generateMetadata
     };
 }
 
-const ProductSlugPage = async ({ params }: Props) => {
+const ProductSlugContent = async ({ params }: Props) => {
     const dataDetail: ProductInterface = await fetch(`${baseURL}${Endpoint.Product.GetById}/${splitTakeId(params.slug)}`, {
         cache: 'no-store', // Tắt cache
     }).then((res) =>
@@ -156,7 +158,7 @@ const ProductSlugPage = async ({ params }: Props) => {
                                 <div className={styles.title}>Mô tả sản phẩm</div>
                             </div>
                             <article
-                                className="prose max-w-none"
+                                className="prose max-w-none py-5"
                                 dangerouslySetInnerHTML={{ __html: dataDetail.description }}
                             />
                         </div>
@@ -185,4 +187,10 @@ const ProductSlugPage = async ({ params }: Props) => {
     )
 }
 
-export default ProductSlugPage
+
+const ProductSlugPage = dynamic(() => Promise.resolve(ProductSlugContent), {
+    ssr: true,
+    loading: () => <PageLoading />
+});
+
+export default ProductSlugPage;

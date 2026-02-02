@@ -1,5 +1,5 @@
 /* Gold & Black Product Section */
-.product-gold-section {
+.productGoldSection {
   position: relative;
   max-width: 1400px;
   margin: 0 auto;
@@ -8,15 +8,19 @@
   background: #fff;
 }
 
-.gold-container {
+.goldContainer {
   position: relative;
   z-index: 2;
   width: 100%;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: center;
 }
 
 /* Gold Pattern Background */
-.gold-pattern-bg {
+.goldPatternBg {
   position: absolute;
   top: 0;
   left: 0;
@@ -38,14 +42,31 @@
 }
 
 /* Gold Grid */
-.gold-grid {
+.goldGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 24px;
 }
-
+.goldGrid2Col {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+.goldGrid3Col {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.sectionTitle {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #000;
+  line-height: 1.2;
+  text-align: center;
+  text-transform: uppercase;
+}
 /* Gold Card */
-.gold-card {
+.goldCard {
   background: white;
   overflow: hidden;
   position: relative;
@@ -59,7 +80,7 @@
   flex-direction: column;
 }
 
-.gold-card:hover {
+.goldCard:hover {
   transform: translateY(-8px);
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(212, 175, 55, 0.2);
   border-color: rgba(212, 175, 55, 0.3);
@@ -73,7 +94,7 @@
 }
 
 /* Gold Sale Badge */
-.gold-sale-badge {
+.goldSaleBadge {
   position: absolute;
   top: 12px;
   left: 12px;
@@ -89,7 +110,7 @@
   box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
 }
 
-.gold-sale-badge::before {
+.goldSaleBadge::before {
   content: '';
   position: absolute;
   top: 0;
@@ -100,7 +121,7 @@
   border-left: 8px solid transparent;
 }
 
-.gold-sale-badge::after {
+.goldSaleBadge::after {
   content: '';
   position: absolute;
   bottom: 0;
@@ -111,7 +132,7 @@
   border-left: 8px solid transparent;
 }
 
-.gold-badge-corner {
+.goldBadgeCorner {
   position: absolute;
   top: -4px;
   right: -4px;
@@ -123,14 +144,15 @@
 }
 
 /* Card Media with Gold Border - Tỷ lệ 1:1 */
-.card-gold-media {
+.cardGoldMedia {
   position: relative;
   width: 100%;
+  max-height: 280px;
   padding-top: 100%; /* Tạo tỷ lệ 1:1 */
   overflow: hidden;
 }
 
-.gold-media-wrapper {
+.goldMediaWrapper {
   position: absolute;
   top: 0;
   left: 0;
@@ -139,7 +161,7 @@
 }
 
 /* Image Container với tỷ lệ 1:1 */
-.gold-card-image {
+.goldCardImage {
   position: relative;
   width: 100%;
   height: 100%;
@@ -147,18 +169,18 @@
 }
 
 /* Next/Image component styling */
-.gold-card-image img {
+.goldCardImage img {
   object-fit: cover;
   width: 100% !important;
   height: 100% !important;
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.gold-card:hover .gold-card-image img {
+.goldCard:hover .goldCardImage img {
   transform: scale(1.05);
 }
 
-.gold-image-overlay {
+.goldImageOverlay {
   position: absolute;
   top: 0;
   left: 0;
@@ -172,7 +194,7 @@
   pointer-events: none;
 }
 
-.gold-media-border {
+.goldMediaBorder {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -189,7 +211,7 @@
   z-index: 2;
 }
 
-.gold-quick-view-btn {
+.goldQuickViewBtn {
   position: absolute;
   bottom: 16px;
   right: 16px;
@@ -211,37 +233,37 @@
   z-index: 3;
 }
 
-.gold-card:hover .gold-quick-view-btn {
+.goldCard:hover .goldQuickViewBtn {
   opacity: 1;
   transform: translateX(0);
 }
 
-.gold-quick-view-btn:hover {
+.goldQuickViewBtn:hover {
   transform: translateX(0) scale(1.05);
   box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
 }
 
-.gold-eye-icon {
+.goldEyeIcon {
   width: 16px;
   height: 16px;
 }
 
 /* Card Content */
-.card-gold-content {
+.cardGoldContent {
   padding: 16px;
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 
-.gold-content-wrapper {
+.goldContentWrapper {
   display: flex;
   flex-direction: column;
   gap: 12px;
   flex: 1;
 }
 
-.gold-card-title {
+.goldCardTitle {
   font-size: 16px;
   font-weight: 600;
   color: #333;
@@ -253,13 +275,13 @@
   overflow: hidden;
 }
 
-.gold-features {
+.goldFeatures {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
 }
 
-.gold-feature-chip {
+.goldFeatureChip {
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -273,25 +295,25 @@
 }
 
 /* Price Section */
-.gold-price-section {
+.goldPriceSection {
   margin-top: auto;
   border-top: 1px solid rgba(212, 175, 55, 0.1);
 }
 
-.gold-price-row {
+.goldPriceRow {
   display: flex;
   align-items: center;
   gap: 8px;
   margin-bottom: 4px;
 }
 
-.gold-current-price {
+.goldCurrentPrice {
   font-size: 20px;
   font-weight: 800;
   color: #d4af37;
 }
 
-.gold-discount-badge {
+.goldDiscountBadge {
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -303,71 +325,32 @@
   font-weight: 700;
 }
 
-.discount-icon {
+.discountIcon {
   font-size: 11px;
 }
 
-.gold-original-price-wrapper {
+.goldOriginalPriceWrapper {
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
-.gold-original-price {
+.goldOriginalPrice {
   font-size: 14px;
   color: #999;
   text-decoration: line-through;
   font-weight: 500;
 }
 
-.gold-normal-price {
+.goldNormalPrice {
   font-size: 20px;
   font-weight: 800;
   color: #333;
 }
 
-/* Gold Corner Accents */
-.gold-corner-tl,
-.gold-corner-tr,
-.gold-corner-bl,
-.gold-corner-br {
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  z-index: 1;
-  pointer-events: none;
-}
-
-.gold-corner-tl {
-  top: 0;
-  left: 0;
-  border-top: 2px solid #d4af37;
-  border-left: 2px solid #d4af37;
-}
-
-.gold-corner-tr {
-  top: 0;
-  right: 0;
-  border-top: 2px solid #d4af37;
-  border-right: 2px solid #d4af37;
-}
-
-.gold-corner-bl {
-  bottom: 0;
-  left: 0;
-  border-bottom: 2px solid #d4af37;
-  border-left: 2px solid #d4af37;
-}
-
-.gold-corner-br {
-  bottom: 0;
-  right: 0;
-  border-bottom: 2px solid #d4af37;
-  border-right: 2px solid #d4af37;
-}
 
 /* Gold Hover Effects */
-.gold-card::before {
+.goldCard::before {
   content: '';
   position: absolute;
   top: 0;
@@ -387,160 +370,195 @@
   z-index: 1;
 }
 
-.gold-card:hover::before {
+.goldCard:hover::before {
   opacity: 1;
 }
 
 /* Responsive Design */
 @media (max-width: 1200px) {
-  .gold-grid {
+  .goldGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .goldGrid2Col {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  .goldGrid3Col {
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
   }
 }
 
 @media (max-width: 992px) {
-  .product-gold-section {
+  .productGoldSection {
     padding: 40px 16px;
   }
 
-  .gold-title-gradient {
+  .goldTitleGradient {
     font-size: 24px;
   }
 
-  .gold-title-highlight {
+  .goldTitleHighlight {
     font-size: 28px;
   }
 
-  .gold-grid {
+  .goldGrid {
     grid-template-columns: repeat(2, 1fr);
     gap: 16px;
   }
 }
 
 @media (max-width: 768px) {
-  .gold-grid {
+  .goldGrid {
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
   }
 
-  .gold-title-wrapper {
+  .goldGrid2Col {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .goldGrid3Col {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .goldTitleWrapper {
     flex-direction: column;
     gap: 16px;
   }
 
-  .gold-title-line {
+  .goldTitleLine {
     width: 80px;
   }
 
-  .gold-title-gradient {
+  .goldTitleGradient {
     font-size: 20px;
   }
 
-  .gold-title-highlight {
+  .goldTitleHighlight {
     font-size: 24px;
     flex-direction: column;
     gap: 4px;
   }
 
-  .gold-card-title {
+  .goldCardTitle {
     font-size: 15px;
   }
 
-  .gold-current-price,
-  .gold-normal-price {
+  .goldCurrentPrice,
+  .goldNormalPrice {
     font-size: 18px;
   }
 
-  .card-gold-content {
+  .cardGoldContent {
     padding: 12px;
   }
 
-  .gold-feature-chip {
+  .goldFeatureChip {
     font-size: 11px;
     padding: 3px 8px;
   }
 }
 
 @media (max-width: 480px) {
-  .product-gold-section {
+  .productGoldSection {
     padding: 32px 12px;
   }
 
-  .gold-grid {
+  .goldGrid {
     grid-template-columns: repeat(2, 1fr);
     gap: 8px;
   }
 
-  .gold-card-title {
+  .goldGrid2Col {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .goldGrid3Col {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .goldCardTitle {
     font-size: 14px;
   }
 
-  .gold-title-gradient {
+  .goldTitleGradient {
     font-size: 18px;
     letter-spacing: 1px;
   }
 
-  .gold-title-highlight {
+  .goldTitleHighlight {
     font-size: 20px;
   }
 
-  .gold-current-price,
-  .gold-normal-price {
+  .goldCurrentPrice,
+  .goldNormalPrice {
     font-size: 16px;
   }
 
-  .gold-original-price {
+  .goldOriginalPrice {
     font-size: 13px;
   }
 
-  .gold-discount-badge {
+  .goldDiscountBadge {
     font-size: 10px;
     padding: 2px 6px;
   }
 
-  .gold-quick-view-btn {
+  .goldQuickViewBtn {
     padding: 6px 12px;
     font-size: 11px;
     bottom: 12px;
     right: 12px;
   }
 
-  .gold-sale-badge {
+  .goldSaleBadge {
     padding: 4px 12px;
     font-size: 11px;
   }
 }
 
 @media (max-width: 360px) {
-  .gold-grid {
+  .goldGrid {
     grid-template-columns: 1fr;
     gap: 12px;
   }
 
-  .gold-card-title {
+  .goldGrid2Col {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .goldGrid3Col {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .goldCardTitle {
     font-size: 15px;
   }
 }
 
 /* Touch Device Optimization */
 @media (hover: none) {
-  .gold-card:hover {
+  .goldCard:hover {
     transform: none;
   }
 
-  .gold-quick-view-btn {
+  .goldQuickViewBtn {
     opacity: 1;
     transform: translateX(0);
   }
 
-  .gold-card:hover .gold-card-image img {
+  .goldCard:hover .goldCardImage img {
     transform: none;
   }
 }
 
 /* Loading state for image */
-.gold-card-image::before {
+.goldCardImage::before {
   content: '';
   position: absolute;
   top: 0;

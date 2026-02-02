@@ -60,8 +60,8 @@
 /* News Grid - Updated Responsive */
 .recentGrid {
   display: grid;
-  gap: 24px;
-  grid-template-columns: 1fr; /* Mobile: 1 column */
+  gap: 12px;
+  grid-template-columns: repeat(2, 1fr);
 }
 
 .recentCard {
@@ -106,7 +106,7 @@
 }
 
 .recentContent {
-  padding: 20px;
+  padding: 8px;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -160,7 +160,6 @@
   display: flex;
   align-items: center;
   gap: 16px;
-  margin-top: 12px;
   padding-top: 12px;
   border-top: 1px solid #f0f0f0;
 }
@@ -244,10 +243,6 @@
 
   .newsArticleContainer .articleTitle {
     font-size: 2.5rem;
-  }
-
-  .stats {
-    margin-top: 16px;
   }
 
   .newsArticleContainer .categoryFilter {
@@ -376,7 +371,7 @@
 
 @media (max-width: 360px) {
   .recentGrid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr); /* 2 columns */
     gap: 16px;
   }
 
