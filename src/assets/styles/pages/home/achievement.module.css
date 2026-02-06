@@ -1,64 +1,154 @@
-/* Minimal Achievement Section */
+/* Container chính */
 .achievement {
+  background: linear-gradient(rgb(34, 34, 34) 0%, rgb(51, 51, 51) 100%);
+  border: 2px solid #ffd700;
+  padding: 12px 0;
   position: relative;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 40px 20px;
+  z-index: 5;
 }
 
 .statsContainer {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 40px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
 }
 
 .statItem {
   text-align: center;
-  padding: 20px 15px;
-  border-bottom: 3px solid #f2df20;
+  position: relative;
+  padding: 15px;
+  border-radius: 8px;
+  transition: transform 0.3s ease, background 0.3s ease;
 }
 
-.statValue {
+.statItem:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 215, 0, 0.05);
+}
+
+.statItem:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: -15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 50px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(255, 215, 0, 0.5),
+    transparent
+  );
+}
+
+.statNumber {
   font-size: 1.5rem;
-  font-weight: 700;
-  color: #f2df20;
+  font-weight: 800;
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   margin-bottom: 8px;
-  text-transform: uppercase;
+  line-height: 1;
+  text-shadow: 0 2px 10px rgba(255, 215, 0, 0.2);
+}
+
+.statNumber::after {
+  content: attr(data-symbol);
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .statLabel {
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   color: #ffffff;
-  opacity: 0.8;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  margin-bottom: 4px;
+  opacity: 0.9;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+@media (max-width: 992px) {
   .statsContainer {
     grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
+    gap: 40px;
   }
   
-  .statValue {
-    font-size: 1.2rem;
+  .statNumber {
+    font-size: 1.6rem;
+  }
+  
+  .statLabel {
+    font-size: 0.85rem;
   }
 }
 
-@media (max-width: 480px) {
-  .achievement {
-    padding: 30px 15px;
+@media (max-width: 768px) {
+  .statsContainer {
+    padding: 0 20px;
+    gap: 30px;
   }
   
+  .statNumber {
+    font-size: 1.2rem;
+  }
+  
+  .statLabel {
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+  }
+  
+  .statItem:not(:last-child)::after {
+    height: 40px;
+  }
+}
+
+@media (max-width: 576px) {
   .statsContainer {
-    grid-template-columns: 1fr;
-    gap: 12px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  
+  .statNumber {
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+  }
+  
+  .statLabel {
+    font-size: 0.7rem;
+    letter-spacing: 0.8px;
   }
   
   .statItem {
-    padding: 15px;
+    padding: 10px;
   }
   
-  .statValue {
-    font-size: 1.1rem;
+  .statItem:not(:last-child)::after {
+    height: 35px;
+    right: -10px;
+  }
+}
+
+@media (max-width: 400px) {
+  .statsContainer {
+    gap: 15px;
+    padding: 0 15px;
+  }
+  
+  .statNumber {
+    font-size: 0.85rem;
+  }
+  
+  .statLabel {
+    font-size: 0.65rem;
+    letter-spacing: 0.5px;
   }
 }

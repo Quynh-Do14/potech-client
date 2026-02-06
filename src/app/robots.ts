@@ -5,37 +5,67 @@ export default function robots(): MetadataRoute.Robots {
         rules: [
             {
                 userAgent: '*',
+                allow: [
+                    '/',
+                    '/tin-tuc/',
+                    '/san-pham/',
+                    '/dai-ly/',
+                ],
                 disallow: [
                     '/profile/',
                     '/login/',
                     '/register/',
                 ],
-                allow: [
-                    '/*.js$',
-                    '/*.css$',
-                    '/*.png$',
-                    '/*.jpg$',
-                    '/*.jpeg$',
-                    '/*.gif$',
-                    '/*.pdf$',
-                    '/*.doc$',
-                    '/*.docx$',
-
-                    '/tin-tuc/',
-                    '/san-pham',
-                    '/dai-ly',
-                    '/  /',
-                ],
             },
+            // Rule riêng cho AI crawlers
             {
-                userAgent: 'ChatGPT-User',
+                userAgent: [
+                    'GPTBot',
+                    'ChatGPT-User',
+                    'Google-Extended',
+                    'Claude-Web',
+                    'OAI-SiteChecker',
+                    'anthropic-ai',
+                    'FacebookBot'
+                ],
                 allow: '/',
+                disallow: [
+                    '/api/',
+                    '/admin/',
+                    '/profile/',
+                    '/user/',
+                ],
+                // Thêm crawl delay cho AI bots
+                crawlDelay: 2,
             },
+            // Googlebot riêng
             {
                 userAgent: 'Googlebot',
-                allow: '/Register/RegisterGoogle',
+                allow: [
+                    '/',
+                    '/tin-tuc/',
+                    '/san-pham/',
+                    '/dai-ly/',
+                ],
+                disallow: [
+                    '/api/',
+                    '/admin/',
+                ],
+                crawlDelay: 1,
+            },
+            // Chặn hoàn toàn các AI crawlers nếu không muốn
+            {
+                userAgent: [
+                    'GPTBot',
+                    'ChatGPT-User',
+                    'Google-Extended',
+                    'CCBot',
+                    'OAI-SiteChecker',
+                ],
+                disallow: '/', // Chặn toàn bộ nếu cần
             },
         ],
-        sitemap: 'https://potech.vn/sitemap.xml',
+        sitemap: 'https://potechvietnam.vn/sitemap.xml',
+        host: 'https://potechvietnam.vn',
     }
 }

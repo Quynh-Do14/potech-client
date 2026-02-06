@@ -170,6 +170,12 @@
 
 /* Mobile: 480px - 767px */
 @media (max-width: 767px) {
+  .gridLink {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 20px;
+  }
+
   .footer {
     padding: 40px 0 20px;
   }

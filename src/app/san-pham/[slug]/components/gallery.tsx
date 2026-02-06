@@ -20,7 +20,7 @@ const SlideItem = memo(({ slide, isActive, onClick }: { slide: string, isActive:
                     alt="Product thumbnail"
                     fill
                     className={styles.thumbnailImage}
-                    sizes="(max-width: 768px) 100px, 150px"
+                    sizes="100px"
                     quality={75}
                 />
                 {isActive && <div className={styles.activeOverlay} />}
@@ -49,13 +49,9 @@ const GalleryComponent = (props: Props) => {
     }, [slides]);
 
     const handleThumbnailClick = useCallback((index: number) => {
-        // Ngăn chặn scroll to top
         event?.preventDefault();
-
         setCurrentSlide(index);
         setMainImage(slides[index]);
-
-        // Smooth scroll thumbnail vào view nếu cần
         if (thumbnailSliderRef.current) {
             thumbnailSliderRef.current.slickGoTo(index);
         }
@@ -97,7 +93,7 @@ const GalleryComponent = (props: Props) => {
 
     const settings: Settings = {
         dots: false,
-        infinite: true,
+        infinite: false,
         speed: 300,
         slidesToShow: Math.min(5, slides.length),
         slidesToScroll: 1,
@@ -105,10 +101,11 @@ const GalleryComponent = (props: Props) => {
         arrows: false,
         centerMode: true,
         centerPadding: '0px',
-        focusOnSelect: false, // Đặt false để tránh focus gây scroll
+        focusOnSelect: false,
         beforeChange: handleBeforeChange,
         swipeToSlide: true,
         touchThreshold: 10,
+        variableWidth: false, // Đặt false để sử dụng fixed width
         responsive: [
             {
                 breakpoint: 1200,
@@ -138,30 +135,6 @@ const GalleryComponent = (props: Props) => {
         ]
     };
 
-    <style jsx global>{`
-    /* Slick slider global fixes */
-    .galleryContainer .slick-slide {
-        height: auto !important;
-    }
-    
-    .galleryContainer .slick-slide > div {
-        height: 100%;
-    }
-    
-    .galleryContainer .slick-track {
-        display: flex !important;
-        align-items: center;
-    }
-    
-    .galleryContainer .slick-list {
-        overflow: visible !important;
-    }
-    
-    .galleryContainer .slick-slide:focus {
-        outline: none !important;
-    }
-    `}</style>
-
     return (
         <div className={styles.galleryContainer} ref={galleryContainerRef}>
             {/* Main Image Section */}
@@ -179,80 +152,68 @@ const GalleryComponent = (props: Props) => {
                             className={styles.mainImage}
                             priority
                             quality={90}
-                            onLoad={() => {
-                                // Thêm class loaded khi ảnh load xong
-                                const container = document.querySelector(`.${styles.mainImageContainer}`);
-                                if (container) {
-                                    container.classList.add(styles.loaded);
-                                }
-                            }}
                         />
                     </div>
 
                     {/* Navigation Buttons */}
-                    <button
-                        className={styles.navButton}
-                        onClick={handlePrev}
-                        aria-label="Previous image"
-                        type="button"
-                    >
-                        <i className="fa fa-chevron-left" aria-hidden="true"></i>
-                    </button>
-                    <button
-                        className={styles.navButton}
-                        onClick={handleNext}
-                        aria-label="Next image"
-                        type="button"
-                    >
-                        <i className="fa fa-chevron-right" aria-hidden="true"></i>
-                    </button>
-
-
+                    {
+                        slides.length > 1
+                        &&
+                        <button
+                            className={`${styles.navButton} ${styles.prevButton}`}
+                            onClick={handlePrev}
+                            aria-label="Previous image"
+                            type="button"
+                        >
+                            <i className="fa fa-chevron-left" aria-hidden="true"></i>
+                        </button>
+                    }
+                    {
+                        slides.length > 1
+                        &&
+                        <button
+                            className={`${styles.navButton} ${styles.nextButton}`}
+                            onClick={handleNext}
+                            aria-label="Next image"
+                            type="button"
+                        >
+                            <i className="fa fa-chevron-right" aria-hidden="true"></i>
+                        </button>
+                    }
                     {/* Slide Counter */}
-                    <div className={styles.slideCounter}>
-                        <span className={styles.currentSlide}>{currentSlide + 1}</span>
-                        <span className={styles.slideSeparator}>/</span>
-                        <span className={styles.totalSlides}>{slides.length}</span>
-                    </div>
+                    {
+                        slides.length > 1
+                        &&
+                        <div className={styles.slideCounter}>
+                            <span className={styles.currentNumber}>{currentSlide + 1}</span>
+                            <span className={styles.slash}>/</span>
+                            <span className={styles.totalNumber}>{slides.length}</span>
+                        </div>
+                    }
                 </div>
             </div>
 
             {/* Thumbnail Slider */}
-            <div className={styles.thumbnailSliderContainer}>
-                <Slider {...settings} ref={thumbnailSliderRef}>
-                    {slides.map((slide, index) => (
-                        <div key={index} className={styles.slideWrapper}>
-                            <SlideItem
-                                slide={slide}
-                                isActive={currentSlide === index}
-                                onClick={() => handleThumbnailClick(index)}
-                            />
-                        </div>
-                    ))}
-                </Slider>
-
-                {/* Custom Dots Navigation */}
-                {slides.length > 5 && (
-                    <div className={styles.customDots}>
-                        {slides.map((_, index) => (
-                            <button
-                                key={index}
-                                className={`${styles.dot} ${currentSlide === index ? styles.activeDot : ''}`}
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    handleThumbnailClick(index);
-                                }}
-                                aria-label={`Go to slide ${index + 1}`}
-                                type="button"
-                            >
-                                {currentSlide === index && (
-                                    <i className="fa fa-circle" aria-hidden="true"></i>
-                                )}
-                            </button>
-                        ))}
+            {
+                slides.length > 1
+                &&
+                <div className={styles.thumbnailSliderContainer}>
+                    <div className={styles.sliderWrapper}>
+                        <Slider {...settings} ref={thumbnailSliderRef}>
+                            {slides.map((slide, index) => (
+                                <div key={index} className={styles.slideWrapper}>
+                                    <SlideItem
+                                        slide={slide}
+                                        isActive={currentSlide === index}
+                                        onClick={() => handleThumbnailClick(index)}
+                                    />
+                                </div>
+                            ))}
+                        </Slider>
                     </div>
-                )}
-            </div>
+                </div>
+            }
+
         </div>
     )
 }

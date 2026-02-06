@@ -234,7 +234,7 @@ const HeaderSection = () => {
                 <div className={styles.container}>
                     <Link href={ROUTE_PATH.HOME_PAGE} className={styles.logo}>
                         <div className={styles.logoIcon}>
-                            <Image src={logo} alt="POTECH" width={140} height={120} />
+                            <Image src={logo} alt="POTECH" width={180} height={120} />
                         </div>
                     </Link>
 

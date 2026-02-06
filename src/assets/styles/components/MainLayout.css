@@ -2,9 +2,19 @@
   position: relative;
 }
 
-.main-layout-client .social {
+.main-layout-client .social.media {
   position: fixed;
   right: 5%;
+  bottom: 10%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 999;
+}
+
+.main-layout-client .social.tel {
+  position: fixed;
+  left: 5%;
   bottom: 10%;
   display: flex;
   flex-direction: column;
@@ -17,37 +27,133 @@
   display: inline-block;
 }
 
+/* Hiệu ứng nổi bật cho hotline */
+.main-layout-client .social.tel .social-item {
+  animation: pulse-hotline 2s infinite;
+  box-shadow: 0 0 20px rgba(255, 59, 48, 0.5);
+  border-radius: 50%;
+}
+
+/* Hiệu ứng nổi bật cho mạng xã hội */
+.main-layout-client .social.media .social-item {
+  animation: float-social 3s ease-in-out infinite;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
 .main-layout-client .social img {
   width: 60px;
   height: 60px;
   cursor: pointer;
-  transition: transform 0.2s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 50%;
 }
 
 .main-layout-client .social img:hover {
-  transform: scale(1.1);
+  transform: scale(1.15);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* Hiệu ứng đặc biệt cho hotline khi hover */
+.main-layout-client .social.tel img:hover {
+  box-shadow: 0 0 30px rgba(255, 59, 48, 0.8);
+  filter: brightness(1.2);
 }
 
 /* Tooltip */
-.main-layout-client .social-item::after {
+.main-layout-client .tel .social-item::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 60px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: linear-gradient(135deg, #ff3b30, #ff9500);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+  box-shadow: 0 4px 12px rgba(255, 59, 48, 0.4);
+}
+
+.main-layout-client .media .social-item::after {
   content: attr(data-tooltip);
   position: absolute;
   right: 60px;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.8);
+  background: linear-gradient(135deg, #007aff, #5856d6);
   color: white;
-  padding: 6px 12px;
-  border-radius: 4px;
-  font-size: 12px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
   white-space: nowrap;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.3s ease, transform 0.3s ease;
   pointer-events: none;
+  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.4);
 }
 
 .main-layout-client .social-item:hover::after {
   opacity: 1;
+  transform: translateY(-50%) scale(1.05);
+}
+
+/* Animation cho hotline - hiệu ứng nhấp nháy */
+@keyframes pulse-hotline {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 15px rgba(255, 59, 48, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 59, 48, 0);
+  }
+}
+
+/* Animation cho mạng xã hội - hiệu ứng nổi lên */
+@keyframes float-social {
+  0%,
+  100% {
+    transform: translateY(0);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  }
+  50% {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* Animation xoay nhẹ cho icon */
+@keyframes rotate-icon {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Hiệu ứng cho icon hotline khi không hover */
+.main-layout-client .social.tel img {
+  animation: heartbeat 1.5s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
 }
 
 /* Responsive tooltip */
@@ -57,11 +163,19 @@
   }
 }
 
-/* Responsive images */
+/* Responsive images và animation */
 @media (max-width: 1024px) {
   .main-layout-client .social img {
     width: 45px;
     height: 45px;
+  }
+
+  .main-layout-client .tel .social-item::after {
+    left: 45px;
+  }
+
+  .main-layout-client .media .social-item::after {
+    right: 45px;
   }
 }
 
@@ -75,11 +189,37 @@
     width: 40px;
     height: 40px;
   }
+
+  /* Giảm animation trên mobile để tiết kiệm pin */
+  .main-layout-client .social.tel .social-item {
+    animation: pulse-hotline 3s infinite;
+    width: 40px;
+    height: 40px;
+  }
+
+  .main-layout-client .social.media .social-item {
+    animation: float-social 4s ease-in-out infinite;
+  }
 }
 
 @media (max-width: 480px) {
+  .main-layout-client .social.tel .social-item {
+    animation: pulse-hotline 3s infinite;
+    width: 35px;
+    height: 35px;
+  }
+
   .main-layout-client .social img {
     width: 35px;
     height: 35px;
+  }
+
+  /* Tắt animation trên thiết bị rất nhỏ */
+  @media (prefers-reduced-motion: reduce) {
+    .main-layout-client .social.tel .social-item,
+    .main-layout-client .social.media .social-item,
+    .main-layout-client .social.tel img {
+      animation: none;
+    }
   }
 }

@@ -88,11 +88,11 @@ const FooterSection = () => {
                     {/* Contact Section */}
                     <div className={styles.footerSection}>
                         <div className={styles.sectionTitle}>
-                            LIÊN HỆ
+                            Công ty TNHH Thương Mại Xuất Nhập Khẩu Nội Thất Ô Tô Quang Minh
                         </div>
                         <div className={styles.contactInfo}>
                             <div className={styles.companyInfo}>
-                                Công ty TNHH Thương Mại Xuất Nhập Khẩu Nội Thất Ô Tô Quang Minh
+
                             </div>
                             <div className={styles.companyInfo}>
                                 Mã số doanh nghiệp: 0107801299 - Sở KH và ĐT TP Hà Nội cấp ngày 12/04/2017
@@ -147,7 +147,7 @@ const FooterSection = () => {
                     <div className={styles.gridLink}>
                         <div className={styles.footerSection}>
                             <div className={styles.sectionTitle}>
-                                LIÊN KẾT NHANH
+                                LIÊN KẾT
                             </div>
                             <ul className={styles.linksList}>
                                 {menuItems.map((item) => (
@@ -178,12 +178,6 @@ const FooterSection = () => {
                     </div>
 
                 </div>
-            </div>
-
-
-            <div className={styles.footerBottom}>
-                <p>&copy; {new Date().getFullYear()} POTECH. Tất cả các quyền được bảo lưu.</p>
-                <p>Chuyên gia phim cách nhiệt & chăm sóc ô tô hàng đầu Việt Nam</p>
             </div>
         </footer>
     );
