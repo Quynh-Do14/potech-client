@@ -100,7 +100,7 @@ export const metadata: Metadata = {
     countryName: "Vietnam",
     images: [
       {
-        url: configImageURL('/uploads/POTECH-logo.png'),
+        url: configImageURL('/uploads/potech-logo.jpg'),
         width: 1200,
         height: 630,
         alt: `${brandName} - ${companyName}`,
@@ -401,7 +401,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-        
+
         {/* Geo Meta Tags */}
         <meta name="geo.region" content="VN-HN" />
         <meta name="geo.placename" content="Hà Nội" />
