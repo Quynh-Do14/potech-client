@@ -39,7 +39,7 @@ const IntroducePage = () => {
     return (
         <ClientLayout>
             <BannerCommon
-                bannerImg={banner}
+                type={'INTRODUCE'}
             />
             <div className={`${styles.introduceContainer} padding-common`}>
                 <BreadcrumbCommon
