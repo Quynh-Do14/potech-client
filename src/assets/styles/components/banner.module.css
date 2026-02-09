@@ -1,7 +1,8 @@
 /* ImageBanner.module.css */
 .bannerContainer {
-  width: 1920px;
-  height: 288px;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16/5;
   position: relative;
   overflow: hidden;
   background: #000; /* Fallback màu nền */
@@ -16,10 +17,3 @@
 }
 
 /* Responsive cho các màn hình nhỏ hơn */
-@media (max-width: 1920px) {
-  .bannerContainer {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 20/3;
-  }
-}

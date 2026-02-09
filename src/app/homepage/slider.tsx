@@ -25,7 +25,9 @@ const FullWidthSlider = () => {
     const onGetListBannerAsync = async () => {
         try {
             await bannerService.GetBanner(
-                {},
+                {
+                    type: "HOMEPAGE"
+                },
                 setLoading
             ).then((res) => {
                 const listImg = res.data.map((item: BannerInterface) => item.image)

@@ -23,7 +23,7 @@ const PolicyPage = () => {
     return (
         <ClientLayout>
             <BannerCommon
-                bannerImg={banner}
+                type='POLICY'
             />
             <div className={`${styles.policyContainer} padding-common`}>
                 <BreadcrumbCommon

@@ -66,7 +66,7 @@ const ContactPage = () => {
     return (
         <ClientLayout>
             <BannerCommon
-                bannerImg={banner}
+                type='CONTACT'
             />
             <div className={`${styles.contactContainer} padding-common`}>
                 <BreadcrumbCommon
