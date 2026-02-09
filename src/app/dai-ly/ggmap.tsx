@@ -145,8 +145,8 @@ export default function GoogleMapView({ agencies, selectedAgency }: Props) {
                                     <Image
                                         src={configImageURL(item.image)}
                                         alt={item.name}
-                                        width={150}
-                                        height={150}
+                                        width={120}
+                                        height={120}
                                     />
                                     <strong>{item.name}</strong>
 

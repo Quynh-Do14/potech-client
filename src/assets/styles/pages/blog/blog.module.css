@@ -92,7 +92,7 @@
 .recentImage {
   position: relative;
   width: 100%;
-  aspect-ratio: 16/9; /* Tỷ lệ chuẩn hơn */
+  aspect-ratio: 3/2; /* Tỷ lệ chuẩn hơn */
   overflow: hidden;
 }
 
@@ -186,11 +186,6 @@
     grid-template-columns: repeat(2, 1fr); /* 2 columns */
     gap: 20px;
   }
-
-  .recentImage {
-    aspect-ratio: 3/2; /* Landscape cho mobile */
-  }
-
   .recentTitle {
     font-size: 15px;
   }
@@ -203,9 +198,6 @@
     gap: 20px;
   }
 
-  .recentImage {
-    aspect-ratio: 16/9;
-  }
 
   .recentContent {
     padding: 16px;
@@ -225,10 +217,6 @@
   .recentGrid {
     grid-template-columns: repeat(2, 1fr); /* 2 columns cho tablet */
     gap: 24px;
-  }
-
-  .recentImage {
-    aspect-ratio: 16/10;
   }
 
   .recentContent {
@@ -265,11 +253,6 @@
     gap: 30px;
   }
 
-  .recentImage {
-    aspect-ratio: 16/9;
-    height: 200px;
-  }
-
   .recentContent {
     padding: 12px;
     gap: 16px;
@@ -300,11 +283,6 @@
     gap: 20px;
   }
 
-  .recentImage {
-    aspect-ratio: 16/11;
-    height: 220px;
-  }
-
   .recentTitle {
     font-size: 18px;
     -webkit-line-clamp: 2;
@@ -320,10 +298,6 @@
   .recentGrid {
     grid-template-columns: repeat(4, 1fr);
     gap: 40px;
-  }
-
-  .recentImage {
-    height: 240px;
   }
 
   .recentContent {
@@ -345,10 +319,6 @@
     grid-template-columns: repeat(2, 1fr); /* 2 columns */
     gap: 8px;
   }
-  .recentImage {
-    aspect-ratio: 4/3;
-  }
-
   .recentContent {
     padding: 8px;
   }
@@ -373,10 +343,6 @@
   .recentGrid {
     grid-template-columns: repeat(2, 1fr); /* 2 columns */
     gap: 16px;
-  }
-
-  .recentImage {
-    aspect-ratio: 4/3;
   }
 
   .recentContent {

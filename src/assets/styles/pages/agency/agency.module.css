@@ -124,10 +124,10 @@
 
 /* Card Content */
 .cardContent {
-  padding: 24px;
+  padding: 12px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
 }
 
 .cardHeader {
@@ -154,8 +154,7 @@
 .cardInfo {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  margin-top: 8px;
+  gap: 8px;
 }
 
 .infoItem {
@@ -342,10 +341,6 @@
     height: 60vh;
   }
 
-  .cardContent {
-    padding: 20px;
-  }
-
   .cardName {
     font-size: 18px;
   }
@@ -371,11 +366,6 @@
 
   .cardImage {
     height: 180px;
-  }
-
-  .cardContent {
-    padding: 16px;
-    gap: 12px;
   }
 
   .noDataContainer {
@@ -485,10 +475,6 @@
     margin: 20px auto 0;
   }
 
-  .cardContent {
-    padding: 24px;
-  }
-
   .cardBadge {
     top: 28px;
     left: 28px;
@@ -538,10 +524,6 @@
 
   .cardName {
     font-size: 1.25rem;
-  }
-
-  .cardContent {
-    padding: 20px;
   }
 
   .infoIconWrapper {

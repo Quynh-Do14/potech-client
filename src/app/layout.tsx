@@ -379,6 +379,19 @@ export default function RootLayout({
         {/* RSS Feed (nếu có) */}
         {/* <link rel="alternate" type="application/rss+xml" href="/feed.xml" /> */}
 
+
+        {/* <!-- Trong layout hoặc head của Next.js --> */}
+        <meta name="robots" content="index, follow" />
+        <meta name="googlebot" content="index, follow" />
+        <meta name="googlebot-news" content="index, follow" />
+
+        {/* <!-- Chặn AI training từ OpenAI, Anthropic, etc. --> */}
+        <meta name="robots" content="noai, noimageai" />
+        <meta name="ai" content="noindex, nofollow, noarchive" />
+
+        {/* <!-- Hoặc cụ thể hơn --> */}
+        <meta name="google-extended" content="notranslate" />
+
         {/* Structured Data */}
         <script
           type="application/ld+json"
