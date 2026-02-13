@@ -7,9 +7,9 @@ interface Stat {
 
 const stats: Stat[] = [
     { title: "Lỗi 1 đổi 1", label: "Trong 12 tháng" },
-    { title: "Bảo hành 18 tháng", label: "Kể từ ngày mua" },
+    { title: "Bảo hành 24 tháng", label: "Kể từ ngày mua" },
     { title: "Sản phẩm chính hãng", label: "Đại lý toàn quốc" },
-    { title: "Miễn phí vận chuyển", label: "Toàn quốc" }
+    { title: "Miễn phí lắp đặt ", label: "Toàn quốc" }
 ];
 
 const AchievementSection = () => {

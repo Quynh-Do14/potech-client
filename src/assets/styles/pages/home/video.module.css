@@ -1,12 +1,12 @@
 /* PromotionSection.module.css */
 
 .videoSection {
-  color: #1a1a1a;
+  color: #ffffff;
   position: relative;
   max-width: 1400px;
   margin: 0 auto;
   padding: 30px 20px;
-  background: #fff;
+  background: transparent;
 }
 
 /* Video Content - 2 video side by side */
@@ -23,41 +23,55 @@
   gap: 8px;
   cursor: pointer;
   position: relative;
-
-  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.05);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
 }
+
+.mainVideo:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 140, 0, 0.3);
+  transform: translateY(-5px);
+}
+
 .testimonialVideoContent {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding: 12px;
+  padding: 20px;
 }
+
 .testimonialTitle {
   font-size: 1.6rem;
   font-weight: 700;
-  color: #eec715;
+  color: #ffb347; /* Màu cam sáng hơn */
   line-height: 1.3;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.testimonialTitle::before {
-  content: '"';
-}
-
+.testimonialTitle::before,
 .testimonialTitle::after {
   content: '"';
+  color: #ff8c00;
+  font-size: 2rem;
+  opacity: 0.8;
 }
 
 .testimonialVideoContainer {
   position: relative;
   border-radius: 12px;
-  background: #000;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
 }
 
 .testimonialVideo {
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #333, #222);
+  background: linear-gradient(135deg, #2d2d2d, #1e1e1e);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -68,27 +82,35 @@
   position: absolute;
   width: 60px;
   height: 60px;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.95);
   border: none;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  box-shadow: 0 4px 20px rgba(255, 140, 0, 0.4);
+  transition: all 0.3s ease;
 }
 
 .smallPlayButton svg {
-  color: #ff8c00e6;
+  color: #ff8c00;
+  width: 30px;
+  height: 30px;
 }
+
 .smallPlayButton:hover {
-  transform: scale(1.2);
-  transition-duration: 0.3s;
+  transform: scale(1.15);
+  background: #ffffff;
+  box-shadow: 0 6px 25px rgba(255, 140, 0, 0.6);
 }
+
 .testimonialQuote {
   font-size: 0.95rem;
   line-height: 1.6;
-  color: #444;
+  color: #e0e0e0; /* Màu xám sáng */
   margin: 0;
+  font-style: italic;
 }
 
 .testimonialFooter {
@@ -96,13 +118,15 @@
   justify-content: space-between;
   align-items: center;
   padding-top: 15px;
-  border-top: 1px solid #e5e5e5;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  color: #cccccc;
 }
 
 /* Footer Stats */
 .footer {
   padding-top: 40px;
-  border-top: 1px solid #e5e5e5;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  margin-top: 20px;
 }
 
 .statsContainer {
@@ -113,18 +137,68 @@
 
 .statItem {
   text-align: center;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+}
+
+.statItem:hover {
+  background: rgba(255, 140, 0, 0.1);
+  border-color: rgba(255, 140, 0, 0.3);
+  transform: translateY(-3px);
 }
 
 .statValue {
   font-size: 2.2rem;
   font-weight: 800;
-  color: #ff8c00;
+  color: #ffa64d; /* Màu cam nhạt */
   margin-bottom: 8px;
+  text-shadow: 0 0 20px rgba(255, 140, 0, 0.3);
 }
 
 .statLabel {
   font-size: 0.95rem;
-  color: #666;
+  color: #b0b0b0; /* Màu xám trung bình */
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+/* Thêm các thành phần khác nếu có */
+.promotionTitle {
+  color: #ffffff;
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.taglineHighlight {
+  color: #ffb347;
+  text-shadow: 0 2px 10px rgba(255, 140, 0, 0.3);
+}
+
+.actionButton {
+  background: linear-gradient(135deg, #ff8c00, #ff6b00);
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 30px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.actionButton:hover {
+  background: linear-gradient(135deg, #ff9900, #ff7700);
+  box-shadow: 0 5px 20px rgba(255, 140, 0, 0.4);
+  transform: scale(1.05);
+}
+
+.dateInfo {
+  color: #cccccc;
+}
+
+.dateInfo strong {
+  color: #ffb347;
 }
 
 /* Responsive */
@@ -150,7 +224,11 @@
 
   .statsContainer {
     grid-template-columns: repeat(2, 1fr);
-    gap: 25px;
+    gap: 20px;
+  }
+
+  .statItem {
+    padding: 15px;
   }
 
   .promotionTitle {
@@ -167,17 +245,23 @@
   .videoSection {
     padding: 32px 15px;
   }
+  
   .videoContent {
     grid-template-columns: 1fr;
     gap: 40px;
   }
+  
   .statsContainer {
     grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    gap: 15px;
   }
 
   .statValue {
     font-size: 1.8rem;
+  }
+
+  .statItem {
+    padding: 12px;
   }
 
   .promotionTitle {
@@ -196,5 +280,10 @@
   .smallPlayButton {
     width: 50px;
     height: 50px;
+  }
+  
+  .smallPlayButton svg {
+    width: 25px;
+    height: 25px;
   }
 }

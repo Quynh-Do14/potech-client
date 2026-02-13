@@ -15,7 +15,10 @@ export default function Home() {
           <AchievementSection />
         </div>
         <ProductSection />
-        <VideoSection />
+        <div className="bg-gradient-dark">
+          <VideoSection />
+
+        </div>
         <ArticleSection />
       </div>
     </ClientLayout>

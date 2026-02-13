@@ -12,8 +12,9 @@ const ClientLayout = ({ ...props }: any) => {
             {props.children}
             <FooterSection />
             <div className='social tel'>
-                <a href="tel:19008113" className='social-item' data-tooltip="Gọi ngay 1900 8113">
+                <a href="tel:19008113" className='social-item' data-tooltip="1900 8113">
                     <Image src={call} alt="Gọi ngay" />
+                    <span>1900 8113</span>
                 </a>
             </div>
             <div className='social media'>

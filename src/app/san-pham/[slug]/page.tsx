@@ -137,7 +137,7 @@ const ProductSlugContent = async ({ params }: Props) => {
                                 </div>
 
                                 <ul className={styles.featureList}>
-                                    {features.map((feature, index) => (
+                                    {dataDetail.characteristicProduct.map((feature, index) => (
                                         <li key={index} className={styles.featureItem}>
                                             <span className={styles.featureIcon}>
                                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -145,7 +145,7 @@ const ProductSlugContent = async ({ params }: Props) => {
                                                         stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                                 </svg>
                                             </span>
-                                            <span className={styles.featureText}>{feature}</span>
+                                            <span className={styles.featureText}>{feature.characteristic_name}</span>
                                         </li>
                                     ))}
                                 </ul>

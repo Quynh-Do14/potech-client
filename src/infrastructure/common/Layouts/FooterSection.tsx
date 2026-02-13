@@ -122,7 +122,7 @@ const FooterSection = () => {
                                 <div className={styles.contactItem}>
                                     <i className={`fa fa-map-marker ${styles.contactIcon}`}></i>
                                     <span className={styles.contactText}>
-                                        Số 145 - Trần Nhân Tôn - Phường 2 - Quận 10 - TP. Hồ Chí Minh
+                                        Địa chỉ: Số 15 Tùng Thiện Vương – Phường Phú Định – Thành phố Hồ Chí Minh
                                     </span>
                                 </div>
 

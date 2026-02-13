@@ -46,10 +46,10 @@ const VideoContent = () => {
                     <div className="section-badge">
                         <span className="badge-text">VIDEO GIỚI THIỆU</span>
                     </div>
-                    <h2 className="section-title">
+                    <h2 className="section-title-white">
                         Trải Nghiệm <span className="highlight">Sản Phẩm </span> Qua Video
                     </h2>
-                    <p className="section-subtitle">
+                    <p className="section-subtitle-white">
                         Khám phá sản phẩm của chúng tôi qua những video chất lượng cao,
                         mang đến cái nhìn chân thực và đầy đủ nhất
                     </p>

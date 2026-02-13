@@ -40,11 +40,11 @@ const ProductContent = () => {
         <section className={styles.productGoldSection}>
             <div className="section-header">
                 <div className="section-badge">
-                    <span className="badge-text">SẢN PHẨM MÀN HÌNH</span>
+                    <span className="badge-text"> DANH MỤC SẢN PHẨM</span>
                 </div>
-                <h1 className="section-title">
+                {/* <h1 className="section-title">
                     DVD <span className="highlight">Sản Phẩm </span> Màn Hình
-                </h1>
+                </h1> */}
             </div>
             <div className="flex flex-col gap-10">
                 {categoryProductState.map((category, key) => {

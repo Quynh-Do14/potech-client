@@ -302,6 +302,14 @@
   text-align: center;
 }
 
+.section-header .section-title-white {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.2;
+  text-align: center;
+}
+.section-header .section-title-white .highlight,
 .section-header .section-title .highlight {
   color: #ffd700;
   position: relative;
@@ -310,6 +318,15 @@
 .section-header .section-subtitle {
   font-size: 1rem;
   color: #666;
+  line-height: 1.5;
+  margin: 0;
+  max-width: 500px;
+  text-align: center;
+}
+
+.section-header .section-subtitle-white {
+  font-size: 1rem;
+  color: #fff;
   line-height: 1.5;
   margin: 0;
   max-width: 500px;
