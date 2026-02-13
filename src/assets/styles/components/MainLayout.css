@@ -4,7 +4,7 @@
 
 .main-layout-client .social.media {
   position: fixed;
-  right: 5%;
+  right: 1%;
   bottom: 10%;
   display: flex;
   flex-direction: column;
@@ -14,7 +14,7 @@
 
 .main-layout-client .social.tel {
   position: fixed;
-  left: 5%;
+  left: 1%;
   bottom: 10%;
   display: flex;
   flex-direction: column;
@@ -157,14 +157,13 @@
 }
 
 @media (max-width: 768px) {
-  .main-layout-client .social {
+  .main-layout-client .social.media {
     right: 2%;
-    bottom: 6%;
+    bottom: 2%;
   }
-
   .main-layout-client .social.tel {
     left: 2%;
-    bottom: 6%;
+    bottom: 2%;
     max-width: fit-content; /* Thêm dòng này */
   }
 
