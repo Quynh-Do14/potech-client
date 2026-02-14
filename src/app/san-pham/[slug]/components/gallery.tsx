@@ -40,7 +40,7 @@ const GalleryComponent = (props: Props) => {
     const [currentSlide, setCurrentSlide] = useState<number>(0);
     const [mainImage, setMainImage] = useState<string>(slides[0] || '');
     const mainImageRef = useRef<HTMLDivElement>(null);
-    const thumbnailSliderRef = useRef<Slider>(null);
+    const thumbnailSliderRef = useRef<Slider | null>(null);
     const galleryContainerRef = useRef<HTMLDivElement>(null);
 
     const handleBeforeChange = useCallback((oldIndex: number, newIndex: number) => {
@@ -49,63 +49,76 @@ const GalleryComponent = (props: Props) => {
     }, [slides]);
 
     const handleThumbnailClick = useCallback((index: number) => {
-        event?.preventDefault();
         setCurrentSlide(index);
         setMainImage(slides[index]);
-        if (thumbnailSliderRef.current) {
-            thumbnailSliderRef.current.slickGoTo(index);
-        }
     }, [slides]);
 
-    const handlePrev = useCallback(() => {
-        event?.preventDefault();
+    const handlePrev = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        if (slides.length <= 1) return;
+        
         const newIndex = currentSlide > 0 ? currentSlide - 1 : slides.length - 1;
         setCurrentSlide(newIndex);
         setMainImage(slides[newIndex]);
-        if (thumbnailSliderRef.current) {
-            thumbnailSliderRef.current.slickGoTo(newIndex);
+        
+        // Scroll thumbnail vào view
+        const thumbnails = document.querySelectorAll(`.${styles.slideItem}`);
+        if (thumbnails[newIndex]) {
+            thumbnails[newIndex].scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest',
+                inline: 'center'
+            });
         }
     }, [currentSlide, slides]);
 
-    const handleNext = useCallback(() => {
-        event?.preventDefault();
+    const handleNext = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        if (slides.length <= 1) return;
+        
         const newIndex = currentSlide < slides.length - 1 ? currentSlide + 1 : 0;
         setCurrentSlide(newIndex);
         setMainImage(slides[newIndex]);
-        if (thumbnailSliderRef.current) {
-            thumbnailSliderRef.current.slickGoTo(newIndex);
+        
+        // Scroll thumbnail vào view
+        const thumbnails = document.querySelectorAll(`.${styles.slideItem}`);
+        if (thumbnails[newIndex]) {
+            thumbnails[newIndex].scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest',
+                inline: 'center'
+            });
         }
     }, [currentSlide, slides]);
 
+    // Debug: Kiểm tra xem slider có được khởi tạo không
     useEffect(() => {
-        // Ngăn slick slider gây scroll
-        const slickSlides = document.querySelectorAll('.slick-slide');
-        slickSlides.forEach(slide => {
-            slide.addEventListener('click', (e) => e.preventDefault());
-        });
-
-        return () => {
-            slickSlides.forEach(slide => {
-                slide.removeEventListener('click', (e) => e.preventDefault());
-            });
-        };
+        console.log('Slider ref:', thumbnailSliderRef.current);
     }, []);
 
     const settings: Settings = {
         dots: false,
-        infinite: false,
-        speed: 300,
+        infinite: true, // Thay đổi thành true để có thể cuộn vòng
+        speed: 500,
         slidesToShow: Math.min(5, slides.length),
         slidesToScroll: 1,
         autoplay: false,
         arrows: false,
         centerMode: true,
         centerPadding: '0px',
-        focusOnSelect: false,
+        focusOnSelect: true, // Thay đổi thành true
         beforeChange: handleBeforeChange,
+        afterChange: (index) => {
+            console.log('After change:', index);
+        },
         swipeToSlide: true,
         touchThreshold: 10,
-        variableWidth: false, // Đặt false để sử dụng fixed width
+        variableWidth: false,
+        initialSlide: 0,
         responsive: [
             {
                 breakpoint: 1200,
@@ -199,7 +212,10 @@ const GalleryComponent = (props: Props) => {
                 &&
                 <div className={styles.thumbnailSliderContainer}>
                     <div className={styles.sliderWrapper}>
-                        <Slider {...settings} ref={thumbnailSliderRef}>
+                        <Slider 
+                            {...settings} 
+                            ref={thumbnailSliderRef}
+                        >
                             {slides.map((slide, index) => (
                                 <div key={index} className={styles.slideWrapper}>
                                     <SlideItem
