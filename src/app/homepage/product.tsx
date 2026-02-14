@@ -123,14 +123,14 @@ const ProductContent = () => {
                                             <div className={styles.goldContentWrapper}>
                                                 <h3 className={styles.goldCardTitle}>{item.name}</h3>
 
-                                                <div className={styles.goldFeatures}>
+                                                {/* <div className={styles.goldFeatures}>
                                                     <span className={styles.goldFeatureChip}>
                                                         Điều khiển bằng giọng nói
                                                     </span>
                                                     <span className={styles.goldFeatureChip}>
                                                         Tích hợp camera 360
                                                     </span>
-                                                </div>
+                                                </div> */}
 
                                                 {/* Price Section Gold Style */}
                                                 <div className={styles.goldPriceSection}>
