@@ -26,6 +26,10 @@ const mainDescription = "Màn hình ô tô & Android Box Potech chính hãng thu
 // Keywords được nhóm theo chủ đề
 const keywords = [
   // Nhóm sản phẩm chính
+  "Potech Việt Nam",
+  "potech",
+  "màn hình potech",
+  "android box potech",
   "màn hình ô tô Potech",
   "android box ô tô",
   "android box Potech",
