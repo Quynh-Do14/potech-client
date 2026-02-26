@@ -5,6 +5,7 @@ import RecoilProvider from "./ClientProviders";
 import { configImageURL } from "@/infrastructure/helper/helper";
 import { Work_Sans } from 'next/font/google';
 import "@/assets/styles/common/editor-common.css"
+import Script from "next/script";
 
 const workSans = Work_Sans({
   subsets: ['latin', 'vietnamese'],
@@ -23,50 +24,24 @@ const brandName = "Potech";
 const mainTitle = "Màn hình ô tô & Android Box Potech Chính Hãng - Bảo Hành 10 Năm";
 const mainDescription = "Màn hình ô tô & Android Box Potech chính hãng thuộc hệ sinh thái Quang Minh. Phần cứng độc quyền, tích hợp AI thông minh, bảo hành lên đến 10 năm. Nâng cấp giải trí và an toàn cho xe hơi.";
 
-// Keywords được nhóm theo chủ đề
 const keywords = [
-  // Nhóm sản phẩm chính
   "Potech Việt Nam",
-  "potech",
-  "màn hình potech",
-  "android box potech",
+  "potechvietnam",
+  "màn hình android box Potech",
+  "android box Potech",
   "màn hình ô tô Potech",
   "android box ô tô",
   "android box Potech",
   "màn hình giải trí ô tô",
   "đầu android ô tô",
   "màn hình cảm ứng ô tô",
-
-  // Nhóm tính năng
-  "màn hình ô tô tích hợp AI",
   "android box thông minh",
   "giải pháp giải trí ô tô",
   "nâng cấp hệ thống giải trí xe hơi",
-
-  // Nhóm thương hiệu
   "Potech chính hãng",
   "phụ kiện ô tô Potech",
   "hệ sinh thái Quang Minh",
   "thương hiệu phụ kiện ô tô",
-
-  // Nhóm địa lý
-  "màn hình ô tô Hà Nội",
-  "android box ô tô toàn quốc",
-  "đại lý Potech",
-  "cửa hàng phụ kiện ô tô",
-
-  // Nhóm chất lượng
-  "bảo hành 10 năm",
-  "phần cứng độc quyền",
-  "sản phẩm chính hãng",
-  "chất lượng cao",
-
-  // Nhóm nhu cầu
-  "màn hình thay thế ô tô",
-  "nâng cấp xe hơi",
-  "giải trí ô tô",
-  "công nghệ ô tô",
-  "phụ kiện xe hơi"
 ];
 
 // Tạo canonical URL hợp lệ
@@ -345,7 +320,7 @@ const breadcrumbSchema = {
     }
   ]
 };
-
+const GA_TRACKING_ID = 'G-DYKHV4SM43';
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -409,6 +384,19 @@ export default function RootLayout({
             ])
           }}
         />
+
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', '${GA_TRACKING_ID}');
+        `}
+        </Script>
 
         <link
           rel="stylesheet"
