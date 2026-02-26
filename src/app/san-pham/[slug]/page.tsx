@@ -89,14 +89,7 @@ const ProductSlugContent = async ({ params }: Props) => {
     }).then((res) =>
         res.json()
     );
-    const features = [
-        "Ra lệnh giọng nói thông minh với trợ lý Kiki",
-        "Tích hợp camera 360",
-        "Cài đặt 5 màu sắc xe cơ bản",
-        "Cài đặt được biển số xe",
-        "Màn hình kích thước lớn, độ phân giải cao",
-        "Tích hợp nhiều bản đồ lựa chọn"
-    ];
+
     return (
         <ClientLayout>
             <div className={styles.productContainer}>

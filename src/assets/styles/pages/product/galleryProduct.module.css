@@ -10,7 +10,7 @@
   position: relative;
   width: 100%;
   height: 0;
-  padding-bottom: 75%; /* 4:3 aspect ratio */
+  padding-bottom: 100%; /* 4:3 aspect ratio */
   margin-bottom: 16px;
   border-radius: 8px;
   overflow: hidden;
@@ -18,7 +18,15 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.imageWrapper {
+.mainImageWrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.imageContainer {
   position: absolute;
   top: 0;
   left: 0;
@@ -60,11 +68,11 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-.navButton.prevButton {
+.prevButton {
   left: 12px;
 }
 
-.navButton.nextButton {
+.nextButton {
   right: 12px;
 }
 
@@ -83,6 +91,7 @@
   align-items: center;
   gap: 2px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  z-index: 10;
 }
 
 .currentNumber {
@@ -97,21 +106,25 @@
   opacity: 0.9;
 }
 
-/* Thumbnails Container */
-.thumbnailsContainer {
-  padding: 0 4px;
+/* Thumbnail Slider Container */
+.thumbnailSliderContainer {
+  padding: 0 30px; /* Tạo khoảng trống cho slider */
+  position: relative;
 }
 
-.thumbnailWrapper {
+.sliderWrapper {
+  overflow: hidden;
+}
+
+/* Slide Wrapper (slick-slide wrapper) */
+.slideWrapper {
   padding: 0 4px;
+  height: 100%;
 }
 
 /* Slide Item */
 .slideItem {
-  position: relative;
-  width: 100%;
-  height: 0;
-  padding-bottom: 100%; /* Square aspect ratio */
+  aspect-ratio: 1 / 1;
   cursor: pointer;
   border: none;
   background: none;
@@ -119,6 +132,8 @@
   border-radius: 6px;
   overflow: hidden;
   transition: transform 0.2s ease;
+  position: relative;
+  height: 100%;
 }
 
 .slideItem:hover {
@@ -135,9 +150,6 @@
 }
 
 .slideInner {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
   border: 2px solid transparent;
@@ -145,23 +157,52 @@
   overflow: hidden;
   transition: all 0.2s ease;
   background: #f5f5f5;
+  position: relative;
 }
 
 .thumbnailImage {
-  object-fit: cover !important;
+  object-fit: cover;
   object-position: center;
-  position: relative !important;
-  height: 100% !important;
   width: 100% !important;
+  height: 100% !important;
+  position: relative !important;
 }
 
-/* Slick Slider Customization */
-.thumbnailsContainer :global(.slick-list) {
+.activeOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 2px solid #ff8c00;
+  border-radius: 4px;
+  pointer-events: none;
+  box-sizing: border-box;
+  z-index: 2;
+}
+
+/* Slick Slider Custom Styles */
+.thumbnailSliderContainer :global(.slick-list) {
+  overflow: hidden;
   margin: 0 -4px;
 }
 
-.thumbnailsContainer :global(.slick-slide) {
-  height: auto;
+.thumbnailSliderContainer :global(.slick-slide) {
+  transition: transform 0.3s ease;
+}
+
+.thumbnailSliderContainer :global(.slick-slide) > div {
+  height: 100%;
+}
+
+.thumbnailSliderContainer :global(.slick-track) {
+  display: flex;
+  align-items: center;
+}
+
+/* Slick center mode active slide */
+.thumbnailSliderContainer :global(.slick-center) .slideItem {
+  transform: scale(1.05);
 }
 
 /* Responsive Design */
@@ -171,7 +212,7 @@
   }
 
   .mainImageContainer {
-    padding-bottom: 100%; /* 1:1 aspect ratio for mobile */
+    padding-bottom: 100%;
   }
 
   .navButton {
@@ -183,6 +224,10 @@
   .slideCounter {
     font-size: 12px;
     padding: 3px 8px;
+  }
+
+  .thumbnailSliderContainer {
+    padding: 0 20px;
   }
 }
 
@@ -197,11 +242,11 @@
     height: 32px;
   }
 
-  .navButton.prevButton {
+  .prevButton {
     left: 8px;
   }
 
-  .navButton.nextButton {
+  .nextButton {
     right: 8px;
   }
 
@@ -210,7 +255,11 @@
     right: 8px;
   }
 
-  .thumbnailWrapper {
+  .thumbnailSliderContainer {
+    padding: 0 15px;
+  }
+
+  .slideWrapper {
     padding: 0 3px;
   }
 }
@@ -220,13 +269,4 @@
 .slideItem:focus-visible {
   outline: 2px solid #ff8c00;
   outline-offset: 2px;
-}
-
-@keyframes loading {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
 }

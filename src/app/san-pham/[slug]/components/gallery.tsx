@@ -56,13 +56,13 @@ const GalleryComponent = (props: Props) => {
     const handlePrev = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         e.stopPropagation();
-        
+
         if (slides.length <= 1) return;
-        
+
         const newIndex = currentSlide > 0 ? currentSlide - 1 : slides.length - 1;
         setCurrentSlide(newIndex);
         setMainImage(slides[newIndex]);
-        
+
         // Scroll thumbnail vào view
         const thumbnails = document.querySelectorAll(`.${styles.slideItem}`);
         if (thumbnails[newIndex]) {
@@ -77,13 +77,13 @@ const GalleryComponent = (props: Props) => {
     const handleNext = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         e.stopPropagation();
-        
+
         if (slides.length <= 1) return;
-        
+
         const newIndex = currentSlide < slides.length - 1 ? currentSlide + 1 : 0;
         setCurrentSlide(newIndex);
         setMainImage(slides[newIndex]);
-        
+
         // Scroll thumbnail vào view
         const thumbnails = document.querySelectorAll(`.${styles.slideItem}`);
         if (thumbnails[newIndex]) {
@@ -212,8 +212,8 @@ const GalleryComponent = (props: Props) => {
                 &&
                 <div className={styles.thumbnailSliderContainer}>
                     <div className={styles.sliderWrapper}>
-                        <Slider 
-                            {...settings} 
+                        <Slider
+                            {...settings}
                             ref={thumbnailSliderRef}
                         >
                             {slides.map((slide, index) => (
