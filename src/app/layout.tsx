@@ -4,6 +4,7 @@ import { AntdRegistry } from "@ant-design/nextjs-registry";
 import RecoilProvider from "./ClientProviders";
 import { configImageURL } from "@/infrastructure/helper/helper";
 import { Work_Sans } from 'next/font/google';
+import "@/assets/styles/common/editor-common.css"
 
 const workSans = Work_Sans({
   subsets: ['latin', 'vietnamese'],
