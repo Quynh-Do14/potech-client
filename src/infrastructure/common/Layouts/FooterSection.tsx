@@ -24,7 +24,7 @@ const FooterSection = () => {
         },
         {
             id: "agency",
-            label: "ĐẠI Lý",
+            label: "ĐẠI LÝ",
             href: ROUTE_PATH.AGENCY,
             icon: "fa-building"
         },

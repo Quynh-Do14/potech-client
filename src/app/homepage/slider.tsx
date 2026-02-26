@@ -15,6 +15,8 @@ const Slider = dynamic(() => import("react-slick"), {
 });
 
 import { Settings } from "react-slick";
+import Link from "next/link";
+import { ROUTE_PATH } from "@/core/common/appRouter";
 
 const FullWidthSlider = () => {
     const [currentSlide, setCurrentSlide] = useState<number>(0);
@@ -159,7 +161,7 @@ const FullWidthSlider = () => {
             `}</style>
 
             {/* Main Slider */}
-            <div className="slider-wrapper">
+            <Link href={ROUTE_PATH.PRODUCT} className="slider-wrapper">
                 <Slider {...settings}>
                     {listBanner.map((slide: string, index: number) => (
                         <div key={index} className="slide-item">
@@ -175,8 +177,8 @@ const FullWidthSlider = () => {
                         </div>
                     ))}
                 </Slider>
-            </div>
-        </div>
+            </Link>
+        </div >
     );
 };
 
