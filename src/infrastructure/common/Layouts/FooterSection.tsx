@@ -69,7 +69,7 @@ const FooterSection = () => {
         },
         {
             id: "shipping",
-            label: "HÔNG TIN VỀ VẬN HÀNH VÀ GIAO NHẬN",
+            label: "THÔNG TIN VỀ VẬN HÀNH VÀ GIAO NHẬN",
             href: ROUTE_PATH.SHIPPING_DELIVERY_INFO,
             icon: "fa-truck"
         },

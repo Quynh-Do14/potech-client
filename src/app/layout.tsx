@@ -56,7 +56,7 @@ export const metadata: Metadata = {
     description: mainDescription,
     images: [
       {
-        url: configImageURL('/uploads/POTECH-logo.png'),
+        url: configImageURL('/uploads/potech-logo.jpg'),
         width: 1200,
         height: 630,
         alt: "Potech Việt Nam",
@@ -68,7 +68,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: mainTitle,
     description: mainDescription,
-    images: [configImageURL('/uploads/POTECH-logo.png')],
+    images: [configImageURL('/uploads/potech-logo.jpg')],
   },
   robots: {
     index: true,
@@ -99,7 +99,7 @@ const localBusinessSchema = {
   "@type": "AutomotiveBusiness",
   "@id": `${siteURL}/#localbusiness`,
   "name": "Công ty TNHH Thương Mại XNK Nội Thất Ô Tô Quang Minh",
-  "image": configImageURL('/uploads/POTECH-logo.png'),
+  "image": configImageURL('/uploads/potech-logo.jpg'),
   "description": "Chuyên cung cấp và lắp đặt Màn hình ô tô & Android Box Potech chính hãng",
   "url": siteURL,
   "hasMap": `https://maps.app.goo.gl/GNH8zFY4UT5svvrq8`,
@@ -149,7 +149,7 @@ const organizationSchema = {
   "@id": `${siteURL}/#organization`,
   "name": "Công ty TNHH Thương Mại XNK Nội Thất Ô Tô Quang Minh",
   "url": siteURL,
-  "logo": configImageURL('/uploads/POTECH-logo.png'),
+  "logo": configImageURL('/uploads/potech-logo.jpg'),
   "description": "GPKD số 0107801299 do Sở KH và ĐT TP Hà Nội cấp ngày 12/04/2017. Chuyên nhập khẩu và phân phối Màn hình ô tô & Android Box Potech Chính Hãng.",
   "sameAs": [
     "https://www.facebook.com/potech.vietnam",
@@ -184,7 +184,7 @@ const productSchema = {
   "@id": `${siteURL}/#product`,
   "name": mainTitle,
   "description": mainDescription,
-  "image": configImageURL('/uploads/POTECH-logo.png'),
+  "image": configImageURL('/uploads/potech-logo.jpg'),
   "brand": {
     "@type": "Brand",
     "name": brandName
@@ -317,7 +317,7 @@ export default function RootLayout({
         {/* Schema Markup cho body */}
         <meta itemProp="name" content={mainTitle} />
         <meta itemProp="description" content={mainDescription} />
-        <meta itemProp="image" content={configImageURL('/uploads/POTECH-logo.png')} />
+        <meta itemProp="image" content={configImageURL('/uploads/potech-logo.jpg')} />
       </head>
 
       <body className={workSans.className} itemScope itemType="https://schema.org/WebPage">
