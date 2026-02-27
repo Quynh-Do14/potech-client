@@ -22,15 +22,15 @@ const ClientLayout = ({ ...props }: any) => {
                     target='_blank'
                     rel="noopener noreferrer"
                     className='social-item'
-                    data-tooltip="Facebook RIMO">
-                    <Image src={facebook} alt='RIMO' />
+                    data-tooltip="Facebook POTECH">
+                    <Image src={facebook} alt='POTECH' />
                 </a>
                 <a href="https://m.me/109804934943900"
                     target='_blank'
                     rel="noopener noreferrer"
                     className='social-item'
-                    data-tooltip="Messenger RIMO">
-                    <Image src={mess} alt='RIMO' />
+                    data-tooltip="Messenger POTECH">
+                    <Image src={mess} alt='POTECH' />
                 </a>
             </div>
 
