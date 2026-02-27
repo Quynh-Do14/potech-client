@@ -113,11 +113,11 @@ const FooterSection = () => {
                                 <div className={styles.contactItem}>
                                     <i className={`fa fa-phone ${styles.contactIcon}`}></i>
                                     <span className={styles.contactText}>
-                                        1900.8113
+                                         1900.988.910
                                     </span>
                                 </div>
                                 <div className={styles.companyInfo}>
-                                    POTECH TP. HCM
+                                    POTECH TP.HCM
                                 </div>
                                 <div className={styles.contactItem}>
                                     <i className={`fa fa-map-marker ${styles.contactIcon}`}></i>

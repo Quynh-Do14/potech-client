@@ -103,7 +103,7 @@ const localBusinessSchema = {
   "description": "Chuyên cung cấp và lắp đặt Màn hình ô tô & Android Box Potech chính hãng",
   "url": siteURL,
   "hasMap": `https://maps.app.goo.gl/GNH8zFY4UT5svvrq8`,
-  "telephone": "+84-19008113",
+  "telephone": "+84-1900988910",
   "address": {
     "@type": "PostalAddress",
     "streetAddress": "Số 12 Ngõ 44 Tư Đình – Tổ 5 – Phường Long Biên – Thành phố Hà Nội",
