@@ -89,9 +89,9 @@ const BlogSlugPage = async ({ params }: Props) => {
                                 <Image src={configImageURL(blog.image)} alt={blog.title} fill loading="lazy" />
                             </div>
                             <TocBlog tocItems={tocItemsLength} />
-                            <div className="quill-content">
+                            <div className="tiny-style">
                                 <article
-                                    className="ql-editor prose max-w-none"
+                                    className="prose max-w-none"
                                     dangerouslySetInnerHTML={{ __html: updatedContent }}
                                 />
                             </div>

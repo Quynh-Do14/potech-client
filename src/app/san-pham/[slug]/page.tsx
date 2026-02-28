@@ -150,9 +150,9 @@ const ProductSlugContent = async ({ params }: Props) => {
                             <div className={styles.specificationHeader}>
                                 <div className={styles.title}>Mô tả sản phẩm</div>
                             </div>
-                            <div className="quill-content">
+                            <div className="tiny-style">
                                 <article
-                                    className="ql-editor prose max-w-none"
+                                    className="prose max-w-none"
                                     dangerouslySetInnerHTML={{ __html: dataDetail.description }}
                                 />
                             </div>
