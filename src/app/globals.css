@@ -17,13 +17,6 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 /* Large Desktop (1600px and up) */
 @media (min-width: 1600px) {
   .padding-common,
@@ -295,19 +288,10 @@
 
 .section-header .section-title {
   font-size: 2rem;
-  font-weight: 800;
-  color: #000;
   line-height: 1.2;
   text-align: center;
 }
 
-.section-header .section-title-white {
-  font-size: 2rem;
-  font-weight: 800;
-  color: #ffffff;
-  line-height: 1.2;
-  text-align: center;
-}
 .section-header .section-title-white .highlight,
 .section-header .section-title .highlight {
   color: #ffd700;

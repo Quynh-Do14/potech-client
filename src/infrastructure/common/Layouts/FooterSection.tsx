@@ -1,8 +1,33 @@
+'use client'
 import styles from '@/assets/styles/components/footer.module.css';
 import { ROUTE_PATH } from '@/core/common/appRouter';
+import { ContentPageInterface, ContentPageParams } from '@/infrastructure/interface/contentPage/contentPage.interface';
+import contentPageService from '@/infrastructure/repository/contentPage/contentPage.service';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 const FooterSection = () => {
+    const [content, setContent] = useState<Array<ContentPageInterface>>([])
+
+    const onGetListProductAsync = async () => {
+        const param: ContentPageParams = {
+            type: 'FOOTER'
+        }
+        try {
+            await contentPageService.GetContentPage(
+                param,
+                () => { }
+            ).then((res) => {
+                setContent(res.data?.[0]?.content);
+            })
+        }
+        catch (error) {
+            console.error(error)
+        }
+    }
+    useEffect(() => {
+        onGetListProductAsync().then(_ => { })
+    }, []);
     const menuItems = [
         {
             id: "home",
@@ -90,7 +115,7 @@ const FooterSection = () => {
                         <div className={styles.sectionTitle}>
                             Công ty TNHH Thương Mại Xuất Nhập Khẩu Nội Thất Ô Tô Quang Minh
                         </div>
-                        <div className={styles.contactInfo}>
+                        {/* <div className={styles.contactInfo}>
                             <div className={styles.companyInfo}>
 
                             </div>
@@ -113,7 +138,7 @@ const FooterSection = () => {
                                 <div className={styles.contactItem}>
                                     <i className={`fa fa-phone ${styles.contactIcon}`}></i>
                                     <span className={styles.contactText}>
-                                         1900.988.910
+                                        1900.988.910
                                     </span>
                                 </div>
                                 <div className={styles.companyInfo}>
@@ -132,14 +157,13 @@ const FooterSection = () => {
                                         1900.8113
                                     </span>
                                 </div>
-                                {/* <div className={styles.contactItem}>
-                                    <i className={`fa fa-envelope ${styles.contactIcon}`}></i>
-                                    <span className={styles.contactText}>
-                                        inmax.quangminh@gmail.com
-                                    </span>
-                                </div> */}
-
                             </div>
+                        </div> */}
+                        <div className="tiny-style">
+                            <article
+                                className="prose max-w-none"
+                                dangerouslySetInnerHTML={{ __html: content }}
+                            />
                         </div>
                     </div>
 

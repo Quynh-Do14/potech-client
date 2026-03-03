@@ -5,17 +5,45 @@ import React from 'react'
 import styles from '@/assets/styles/pages/policy.module.css'
 import TocClient from '../tocClient'
 import BannerCommon from '@/infrastructure/common/banner/BannerCommon'
-import banner from '@/assets/images/banner/banner-daily.jpg';
+import { ContentPageInterface } from '@/infrastructure/interface/contentPage/contentPage.interface'
+import { Endpoint } from '@/core/common/apiLink'
+const baseURL = process.env.NEXT_PUBLIC_API_URL;
+const PolicyPage = async () => {
+    const config = await fetch(`${baseURL}${Endpoint.ContentPage.Get}?type=MUA_HANG`, {
+        cache: 'no-store', // Tắt cache
+    }).then((res) => res.json());
 
-const PolicyPage = () => {
+    const contentPage: ContentPageInterface[] = config.data
+    const content = contentPage[0].content ? contentPage[0].content : ""
 
-    const tableOfContents = [
-        { id: 'chinh-sach-mua-hang', name: 'CHÍNH SÁCH MUA HÀNG' },
-    ];
+    let tocItems: { id: string; text: any; level: number; }[] = [];
+    let tocItemsLength: { id: string; text: any; level: number; }[] = [];
+
+    var initialLength = 0
+    const headings = String(content).match(/<(h[2-3])[^>]*>(.*?)<\/\1>/g);
+    if (headings) {
+        const items = headings.map((heading, index) => {
+            const level = heading.match(/h([2-3])/)?.[1] ?? '2';
+            const text = heading.replace(/<\/?h[2-3][^>]*>/g, '');
+            const id = `heading-${index}`;
+            return { id, text, level: parseInt(level) };
+        });
+        initialLength = items.length
+        tocItems = items;
+    }
+
+    const updatedContent = String(content).replace(/<(h[2-3])[^>]*>(.*?)<\/\1>/g, (_match: any, tag: string[], text: any, _index: any) => {
+        const id = `heading-${tocItems.length}`;
+
+        tocItems.push({ id, text, level: parseInt(tag[1]) });
+        tocItemsLength = tocItems.filter((_it, index) => index >= initialLength)
+        return `<${tag} id="${id}">${text}</${tag}>`;
+    });
+
     return (
         <ClientLayout>
             <BannerCommon
-                type='POLICY'
+                type={'POLICY'}
             />
             <div className={`${styles.policyContainer} padding-common`}>
                 <BreadcrumbCommon
@@ -24,24 +52,13 @@ const PolicyPage = () => {
                     title={'Chính sách mua hàng'}
                     blackColor={true}
                 />
-                <TocClient
-                    tableOfContents={tableOfContents}
-                />
+                <TocClient tocItems={tocItemsLength} />
 
-                <div className={styles.container}>
-                    <h1 className={styles.title} id='chinh-sach-mua-hang'>CHÍNH SÁCH MUA HÀNG</h1>
-
-                    <p className={styles.paragraph}>
-                        Hiện nay Inmax đang cung cấp tất cả các hình thức mua hàng để phục vụ tốt nhất tất cả các yêu cầu của quý khách hàng trên khắp cả nước.
-                    </p>
-
-                    <p className={styles.paragraph}>
-                        Với các sản phẩm phim cách nhiệt công ty bán ra luôn cung cấp đầy đủ giấy tờ, nguồn gốc hàng hóa, và những chứng nhận hợp quy với tiêu chuẩn Việt Nam.
-                    </p>
-
-                    <p className={styles.paragraph}>
-                        Quý khách hàng có thể đặt mua hàng trực tiếp tại các đại lý của Inmax trên toàn quốc, qua HOTLINE 1900 8113 hoặc trên website online: https://inmax.vn/
-                    </p>
+                <div className="tiny-style">
+                    <article
+                        className="prose max-w-none"
+                        dangerouslySetInnerHTML={{ __html: updatedContent }}
+                    />
                 </div>
             </div>
         </ClientLayout>

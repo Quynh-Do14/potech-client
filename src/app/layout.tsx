@@ -6,6 +6,8 @@ import { configImageURL } from "@/infrastructure/helper/helper";
 import { Work_Sans } from 'next/font/google';
 import "@/assets/styles/common/tiny-editor-common.css"
 import Script from "next/script";
+import { Endpoint } from "@/core/common/apiLink";
+import { ConfigPageInterface } from "@/infrastructure/interface/configPage/configPage.interface";
 
 const workSans = Work_Sans({
   subsets: ['latin', 'vietnamese'],
@@ -23,6 +25,11 @@ const companyName = "Công ty TNHH Thương Mại XNK Nội Thất Ô Tô Quang 
 const brandName = "Potech";
 const mainTitle = "Màn hình ô tô & Android Box Potech Chính Hãng - Bảo Hành 10 Năm";
 const mainDescription = "Màn hình ô tô & Android Box Potech chính hãng thuộc hệ sinh thái Quang Minh. Phần cứng độc quyền, tích hợp AI thông minh, bảo hành lên đến 10 năm. Nâng cấp giải trí và an toàn cho xe hơi.";
+
+let defaultMetadata = {
+  title: "Màn hình ô tô & Android Box Potech Chính Hãng - Bảo Hành 10 Năm",
+  description: "Màn hình ô tô & Android Box Potech chính hãng thuộc hệ sinh thái Quang Minh. Phần cứng độc quyền, tích hợp AI thông minh, bảo hành lên đến 10 năm. Nâng cấp giải trí và an toàn cho xe hơi.",
+};
 
 const keywords = [
   "Potech Việt Nam",
@@ -44,53 +51,94 @@ const keywords = [
   "thương hiệu phụ kiện ô tô",
 ];
 
-export const metadata: Metadata = {
-  title: mainTitle,
-  description: mainDescription,
-  keywords: keywords.join(", "),
-  authors: [{ name: "Công ty TNHH Thương Mại XNK Nội Thất Ô Tô Quang Minh" }],
-  openGraph: {
-    type: "website",
-    url: process.env.NEXT_PUBLIC_PUBLIC_URL,
-    title: mainTitle,
-    description: mainDescription,
-    images: [
-      {
-        url: configImageURL('/uploads/potech-logo.jpg'),
-        width: 1200,
-        height: 630,
-        alt: "Potech Việt Nam",
-      },
-    ],
-    siteName: "Potech Việt Nam",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: mainTitle,
-    description: mainDescription,
-    images: [configImageURL('/uploads/potech-logo.jpg')],
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
+// Tạo async function để fetch metadata
+async function getMetadata() {
+  const baseURL = process.env.NEXT_PUBLIC_API_URL;
+
+  if (!baseURL) {
+    console.warn('NEXT_PUBLIC_API_URL is not defined');
+    return defaultMetadata;
+  }
+
+  try {
+    const response = await fetch(`${baseURL}${Endpoint.ConfigPage.Get}?type=TITLE_PAGE`, {
+      next: { revalidate: 3600 }
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      throw new Error('Invalid JSON response');
+    }
+
+    const config = await response.json();
+    const configPage: ConfigPageInterface = config.data?.[0];
+    defaultMetadata.title = configPage.title
+    defaultMetadata.description = configPage.description
+    return {
+      title: configPage?.title || defaultMetadata.title,
+      description: configPage?.description || defaultMetadata.description,
+    };
+  } catch (error) {
+    console.error('Failed to fetch metadata:', error);
+    return defaultMetadata;
+  }
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const metadata = await getMetadata();
+  return {
+    title: metadata.title,
+    description: metadata.description,
+    keywords: keywords.join(", "),
+    authors: [{ name: "Công ty TNHH Thương Mại XNK Nội Thất Ô Tô Quang Minh" }],
+    openGraph: {
+      type: "website",
+      url: process.env.NEXT_PUBLIC_PUBLIC_URL,
+      title: metadata.title,
+      description: metadata.description,
+      images: [
+        {
+          url: configImageURL('/uploads/potech-logo.jpg'),
+          width: 1200,
+          height: 630,
+          alt: "Potech Việt Nam",
+        },
+      ],
+      siteName: "Potech Việt Nam",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: metadata.title,
+      description: metadata.description,
+      images: [configImageURL('/uploads/potech-logo.jpg')],
+    },
+    robots: {
       index: true,
       follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
     },
-  },
-  alternates: {
-    canonical: process.env.NEXT_PUBLIC_PUBLIC_URL,
-    languages: {
-      'vi': process.env.NEXT_PUBLIC_PUBLIC_URL,
-      // 'en': `${process.env.NEXT_PUBLIC_PUBLIC_URL}/en`, // Nếu có trang tiếng Anh
+    alternates: {
+      canonical: process.env.NEXT_PUBLIC_PUBLIC_URL,
+      languages: {
+        'vi': process.env.NEXT_PUBLIC_PUBLIC_URL,
+        // 'en': `${process.env.NEXT_PUBLIC_PUBLIC_URL}/en`, // Nếu có trang tiếng Anh
+      },
     },
-  },
-  // verification: {
-  //   google: process.env.GOOGLE_SITE_VERIFICATION, // Thêm vào biến môi trường nếu có
-  // },
+    // verification: {
+    //   google: process.env.GOOGLE_SITE_VERIFICATION, // Thêm vào biến môi trường nếu có
+    // },
+  }
+
 };
 
 // Schema cho Local Business (quan trọng cho doanh nghiệp địa phương)
@@ -168,8 +216,8 @@ const websiteSchema = {
   "@type": "WebSite",
   "@id": `${siteURL}/#website`,
   "url": siteURL,
-  "name": mainTitle,
-  "description": mainDescription,
+  "name": defaultMetadata.title,
+  "description": defaultMetadata.description,
   "potentialAction": {
     "@type": "SearchAction",
     "target": `${siteURL}/tim-kiem?search={search_term_string}`,
@@ -182,8 +230,8 @@ const productSchema = {
   "@context": "https://schema.org",
   "@type": "Product",
   "@id": `${siteURL}/#product`,
-  "name": mainTitle,
-  "description": mainDescription,
+  "name": defaultMetadata.title,
+  "description": defaultMetadata.description,
   "image": configImageURL('/uploads/potech-logo.jpg'),
   "brand": {
     "@type": "Brand",
@@ -210,10 +258,6 @@ export default function RootLayout({
         {/* Meta Charset và Viewport */}
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-
-        {/* Theme Color - Responsive */}
-        <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
-        <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
 
         {/* Favicon - Đầy đủ các kích thước */}
         <link rel="icon" href="/favicon.ico" sizes="any" />
@@ -315,8 +359,8 @@ export default function RootLayout({
         {/* <meta httpEquiv="Content-Security-Policy" content="default-src 'self';" /> */}
 
         {/* Schema Markup cho body */}
-        <meta itemProp="name" content={mainTitle} />
-        <meta itemProp="description" content={mainDescription} />
+        <meta itemProp="name" content={defaultMetadata.title} />
+        <meta itemProp="description" content={defaultMetadata.description} />
         <meta itemProp="image" content={configImageURL('/uploads/potech-logo.jpg')} />
       </head>
 

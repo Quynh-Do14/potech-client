@@ -7,8 +7,19 @@ import Link from "next/link";
 import { ROUTE_PATH } from "@/core/common/appRouter";
 import Image from "next/image";
 import { BlogInterface } from "@/infrastructure/interface/blog/blog.interface";
+import { ConfigPageInterface } from "@/infrastructure/interface/configPage/configPage.interface";
+type Props = {
+    configPage: ConfigPageInterface[]
+    type: 'TITLE_PAGE' | 'SECTION_1' | 'SECTION_2' | 'SECTION_3' | 'SECTION_4' | 'ACHIEVEMENT';
+}
 
-const ArticleSection = () => {
+const ArticleSection = (props: Props) => {
+    const {
+        configPage,
+        type
+    } = props;
+    const configContent = configPage.find(item => item.type == type);
+
     const [listBlog, setListBlog] = useState<Array<BlogInterface>>([])
     const [loading, setLoading] = useState<boolean>(false);
 
@@ -37,15 +48,35 @@ const ArticleSection = () => {
         <div className="news-article-container">
             {/* Header */}
             <div className="section-header">
-                <div className="section-badge">
-                    <span className="badge-text">TIN TỨC & BÀI VIẾT</span>
-                </div>
-                <h2 className="section-title">
-                    Cập Nhật <span className="highlight">Tin Tức</span> Mới Nhất
-                </h2>
-                <p className="section-subtitle">
-                    Thông tin mới nhất về công nghệ, sự kiện và kiến thức chuyên sâu về bảo vệ ô tô
-                </p>
+                {
+                    configContent?.box_content
+                        ?
+                        <div className="section-badge">
+                            <span className="badge-text"> {configContent?.box_content} </span>
+                        </div>
+                        :
+                        null
+                }
+                {
+                    configContent?.title
+                        ?
+                        <h2 className="section-title">
+                            <article
+                                dangerouslySetInnerHTML={{ __html: configContent?.title }}
+                            />
+                        </h2>
+                        :
+                        null
+                }
+                {
+                    configContent?.description
+                        ?
+                        <p className="section-subtitle">
+                            {configContent?.description}
+                        </p>
+                        :
+                        null
+                }
             </div>
             <div className="recent-grid">
                 {listBlog.map(article => (

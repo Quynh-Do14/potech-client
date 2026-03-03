@@ -12,8 +12,19 @@ import Image from "next/image";
 import { ProductInterface } from "@/infrastructure/interface/product/product.interface";
 import dynamic from "next/dynamic";
 import { PageLoading } from "@/infrastructure/common/loading/loadingPage";
+import { ConfigPageInterface } from "@/infrastructure/interface/configPage/configPage.interface";
 
-const ProductContent = () => {
+type Props = {
+    configPage: ConfigPageInterface[]
+    type: 'TITLE_PAGE' | 'SECTION_1' | 'SECTION_2' | 'SECTION_3' | 'SECTION_4' | 'ACHIEVEMENT';
+}
+
+const ProductContent = (props: Props) => {
+    const {
+        configPage,
+        type
+    } = props;
+    const configContent = configPage.find(item => item.type == type);
     const [listProduct, setListProduct] = useState<Array<ProductInterface>>([])
     const categoryProductState = useRecoilValue(CategoryProductState).data;
 
@@ -39,12 +50,35 @@ const ProductContent = () => {
     return (
         <section className={styles.productGoldSection}>
             <div className="section-header">
-                <div className="section-badge">
-                    <span className="badge-text"> DANH MỤC SẢN PHẨM</span>
-                </div>
-                {/* <h1 className="section-title">
-                    DVD <span className="highlight">Sản Phẩm </span> Màn Hình
-                </h1> */}
+                {
+                    configContent?.box_content
+                        ?
+                        <div className="section-badge">
+                            <span className="badge-text"> {configContent?.box_content} </span>
+                        </div>
+                        :
+                        null
+                }
+                {
+                    configContent?.title
+                        ?
+                        <h1 className="section-title">
+                            <article
+                                dangerouslySetInnerHTML={{ __html: configContent?.title }}
+                            />
+                        </h1>
+                        :
+                        null
+                }
+                {
+                    configContent?.description
+                        ?
+                        <p className="section-subtitle">
+                            {configContent?.description}
+                        </p>
+                        :
+                        null
+                }
             </div>
             <div className="flex flex-col gap-10">
                 {categoryProductState.map((category, key) => {

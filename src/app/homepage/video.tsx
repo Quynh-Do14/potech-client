@@ -8,7 +8,19 @@ import YoutubeVideo from '@/infrastructure/common/thumbnailYoutube/youtube'
 import { Modal } from 'antd'
 import dynamic from 'next/dynamic'
 import { PageLoading } from '@/infrastructure/common/loading/loadingPage'
-const VideoContent = () => {
+import { ConfigPageInterface } from '@/infrastructure/interface/configPage/configPage.interface'
+type Props = {
+    configPage: ConfigPageInterface[]
+    type: 'TITLE_PAGE' | 'SECTION_1' | 'SECTION_2' | 'SECTION_3' | 'SECTION_4' | 'ACHIEVEMENT';
+}
+
+const VideoContent = (props: Props) => {
+    const {
+        configPage,
+        type
+    } = props;
+    const configContent = configPage.find(item => item.type == type);
+
     const [listVideo, setListVideo] = useState<Array<VideoInterface>>([]);
     const [selectedVideo, setSelectedVideo] = useState<string>('');
     const [isOpenModalVideo, setIsOpenModalVide] = useState<boolean>(false);
@@ -43,16 +55,35 @@ const VideoContent = () => {
             <div className={styles.container}>
                 {/* Header với logo và thông tin */}
                 <div className="section-header">
-                    <div className="section-badge">
-                        <span className="badge-text">VIDEO GIỚI THIỆU</span>
-                    </div>
-                    <h2 className="section-title-white">
-                        Trải Nghiệm <span className="highlight">Sản Phẩm </span> Qua Video
-                    </h2>
-                    <p className="section-subtitle-white">
-                        Khám phá sản phẩm của chúng tôi qua những video chất lượng cao,
-                        mang đến cái nhìn chân thực và đầy đủ nhất
-                    </p>
+                    {
+                        configContent?.box_content
+                            ?
+                            <div className="section-badge">
+                                <span className="badge-text"> {configContent?.box_content} </span>
+                            </div>
+                            :
+                            null
+                    }
+                    {
+                        configContent?.title
+                            ?
+                            <h2 className="section-title">
+                                <article
+                                    dangerouslySetInnerHTML={{ __html: configContent?.title }}
+                                />
+                            </h2>
+                            :
+                            null
+                    }
+                    {
+                        configContent?.description
+                            ?
+                            <p className="section-subtitle-white">
+                                {configContent?.description}
+                            </p>
+                            :
+                            null
+                    }
                 </div>
 
                 <div className={styles.videoContent}>
