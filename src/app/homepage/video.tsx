@@ -89,7 +89,7 @@ const VideoContent = (props: Props) => {
                 <div className={styles.videoContent}>
                     {
                         listVideo.map((item, index) => {
-                            const videoSplit = slide.link_url.split('v=')[1];
+                            const videoSplit = item.link_url.split('v=')[1];
                             const videoId = videoSplit.split('&')[0] || ""
                             return (
                                 <div onClick={() => onOpenModalVideo(item, videoId)} className={styles.mainVideo} key={index}>
