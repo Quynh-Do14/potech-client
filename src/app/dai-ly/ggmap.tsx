@@ -28,7 +28,7 @@ export default function GoogleMapView({ agencies, selectedAgency }: Props) {
     const [mapCenter, setMapCenter] = useState({ lat: 21.0278, lng: 105.8342 });
 
     const { isLoaded } = useJsApiLoader({
-        googleMapsApiKey: 'AIzaSyD1ICiOLsU1OSuiEOMkjP0gvVHbu1jDsY8',
+        googleMapsApiKey: '',
     });
 
     /** Map load */
