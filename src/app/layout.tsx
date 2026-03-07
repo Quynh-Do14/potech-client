@@ -293,7 +293,7 @@ export default function RootLayout({
 
         {/* <!-- Hoặc cụ thể hơn --> */}
         <meta name="google-extended" content="notranslate" />
-
+        <meta name="google-site-verification" content="_18mFnWj1L07mHxlThcGgXtEtVWzDkKjljB1I8kf0qY" />
         {/* Structured Data */}
         <script
           type="application/ld+json"
