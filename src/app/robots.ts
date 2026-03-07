@@ -33,14 +33,11 @@ export default function robots(): MetadataRoute.Robots {
                     '/register/',
                     '/user/',
                 ],
-                crawlDelay: 1,
             },
             // Rule cho Google-Extended (AI crawler của Google)
             {
                 userAgent: 'Google-Extended',
                 allow: '/', // Cho phép crawl nếu muốn
-                // hoặc disallow: '/' nếu muốn chặn hoàn toàn
-                crawlDelay: 2,
             },
             // Rule mặc định cho tất cả user agents khác
             {
