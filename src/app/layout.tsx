@@ -246,7 +246,7 @@ const productSchema = {
     "offerCount": "5"
   }
 };
-const GA_TRACKING_ID = 'G-DYKHV4SM43';
+const GA_TRACKING_ID = 'G-KSLD8QEXB8';
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -293,7 +293,8 @@ export default function RootLayout({
 
         {/* <!-- Hoặc cụ thể hơn --> */}
         <meta name="google-extended" content="notranslate" />
-        <meta name="google-site-verification" content="_18mFnWj1L07mHxlThcGgXtEtVWzDkKjljB1I8kf0qY" />
+        {/* <meta name="google-site-verification" content="_18mFnWj1L07mHxlThcGgXtEtVWzDkKjljB1I8kf0qY" /> */}
+        <meta name="google-site-verification" content="lJg8BCN37iTvIBfaj8SPDCe36OgJuNsCt21wRRbOXKE" />
         {/* Structured Data */}
         <script
           type="application/ld+json"
