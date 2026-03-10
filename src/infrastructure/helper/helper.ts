@@ -133,3 +133,17 @@ export const extractYouTubeId = (url: string): string | null => {
     const match = url.match(regExp);
     return (match && match[2].length === 11) ? match[2] : null;
 };
+
+export const getYoutubeId = (url: string) => {
+    if (!url) return null;
+
+    // Regex này nhận diện: 
+    // 1. youtube.com/watch?v=ID
+    // 2. youtu.be/ID
+    // 3. youtube.com/embed/ID
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+
+    // YouTube ID luôn có độ dài chuẩn là 11 ký tự
+    return (match && match[2].length === 11) ? match[2] : "";
+};

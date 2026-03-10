@@ -41,11 +41,11 @@ export default function GoogleMapView({ agencies, selectedAgency }: Props) {
         if (!selectedAgency || !mapRef.current) return;
 
         const map = mapRef.current;
-        
+
         // Chuyển đổi tọa độ sang number
         const targetLat = Number(selectedAgency.lat);
         const targetLng = Number(selectedAgency.long);
-        
+
         // Kiểm tra tọa độ hợp lệ
         if (isNaN(targetLat) || isNaN(targetLng)) {
             console.error('Invalid coordinates for agency:', selectedAgency);
@@ -53,10 +53,10 @@ export default function GoogleMapView({ agencies, selectedAgency }: Props) {
         }
 
         const target = { lat: targetLat, lng: targetLng };
-        
+
         // Cập nhật center của map
         setMapCenter(target);
-        
+
         // Thực hiện animation bay đến vị trí với zoom 12
         map.panTo(target);
         map.setZoom(12);
@@ -67,13 +67,13 @@ export default function GoogleMapView({ agencies, selectedAgency }: Props) {
         // 🔥 Delay để đảm bảo map đã render xong rồi mới điều chỉnh vị trí marker
         setTimeout(() => {
             if (!mapRef.current) return;
-            
+
             const map = mapRef.current;
             const mapDiv = map.getDiv() as HTMLElement;
-            
+
             // Tính toán offset để đưa marker lên trên một chút (khoảng 30% từ đỉnh)
             const offsetY = mapDiv.offsetHeight * 0.3; // Điều chỉnh 0.3 để marker nằm ở vị trí tốt hơn
-            
+
             // Dùng panBy để điều chỉnh vị trí
             map.panBy(0, -offsetY);
         }, 100); // Giảm timeout xuống 100ms để mượt hơn
@@ -108,7 +108,7 @@ export default function GoogleMapView({ agencies, selectedAgency }: Props) {
             {agencies.map(item => {
                 const lat = Number(item.lat);
                 const lng = Number(item.long);
-                
+
                 // Kiểm tra tọa độ hợp lệ trước khi render marker
                 if (isNaN(lat) || isNaN(lng)) {
                     console.warn('Invalid coordinates for agency:', item);
@@ -134,7 +134,7 @@ export default function GoogleMapView({ agencies, selectedAgency }: Props) {
                         }}
                     >
                         {activeId === item.id && (
-                            <InfoWindow 
+                            <InfoWindow
                                 onCloseClick={() => setActiveId(null)}
                                 position={{ lat, lng }}
                                 options={{
@@ -161,7 +161,10 @@ export default function GoogleMapView({ agencies, selectedAgency }: Props) {
                                         <svg width="16" height="16" viewBox="0 0 24 24">
                                             <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
                                         </svg>
-                                        <span>{item.phone_number}</span>
+                                        <span>{item.phone_number}{" "}
+                                            {item.phone_number_2 ? `- ${item.phone_number_2}` : null}
+                                            {item.phone_number_3 ? `- ${item.phone_number_3}` : null}
+                                        </span>
                                     </div>
 
                                     {item.categories.length > 0 && (

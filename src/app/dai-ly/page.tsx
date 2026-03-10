@@ -56,7 +56,7 @@ const AgencyContent = () => {
     const onGetListAgencyAsync = async ({ name = searchText, limit = pageSize, page = currentPage, province = provinceSelected, district = districtSelected, category_id = categoryIdSelected }) => {
         const param: AgencyParams = {
             page: page,
-            limit: limit,
+            limit: 9999,
             search: name,
             province: province,
             district: district,
@@ -332,7 +332,10 @@ const AgencyContent = () => {
                                                                             </svg>
                                                                         </div>
                                                                         <div className={styles.infoContent}>
-                                                                            <p className={styles.cardPhone}>{item.phone_number}</p>
+                                                                            <p className={styles.cardPhone}>{item.phone_number}{" "}
+                                                                                {item.phone_number_2 ? `- ${item.phone_number_2}` : null}
+                                                                                {item.phone_number_3 ? `- ${item.phone_number_3}` : null}
+                                                                            </p>
                                                                         </div>
                                                                     </div>
                                                                     {item.categories.length > 0 && (

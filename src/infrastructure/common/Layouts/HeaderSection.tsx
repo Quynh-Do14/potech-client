@@ -148,7 +148,7 @@ const HeaderSection = () => {
         onGetListCategoryAsync().then(_ => { });
         onGetListBlogCategoryAsync().then(_ => { });
         onGetListBrandAsync().then(_ => { });
-        onGetListAgencyCategoryAsync().then(_ => { });
+        // onGetListAgencyCategoryAsync().then(_ => { });
     }, []);
 
     useEffect(() => {

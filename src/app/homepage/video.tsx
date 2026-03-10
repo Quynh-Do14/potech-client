@@ -9,6 +9,7 @@ import { Modal } from 'antd'
 import dynamic from 'next/dynamic'
 import { PageLoading } from '@/infrastructure/common/loading/loadingPage'
 import { ConfigPageInterface } from '@/infrastructure/interface/configPage/configPage.interface'
+import { getYoutubeId } from '@/infrastructure/helper/helper'
 type Props = {
     configPage: ConfigPageInterface[]
     type: 'TITLE_PAGE' | 'SECTION_1' | 'SECTION_2' | 'SECTION_3' | 'SECTION_4' | 'ACHIEVEMENT';
@@ -89,10 +90,9 @@ const VideoContent = (props: Props) => {
                 <div className={styles.videoContent}>
                     {
                         listVideo.map((item, index) => {
-                            const videoSplit = item.link_url.split('v=')[1];
-                            const videoId = videoSplit.split('&')[0] || ""
+                            const videoId = getYoutubeId(item.link_url)
                             return (
-                                <div onClick={() => onOpenModalVideo(item, videoId)} className={styles.mainVideo} key={index}>
+                                <div onClick={() => onOpenModalVideo(item, videoId || "")} className={styles.mainVideo} key={index}>
                                     <div className={styles.testimonialVideoContainer}>
                                         <div className={styles.testimonialVideo}>
                                             <YouTubeThumbnail name={item.name} url={item.link_url} />
