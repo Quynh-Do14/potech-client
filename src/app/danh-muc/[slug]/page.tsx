@@ -11,7 +11,7 @@ import InputSearchCommon from "@/infrastructure/common/input/input-search-common
 import SelectSearchCommon from "@/infrastructure/common/input/select-search-common";
 import ButtonCommon from "@/infrastructure/common/button/button-common";
 import { useRecoilValue } from "recoil";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { ProductInterface, ProductParams } from "@/infrastructure/interface/product/product.interface";
 import { CategoryProductState } from "@/core/common/atoms/category/categoryState";
 import Image from "next/image";
@@ -19,7 +19,12 @@ import { BrandState } from "@/core/common/atoms/brand/brandState";
 import { PaginationNoSizeCommon } from "@/infrastructure/common/pagination/PaginationNoSize";
 import SkeletonProduct from "@/app/san-pham/skeleton";
 
+type ParamsType = {
+    slug: string
+};
+
 const priceRanges = [
+
     {
         "id": 2,
         "name": "0 - 5,000,000",
@@ -74,6 +79,7 @@ const ProductContent = () => {
     const [maxPrice, setMaxPrice] = useState<number>(999999999999);
     const [brandId, setBrandId] = useState<string>("");
 
+    const params: ParamsType = useParams();
     const router = useRouter(); // Từ next/navigation
     const searchParams = useSearchParams(); // Dùng useSearchParams thay vì router.query
 
@@ -186,15 +192,19 @@ const ProductContent = () => {
         const parsedBrand = brand_id || "";
         const parsedMinPrice = parseInt(min_price as string) || 0;
         const parsedMaxPrice = parseInt(max_price as string) || 999999999999;
+        const parsedCategory = splitTakeId(params.slug)
+        const categoryName = categoryProductState.find(item => String(item.id) === String(parsedCategory))
 
         setSearchText(parsedSearch);
         setCurrentPage(parsedPage);
         setPageSize(parsedLimit);
+        setCategoryId(parsedCategory);
+        setCategoryName(String(categoryName?.name))
         setMinPrice(parsedMinPrice);
         setMaxPrice(parsedMaxPrice);
         setRangePrice(`${parsedMinPrice}-${parsedMaxPrice}`)
 
-        onSearch(parsedSearch, parsedLimit, parsedPage, "", parsedBrand);
+        onSearch(parsedSearch, parsedLimit, parsedPage, parsedCategory, parsedBrand);
     }, [search, page, limit, category_id, brand_id]); // Theo dõi các giá trị từ searchParams
 
     const onReset = () => {

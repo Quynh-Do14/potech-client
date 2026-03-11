@@ -19,6 +19,7 @@ import { BrandState } from '@/core/common/atoms/brand/brandState';
 import { CategoryAgencyState, CategoryBlogState, CategoryProductHrefState, CategoryProductState } from '@/core/common/atoms/category/categoryState';
 import { usePathname } from 'next/navigation';
 import categoryAgencyService from '@/infrastructure/repository/category/categoryAgency.service';
+import { convertSlug } from '@/infrastructure/helper/helper';
 
 const HeaderSection = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -60,7 +61,7 @@ const HeaderSection = () => {
                 })
                 const data = res.data?.map((item: CategoryProductInterface) => {
                     const result = {
-                        href: `${ROUTE_PATH.PRODUCT}?category_id=${item.id}`,
+                        href: `${ROUTE_PATH.CATEGORY}/${convertSlug(item.name)}-${item.id}`,
                         label: item.name,
                     }
                     return result;

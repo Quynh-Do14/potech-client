@@ -22,10 +22,18 @@ const containerStyle = {
     height: '100%',
 };
 
+// Tọa độ trung tâm Việt Nam
+const VIETNAM_CENTER = { lat: 16.5, lng: 107.5 };
+// Zoom level để nhìn toàn bộ Việt Nam
+const VIETNAM_ZOOM = 6;
+// Zoom level khi chọn agency
+const AGENCY_ZOOM = 12;
+
 export default function GoogleMapView({ agencies, selectedAgency }: Props) {
     const mapRef = useRef<google.maps.Map | null>(null);
     const [activeId, setActiveId] = useState<number | null>(null);
-    const [mapCenter, setMapCenter] = useState({ lat: 21.0278, lng: 105.8342 });
+    const [mapCenter, setMapCenter] = useState(VIETNAM_CENTER);
+    const [mapZoom, setMapZoom] = useState(VIETNAM_ZOOM);
 
     const { isLoaded } = useJsApiLoader({
         googleMapsApiKey: '',
@@ -36,7 +44,7 @@ export default function GoogleMapView({ agencies, selectedAgency }: Props) {
         mapRef.current = map;
     }, []);
 
-    /** 🔥 Xử lý khi selectedAgency thay đổi */
+    /** Xử lý khi selectedAgency thay đổi */
     useEffect(() => {
         if (!selectedAgency || !mapRef.current) return;
 
@@ -54,17 +62,18 @@ export default function GoogleMapView({ agencies, selectedAgency }: Props) {
 
         const target = { lat: targetLat, lng: targetLng };
 
-        // Cập nhật center của map
+        // Cập nhật center và zoom
         setMapCenter(target);
+        setMapZoom(AGENCY_ZOOM);
 
         // Thực hiện animation bay đến vị trí với zoom 12
         map.panTo(target);
-        map.setZoom(12);
+        map.setZoom(AGENCY_ZOOM);
 
         // Chọn marker này làm active
         setActiveId(selectedAgency.id ?? null);
 
-        // 🔥 Delay để đảm bảo map đã render xong rồi mới điều chỉnh vị trí marker
+        // Điều chỉnh vị trí để marker nằm ở vị trí đẹp
         setTimeout(() => {
             if (!mapRef.current) return;
 
@@ -72,18 +81,26 @@ export default function GoogleMapView({ agencies, selectedAgency }: Props) {
             const mapDiv = map.getDiv() as HTMLElement;
 
             // Tính toán offset để đưa marker lên trên một chút (khoảng 30% từ đỉnh)
-            const offsetY = mapDiv.offsetHeight * 0.3; // Điều chỉnh 0.3 để marker nằm ở vị trí tốt hơn
+            const offsetY = mapDiv.offsetHeight * 0.3;
 
             // Dùng panBy để điều chỉnh vị trí
             map.panBy(0, -offsetY);
-        }, 100); // Giảm timeout xuống 100ms để mượt hơn
+        }, 100);
 
     }, [selectedAgency]);
 
-    /** 🔥 Reset activeId khi selectedAgency là null */
+    /** Reset activeId khi selectedAgency là null */
     useEffect(() => {
         if (!selectedAgency) {
             setActiveId(null);
+
+            // Nếu không có agency được chọn, quay về view toàn Việt Nam
+            if (mapRef.current) {
+                setMapCenter(VIETNAM_CENTER);
+                setMapZoom(VIETNAM_ZOOM);
+                mapRef.current.panTo(VIETNAM_CENTER);
+                mapRef.current.setZoom(VIETNAM_ZOOM);
+            }
         }
     }, [selectedAgency]);
 
@@ -93,16 +110,25 @@ export default function GoogleMapView({ agencies, selectedAgency }: Props) {
         <GoogleMap
             mapContainerStyle={containerStyle}
             center={mapCenter}
-            zoom={12}
+            zoom={mapZoom}
             onLoad={onLoad}
             options={{
-                // Thêm options để map mượt hơn
                 gestureHandling: 'greedy',
                 disableDefaultUI: false,
                 zoomControl: true,
                 streetViewControl: true,
                 mapTypeControl: false,
                 fullscreenControl: true,
+                // Thêm restriction để map không bay ra ngoài Việt Nam (tùy chọn)
+                restriction: {
+                    latLngBounds: {
+                        north: 25,
+                        south: 8,
+                        east: 110,
+                        west: 102,
+                    },
+                    strictBounds: false,
+                },
             }}
         >
             {agencies.map(item => {
@@ -120,7 +146,7 @@ export default function GoogleMapView({ agencies, selectedAgency }: Props) {
                         icon={{
                             url: locationIcon.src,
                             scaledSize: new google.maps.Size(30, 45),
-                            anchor: new google.maps.Point(15, 45), // Điều chỉnh anchor cho chính xác hơn
+                            anchor: new google.maps.Point(15, 45),
                         }}
                         key={item.id}
                         position={{ lat, lng }}
@@ -128,8 +154,10 @@ export default function GoogleMapView({ agencies, selectedAgency }: Props) {
                             setActiveId(item.id ?? null);
                             // Cập nhật center khi click vào marker
                             if (mapRef.current) {
+                                setMapCenter({ lat, lng });
+                                setMapZoom(AGENCY_ZOOM);
                                 mapRef.current.panTo({ lat, lng });
-                                mapRef.current.setZoom(12);
+                                mapRef.current.setZoom(AGENCY_ZOOM);
                             }
                         }}
                     >
@@ -138,7 +166,7 @@ export default function GoogleMapView({ agencies, selectedAgency }: Props) {
                                 onCloseClick={() => setActiveId(null)}
                                 position={{ lat, lng }}
                                 options={{
-                                    pixelOffset: new google.maps.Size(0, -45), // Điều chỉnh vị trí info window
+                                    pixelOffset: new google.maps.Size(0, -45),
                                 }}
                             >
                                 <div className="agency-popup">
@@ -163,8 +191,7 @@ export default function GoogleMapView({ agencies, selectedAgency }: Props) {
                                         </svg>
                                         <span>{item.phone_number}{" "}
                                             {item.phone_number_2 ? `- ${item.phone_number_2}` : null}
-                                            {item.phone_number_3 ? `- ${item.phone_number_3}` : null}
-                                        </span>
+                                            {item.phone_number_3 ? `- ${item.phone_number_3}` : null}</span>
                                     </div>
 
                                     {item.categories.length > 0 && (
