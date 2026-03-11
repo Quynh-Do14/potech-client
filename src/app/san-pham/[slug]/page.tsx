@@ -20,10 +20,16 @@ const baseURL = process.env.NEXT_PUBLIC_API_URL;
 const publicURL = process.env.NEXT_PUBLIC_PUBLIC_URL;
 export async function generateMetadata
     ({ params }: Props): Promise<Metadata> {
-    const product: ProductInterface = await fetch(`${baseURL}${Endpoint.Product.GetById}/${splitTakeId(params.slug)}`, {
+    const product: ProductInterface = await fetch(`${baseURL}${Endpoint.Product.GetById}/${params.slug}`, {
         cache: 'no-store', // Tắt cache
     }).then((res) => res.json());
     const productUrl = `${publicURL}/${ROUTE_PATH.PRODUCT}/${params.slug}`;
+    const keywordConvert = product && product.keyword.map(item => item.keyword)
+    const keywords: string[] = [
+        product.name,
+        product.category_name,
+        product.brand_name,
+    ].filter((item): item is string => Boolean(item)).concat(keywordConvert)
 
     const productSchema = {
         "@context": "https://schema.org",
@@ -70,21 +76,54 @@ export async function generateMetadata
     };
 
     return {
-        title: product.name,
+        title: `${product.name}`,
         description: product.short_description,
+        keywords: keywords,
         openGraph: {
-            title: product.name,
+            title: `${product.name}`,
             description: product.short_description,
-            images: configImageURL(product.image),
+            images: [{
+                url: configImageURL(product.image),
+                alt: product.name,
+            }],
+            type: 'website',
+            url: productUrl,
+            siteName: publicURL,
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title: `${product.name}`,
+            description: product.short_description,
+            images: [{
+                url: configImageURL(product.image),
+                alt: product.name,
+            }],
+        },
+
+        alternates: {
+            canonical: productUrl,
+        },
+
+        robots: {
+            index: true,
+            follow: true,
+            'max-image-preview': 'large',
+            'max-snippet': -1,
         },
         other: {
-            'application/ld+json': JSON.stringify([productSchema, breadcrumbSchema])
+            'application/ld+json': JSON.stringify([productSchema, breadcrumbSchema]),
+            'product:price:amount': product.price?.toString(),
+            'product:price:currency': 'VND',
+            'product:original_price': product.price_sale?.toString() || '',
+            'product:sale_price': product.price?.toString() || '',
+            'product:brand': 'Rimo',
+            'og:updated_time': new Date().toISOString(),
         }
     };
 }
 
 const ProductSlugContent = async ({ params }: Props) => {
-    const dataDetail: ProductInterface = await fetch(`${baseURL}${Endpoint.Product.GetById}/${splitTakeId(params.slug)}`, {
+    const dataDetail: ProductInterface = await fetch(`${baseURL}${Endpoint.Product.GetById}/${params.slug}`, {
         cache: 'no-store', // Tắt cache
     }).then((res) =>
         res.json()

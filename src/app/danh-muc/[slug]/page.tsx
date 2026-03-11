@@ -135,13 +135,12 @@ const ProductContent = () => {
         params.set('min_price', String(minPrice));
         params.set('max_price', String(maxPrice));
         params.set('page', '1'); // Reset về trang 1 khi search
+        params.delete('category_id');
 
         if (categoryId) {
-            router.push(`${ROUTE_PATH.CATEGORY}/${convertSlug(categoryName)}-${categoryId}?${params.toString()}`);
-        }
-        else {
+            router.push(`${ROUTE_PATH.CATEGORY}/${categoryName}?${params.toString()}`);
+        } else {
             router.push(`${ROUTE_PATH.PRODUCT}?${params.toString()}`);
-
         }
 
         await onSearch(searchText, pageSize, 1, categoryId, brandId).then(_ => { });
@@ -155,7 +154,7 @@ const ProductContent = () => {
         const value = e.target.value || ""
         setCategoryId(value);
         const result = categoryProductState.find(item => String(item.id) === String(value))
-        setCategoryName(String(result?.name))
+        setCategoryName(String(result?.slug))
     };
 
     const onChangeBrand = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -185,27 +184,46 @@ const ProductContent = () => {
 
 
     useEffect(() => {
-        const parsedPage = parseInt(page) || 1;
-        const parsedLimit = parseInt(limit) || 10;
-        const parsedSearch = search || "";
-        // const parsedCategory = category_id || "";
-        const parsedBrand = brand_id || "";
-        const parsedMinPrice = parseInt(min_price as string) || 0;
-        const parsedMaxPrice = parseInt(max_price as string) || 999999999999;
-        const parsedCategory = splitTakeId(params.slug)
-        const categoryName = categoryProductState.find(item => String(item.id) === String(parsedCategory))
+        if (!categoryProductState || categoryProductState.length === 0) return;
 
-        setSearchText(parsedSearch);
-        setCurrentPage(parsedPage);
-        setPageSize(parsedLimit);
-        setCategoryId(parsedCategory);
-        setCategoryName(String(categoryName?.name))
-        setMinPrice(parsedMinPrice);
-        setMaxPrice(parsedMaxPrice);
-        setRangePrice(`${parsedMinPrice}-${parsedMaxPrice}`)
+        const fetchData = async () => {
 
-        onSearch(parsedSearch, parsedLimit, parsedPage, parsedCategory, parsedBrand);
-    }, [search, page, limit, category_id, brand_id]); // Theo dõi các giá trị từ searchParams
+            const parsedPage = parseInt(page) || 1;
+            const parsedLimit = parseInt(limit) || 10;
+            const parsedSearch = search || "";
+            // const parsedCategory = category_id || "";
+            const parsedBrand = brand_id || "";
+            const parsedMinPrice = parseInt(min_price as string) || 0;
+            const parsedMaxPrice = parseInt(max_price as string) || 999999999999;
+            // Tìm category dựa trên slug từ URL
+            let currentCategoryId = categoryId;
+            let currentCategoryName = categoryName;
+
+            // Nếu đang ở trang category detail
+            if (params.slug) {
+                const categoryRes = categoryProductState.find(
+                    item => String(item.slug) === String(params.slug)
+                );
+
+                if (categoryRes) {
+                    currentCategoryId = String(categoryRes.id);
+                    currentCategoryName = String(categoryRes.slug);
+                    setCategoryId(currentCategoryId);
+                    setCategoryName(currentCategoryName);
+                }
+            }
+
+            setSearchText(parsedSearch);
+            setCurrentPage(parsedPage);
+            setPageSize(parsedLimit);
+            setMinPrice(parsedMinPrice);
+            setMaxPrice(parsedMaxPrice);
+            setRangePrice(`${parsedMinPrice}-${parsedMaxPrice}`)
+
+            onSearch(parsedSearch, parsedLimit, parsedPage, currentCategoryId, parsedBrand);
+        }
+        fetchData();
+    }, [search, page, limit, params.slug, categoryProductState, brand_id]);
 
     const onReset = () => {
         setSearchText('');
@@ -300,7 +318,7 @@ const ProductContent = () => {
                                 <div className={styles.goldGrid}>
                                     {listProduct.map((item, index) => (
                                         <Link
-                                            href={`${ROUTE_PATH.PRODUCT}/${convertSlug(item.name)}-${item.id}.html`}
+                                            href={`${ROUTE_PATH.PRODUCT}/${item.slug}`}
                                             key={item.id}
                                             className={styles.goldCard}
                                             style={{ animationDelay: `${index * 0.1}s` }}

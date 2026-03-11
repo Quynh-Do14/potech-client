@@ -14,21 +14,153 @@ type Props = {
     params: { slug: string };
 };
 const baseURL = process.env.NEXT_PUBLIC_API_URL;
+const publicURL = process.env.NEXT_PUBLIC_PUBLIC_URL;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-    const blog: BlogInterface = await fetch(`${baseURL}${Endpoint.Blog.GetById}/${splitTakeId(params.slug)}`, {
-        cache: 'no-store', // Tắt cache
-    }).then((res) => res.json());
+    try {
+        const blog: BlogInterface = await fetch(
+            `${baseURL}${Endpoint.Blog.GetById}/${splitTakeId(params.slug)}`,
+            {
+                next: { revalidate: 3600 }, // Cache 1 giờ
+            }
+        ).then((res) => res.json());
 
-    return {
-        title: blog.title,
-        description: blog.short_description,
-        openGraph: {
+        // Kiểm tra blog tồn tại
+        if (!blog?.id) {
+            return {
+                title: 'Bài viết không tồn tại | Potech',
+                robots: { index: false, follow: true },
+            };
+        }
+
+        const blogUrl = `${publicURL}/${ROUTE_PATH.BLOG}/${params.slug}`;
+        const imageUrl = configImageURL(blog.image);
+        const imageAlt = `${blog.title} - Phim cách nhiệt Potech`;
+
+        const keywordConvert = blog && blog.keyword.map(item => item.keyword)
+        const keywords: string[] = [
+            blog.title,
+            blog.category_name,
+        ].filter((item): item is string => Boolean(item)).concat(keywordConvert)
+
+        // ✅ ĐÚNG: Dùng Article/BlogPosting Schema
+        const articleSchema = {
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",  // ✅ Đã sửa
+            "@id": blogUrl,
+            "url": blogUrl,
+            "headline": blog.title,   // ✅ Blog dùng "headline"
+            "name": blog.title,
+            "description": blog.short_description || blog.description,
+            "image": {
+                "@type": "ImageObject",
+                "url": imageUrl,
+                "caption": imageAlt
+            },
+            "datePublished": blog.created_at || new Date().toISOString(), // ✅ Thêm ngày xuất bản
+            "dateModified": blog.updated_at || blog.created_at || new Date().toISOString(),
+            "author": {  // ✅ Thêm tác giả
+                "@type": "Organization",
+                "name": "Potech Việt Nam",
+                "url": publicURL
+            },
+            "publisher": {  // ✅ Thêm nhà xuất bản
+                "@type": "Organization",
+                "name": "Potech Việt Nam",
+                "logo": {
+                    "@type": "ImageObject",
+                    "url": configImageURL('/uploads/potech-logo.jpg'),
+                }
+            },
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": blogUrl
+            },
+            "keywords": keywords,
+            "articleSection": blog.category_name || "Tin tức", // ✅ Thêm chuyên mục
+            "wordCount": blog.short_description?.length || 0, // ✅ Đếm số từ
+            "timeRequired": `PT${Math.ceil((blog.short_description?.length || 0) / 300)}M` // ✅ Thời gian đọc
+        };
+
+        const breadcrumbSchema = {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Trang chủ",
+                    "item": publicURL
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": blog.category_name || "Tin tức",
+                    "item": `${publicURL}/${ROUTE_PATH.BLOG}`
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": blog.title,
+                    "item": blogUrl
+                }
+            ]
+        };
+
+        return {
             title: blog.title,
-            description: blog.short_description,
-            images: configImageURL(blog.image),
-        },
-    };
+            description: blog.short_description?.substring(0, 160),
+            keywords: keywords,
+
+            openGraph: {
+                title: blog.title,
+                description: blog.short_description,
+                url: blogUrl,
+                siteName: 'Potech Việt Nam',
+                images: [{
+                    url: imageUrl,
+                    alt: imageAlt,
+                }],
+                type: 'article',  // ✅ Đã sửa: "article" thay vì "website"
+            },
+
+            twitter: {
+                card: 'summary_large_image',
+                title: blog.title,
+                description: blog.short_description,
+                images: [imageUrl],
+            },
+
+            alternates: {
+                canonical: blogUrl,
+            },
+
+            robots: {
+                index: true,
+                follow: true,
+                'max-image-preview': 'large',
+                'max-snippet': -1,
+            },
+
+            other: {
+                'application/ld+json': JSON.stringify([articleSchema, breadcrumbSchema]), // ✅ Đã sửa
+                'og:image:alt': imageAlt,
+                'twitter:image:alt': imageAlt,
+                'og:locale': 'vi_VN',
+                'article:published_time': blog.created_at,
+                'article:modified_time': blog.updated_at,
+                'article:author': 'Potech Việt Nam',
+                'article:section': blog.category_name,
+            }
+        };
+
+    } catch (error) {
+        console.error('Error generating blog metadata:', error);
+        return {
+            title: 'Potech Việt Nam',
+            robots: { index: false, follow: true },
+        };
+    }
 }
 
 const BlogSlugPage = async ({ params }: Props) => {

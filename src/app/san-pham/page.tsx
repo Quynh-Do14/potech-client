@@ -11,7 +11,7 @@ import InputSearchCommon from "@/infrastructure/common/input/input-search-common
 import SelectSearchCommon from "@/infrastructure/common/input/select-search-common";
 import ButtonCommon from "@/infrastructure/common/button/button-common";
 import { useRecoilValue } from "recoil";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { ProductInterface, ProductParams } from "@/infrastructure/interface/product/product.interface";
 import { CategoryProductState } from "@/core/common/atoms/category/categoryState";
 import Image from "next/image";
@@ -20,6 +20,7 @@ import { PaginationNoSizeCommon } from "@/infrastructure/common/pagination/Pagin
 import SkeletonProduct from "@/app/san-pham/skeleton";
 
 const priceRanges = [
+
     {
         "id": 2,
         "name": "0 - 5,000,000",
@@ -129,13 +130,12 @@ const ProductContent = () => {
         params.set('min_price', String(minPrice));
         params.set('max_price', String(maxPrice));
         params.set('page', '1'); // Reset về trang 1 khi search
+        params.delete('category_id');
 
         if (categoryId) {
-            router.push(`${ROUTE_PATH.CATEGORY}/${convertSlug(categoryName)}-${categoryId}?${params.toString()}`);
-        }
-        else {
+            router.push(`${ROUTE_PATH.CATEGORY}/${categoryName}?${params.toString()}`);
+        } else {
             router.push(`${ROUTE_PATH.PRODUCT}?${params.toString()}`);
-
         }
 
         await onSearch(searchText, pageSize, 1, categoryId, brandId).then(_ => { });
@@ -149,7 +149,7 @@ const ProductContent = () => {
         const value = e.target.value || ""
         setCategoryId(value);
         const result = categoryProductState.find(item => String(item.id) === String(value))
-        setCategoryName(String(result?.name))
+        setCategoryName(String(result?.slug))
     };
 
     const onChangeBrand = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -179,23 +179,28 @@ const ProductContent = () => {
 
 
     useEffect(() => {
-        const parsedPage = parseInt(page) || 1;
-        const parsedLimit = parseInt(limit) || 10;
-        const parsedSearch = search || "";
-        // const parsedCategory = category_id || "";
-        const parsedBrand = brand_id || "";
-        const parsedMinPrice = parseInt(min_price as string) || 0;
-        const parsedMaxPrice = parseInt(max_price as string) || 999999999999;
+        const fetchData = async () => {
 
-        setSearchText(parsedSearch);
-        setCurrentPage(parsedPage);
-        setPageSize(parsedLimit);
-        setMinPrice(parsedMinPrice);
-        setMaxPrice(parsedMaxPrice);
-        setRangePrice(`${parsedMinPrice}-${parsedMaxPrice}`)
+            const parsedPage = parseInt(page) || 1;
+            const parsedLimit = parseInt(limit) || 10;
+            const parsedSearch = search || "";
+            // const parsedCategory = category_id || "";
+            const parsedBrand = brand_id || "";
+            const parsedMinPrice = parseInt(min_price as string) || 0;
+            const parsedMaxPrice = parseInt(max_price as string) || 999999999999;
+            // Tìm category dựa trên slug từ URL
 
-        onSearch(parsedSearch, parsedLimit, parsedPage, "", parsedBrand);
-    }, [search, page, limit, category_id, brand_id]); // Theo dõi các giá trị từ searchParams
+            setSearchText(parsedSearch);
+            setCurrentPage(parsedPage);
+            setPageSize(parsedLimit);
+            setMinPrice(parsedMinPrice);
+            setMaxPrice(parsedMaxPrice);
+            setRangePrice(`${parsedMinPrice}-${parsedMaxPrice}`)
+
+            onSearch(parsedSearch, parsedLimit, parsedPage, '', parsedBrand);
+        }
+        fetchData();
+    }, [search, page, limit, brand_id]);
 
     const onReset = () => {
         setSearchText('');
@@ -290,7 +295,7 @@ const ProductContent = () => {
                                 <div className={styles.goldGrid}>
                                     {listProduct.map((item, index) => (
                                         <Link
-                                            href={`${ROUTE_PATH.PRODUCT}/${convertSlug(item.name)}-${item.id}.html`}
+                                            href={`${ROUTE_PATH.PRODUCT}/${item.slug}`}
                                             key={item.id}
                                             className={styles.goldCard}
                                             style={{ animationDelay: `${index * 0.1}s` }}

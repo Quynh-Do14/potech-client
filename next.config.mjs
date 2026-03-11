@@ -48,7 +48,8 @@ const nextConfig = {
     ]
   },
   transpilePackages: ['react-slick', 'slick-carousel'],
-  reactCompiler: true
+  reactCompiler: true,
+  reactStrictMode: false // Thêm dòng này để tắt StrictMode
 }
 
 export default nextConfig

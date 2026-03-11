@@ -82,7 +82,7 @@ const ArticleSection = (props: Props) => {
                 {listBlog.map(article => (
                     <article key={article.id} className="recent-card">
                         <Link
-                            href={`${ROUTE_PATH.BLOG}/${convertSlug(article?.title)}-${article?.id}.html`}
+                            href={`${ROUTE_PATH.BLOG}/${article?.slug}.html`}
                             className="recent-link"
                         >
                             <div className="recent-image">

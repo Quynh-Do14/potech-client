@@ -108,7 +108,7 @@ const ProductContent = (props: Props) => {
                             <div className={gridStyle}>
                                 {productFromCategory.slice(0, 4).map((item, index) => (
                                     <Link
-                                        href={`${ROUTE_PATH.PRODUCT}/${convertSlug(item.name)}-${item.id}.html`}
+                                        href={`${ROUTE_PATH.PRODUCT}/${item.slug}`}
                                         key={item.id}
                                         className={styles.goldCard}
                                         style={{ animationDelay: `${index * 0.1}s` }}

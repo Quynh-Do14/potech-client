@@ -3,6 +3,7 @@ export interface CategoryProductInterface {
     name: string;
     description: string;
     image: string;
+    slug: string
 }
 
 export interface CategoryProductParams {

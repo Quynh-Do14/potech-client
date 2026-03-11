@@ -176,7 +176,7 @@ const BlogContent = () => {
                                 listBlog.map((article, index) => (
                                     <article key={index} className={styles.recentCard}>
                                         <Link
-                                            href={`${ROUTE_PATH.BLOG}/${convertSlug(article?.title)}-${article?.id}.html`}
+                                            href={`${ROUTE_PATH.BLOG}/${article?.slug}.html`}
                                             className={styles.recentLink}
                                         >
                                             <div className={styles.recentImage}>
