@@ -108,14 +108,13 @@ const FooterSection = () => {
 
     return (
         <footer className={styles.footer}>
-            <div className="padding-common-layout">
-                <div className={styles.footerContainer}>
-                    {/* Contact Section */}
-                    <div className={styles.footerSection}>
-                        <div className={styles.sectionTitle}>
-                            Công ty TNHH Thương Mại Xuất Nhập Khẩu Nội Thất Ô Tô Quang Minh
-                        </div>
-                        {/* <div className={styles.contactInfo}>
+            <div className={styles.footerContainer}>
+                {/* Contact Section */}
+                <div className={styles.footerSection}>
+                    <div className={styles.sectionTitle}>
+                        Công ty TNHH Thương Mại Xuất Nhập Khẩu Nội Thất Ô Tô Quang Minh
+                    </div>
+                    {/* <div className={styles.contactInfo}>
                             <div className={styles.companyInfo}>
 
                             </div>
@@ -159,49 +158,48 @@ const FooterSection = () => {
                                 </div>
                             </div>
                         </div> */}
-                        <div className="tiny-style">
-                            <article
-                                className="prose max-w-none"
-                                dangerouslySetInnerHTML={{ __html: content }}
-                            />
-                        </div>
+                    <div className="tiny-style">
+                        <article
+                            className="prose max-w-none"
+                            dangerouslySetInnerHTML={{ __html: content }}
+                        />
                     </div>
-
-                    {/* Quick Links */}
-                    <div className={styles.gridLink}>
-                        <div className={styles.footerSection}>
-                            <div className={styles.sectionTitle}>
-                                LIÊN KẾT
-                            </div>
-                            <ul className={styles.linksList}>
-                                {menuItems.map((item) => (
-                                    <li className={styles.linkItem} key={item.id}>
-                                        <Link href={item.href} className={styles.link}>
-                                            {item.label}
-                                        </Link>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-
-                        {/* Policies */}
-                        <div className={styles.footerSection}>
-                            <div className={styles.sectionTitle}>
-                                CHÍNH SÁCH
-                            </div>
-                            <ul className={styles.linksList}>
-                                {policy.map((item) => (
-                                    <li className={styles.linkItem} key={item.id}>
-                                        <Link href={item.href} className={styles.link}>
-                                            {item.label}
-                                        </Link>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    </div>
-
                 </div>
+
+                {/* Quick Links */}
+                <div className={styles.gridLink}>
+                    <div className={styles.footerSection}>
+                        <div className={styles.sectionTitle}>
+                            LIÊN KẾT
+                        </div>
+                        <ul className={styles.linksList}>
+                            {menuItems.map((item) => (
+                                <li className={styles.linkItem} key={item.id}>
+                                    <Link href={item.href} className={styles.link}>
+                                        {item.label}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    {/* Policies */}
+                    <div className={styles.footerSection}>
+                        <div className={styles.sectionTitle}>
+                            CHÍNH SÁCH
+                        </div>
+                        <ul className={styles.linksList}>
+                            {policy.map((item) => (
+                                <li className={styles.linkItem} key={item.id}>
+                                    <Link href={item.href} className={styles.link}>
+                                        {item.label}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+
             </div>
         </footer>
     );
