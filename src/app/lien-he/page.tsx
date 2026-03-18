@@ -153,7 +153,7 @@ const ContactPage = () => {
                         </div>
                     </div>
                     <button type='submit' className={styles.submit}>
-                        <span className="btn-text">Đăng nhập</span>
+                        <span className="btn-text">Gửi liên hệ</span>
                     </button>
                 </form>
             </div>
