@@ -65,7 +65,7 @@ const ProductContent = () => {
     const [total, setTotal] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [totalElement, setTotalElement] = useState<number>(0);
-    const [pageSize, setPageSize] = useState<number>(10);
+    const [pageSize, setPageSize] = useState<number>(8);
     const [loading, setLoading] = useState<boolean>(false);
     const [initialLoading, setInitialLoading] = useState<boolean>(true);
     const [categoryId, setCategoryId] = useState<string>("");

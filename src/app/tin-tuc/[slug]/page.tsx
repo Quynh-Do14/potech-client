@@ -33,9 +33,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             };
         }
 
-        const blogUrl = `${publicURL}/${ROUTE_PATH.BLOG}/${params.slug}`;
+        const blogUrl = `${publicURL}${ROUTE_PATH.BLOG}/${params.slug}`;
         const imageUrl = configImageURL(blog.image);
-        const imageAlt = `${blog.title} - Phim cách nhiệt Potech`;
+        const imageAlt = blog.title;
 
         const keywordConvert = blog && blog.keyword.map(item => item.keyword)
         const keywords: string[] = [
@@ -44,68 +44,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         ].filter((item): item is string => Boolean(item)).concat(keywordConvert)
 
         // ✅ ĐÚNG: Dùng Article/BlogPosting Schema
-        const articleSchema = {
-            "@context": "https://schema.org",
-            "@type": "BlogPosting",  // ✅ Đã sửa
-            "@id": blogUrl,
-            "url": blogUrl,
-            "headline": blog.title,   // ✅ Blog dùng "headline"
-            "name": blog.title,
-            "description": blog.short_description || blog.description,
-            "image": {
-                "@type": "ImageObject",
-                "url": imageUrl,
-                "caption": imageAlt
-            },
-            "datePublished": blog.created_at || new Date().toISOString(), // ✅ Thêm ngày xuất bản
-            "dateModified": blog.updated_at || blog.created_at || new Date().toISOString(),
-            "author": {  // ✅ Thêm tác giả
-                "@type": "Organization",
-                "name": "Potech Việt Nam",
-                "url": publicURL
-            },
-            "publisher": {  // ✅ Thêm nhà xuất bản
-                "@type": "Organization",
-                "name": "Potech Việt Nam",
-                "logo": {
-                    "@type": "ImageObject",
-                    "url": configImageURL('/uploads/potech-logo.jpg'),
-                }
-            },
-            "mainEntityOfPage": {
-                "@type": "WebPage",
-                "@id": blogUrl
-            },
-            "keywords": keywords,
-            "articleSection": blog.category_name || "Tin tức", // ✅ Thêm chuyên mục
-            "wordCount": blog.short_description?.length || 0, // ✅ Đếm số từ
-            "timeRequired": `PT${Math.ceil((blog.short_description?.length || 0) / 300)}M` // ✅ Thời gian đọc
-        };
-
-        const breadcrumbSchema = {
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            "itemListElement": [
-                {
-                    "@type": "ListItem",
-                    "position": 1,
-                    "name": "Trang chủ",
-                    "item": publicURL
-                },
-                {
-                    "@type": "ListItem",
-                    "position": 2,
-                    "name": blog.category_name || "Tin tức",
-                    "item": `${publicURL}/${ROUTE_PATH.BLOG}`
-                },
-                {
-                    "@type": "ListItem",
-                    "position": 3,
-                    "name": blog.title,
-                    "item": blogUrl
-                }
-            ]
-        };
 
         return {
             title: blog.title,
@@ -116,7 +54,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
                 title: blog.title,
                 description: blog.short_description,
                 url: blogUrl,
-                siteName: 'Potech Việt Nam',
+                siteName: 'PotechVietNam',
                 images: [{
                     url: imageUrl,
                     alt: imageAlt,
@@ -143,13 +81,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             },
 
             other: {
-                'application/ld+json': JSON.stringify([articleSchema, breadcrumbSchema]), // ✅ Đã sửa
                 'og:image:alt': imageAlt,
                 'twitter:image:alt': imageAlt,
                 'og:locale': 'vi_VN',
                 'article:published_time': blog.created_at,
                 'article:modified_time': blog.updated_at,
-                'article:author': 'Potech Việt Nam',
+                'article:author': 'potechvietnam',
                 'article:section': blog.category_name,
             }
         };
@@ -157,7 +94,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     } catch (error) {
         console.error('Error generating blog metadata:', error);
         return {
-            title: 'Potech Việt Nam',
+            title: 'Potech',
             robots: { index: false, follow: true },
         };
     }
@@ -172,7 +109,9 @@ const BlogSlugPage = async ({ params }: Props) => {
     );
     const blog = dataDetail || {};
     const relatedBlogs = dataDetail?.related_blogs || []
-
+    const blogUrl = `${publicURL}${ROUTE_PATH.BLOG}/${params.slug}`;
+    const imageUrl = configImageURL(blog.image);
+    const imageAlt = blog.title;
 
     let tocItems: { id: string; text: any; level: number; }[] = [];
     let tocItemsLength: { id: string; text: any; level: number; }[] = [];
@@ -197,46 +136,149 @@ const BlogSlugPage = async ({ params }: Props) => {
         tocItemsLength = tocItems.filter((_it, index) => index >= initialLength)
         return `<${tag} id="${id}">${text}</${tag}>`;
     });
+
+    const articleSchema = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",  // ✅ Đã sửa
+        "@id": blogUrl,
+        "url": blogUrl,
+        "headline": blog.title,   // ✅ Blog dùng "headline"
+        "name": blog.title,
+        "description": blog.short_description || blog.description,
+        "image": {
+            "@type": "ImageObject",
+            "url": imageUrl,
+            "caption": imageAlt
+        },
+        "datePublished": blog.created_at || new Date().toISOString(), // ✅ Thêm ngày xuất bản
+        "dateModified": blog.updated_at || blog.created_at || new Date().toISOString(),
+        "author": {  // ✅ Thêm tác giả
+            "@type": "Organization",
+            "name": "Potech Việt Nam",
+            "url": publicURL
+        },
+        "publisher": {  // ✅ Thêm nhà xuất bản
+            "@type": "Organization",
+            "name": "Potech Việt Nam",
+            "logo": {
+                "@type": "ImageObject",
+                "url": configImageURL('/uploads/potech-logo.jpg'),
+            }
+        },
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": blogUrl
+        },
+        "articleSection": "Tin tức", // ✅ Thêm chuyên mục
+        "wordCount": blog.short_description?.length || 0, // ✅ Đếm số từ
+        "timeRequired": `PT${Math.ceil((blog.short_description?.length || 0) / 300)}M` // ✅ Thời gian đọc
+    };
+
+    const breadcrumbSchema = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Trang chủ",
+                "item": publicURL
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Tin tức",
+                "item": `${publicURL}${ROUTE_PATH.BLOG}`
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "name": blog.title,
+                "item": blogUrl
+            }
+        ]
+    };
+
+    const webpageSchema = {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "@id": blogUrl,
+        "url": blogUrl,
+        "name": blog.title,
+        "description": blog.short_description,
+        "isPartOf": {
+            "@type": "WebSite",
+            "@id": `${publicURL}/#website`,
+            "url": publicURL,
+            "name": 'Potech Việt Nam'
+        },
+        "primaryImageOfPage": {
+            "@type": "ImageObject",
+            "url": imageUrl,
+            "caption": imageAlt
+        }
+    };
+
     return (
-        <ClientLayout>
-            <div className={`${styles.blogSlugContainer} padding-common`}>
-                <div className="flex flex-col lg:flex-row gap-5">
-                    {/* Main content - chiếm 75% trên desktop, toàn bộ trên mobile */}
-                    <div className="w-full lg:w-3/4">
-                        <div className="space-y-6 flex flex-col gap-3">
-                            <BreadcrumbCommon
-                                breadcrumb={"Tin tức"}
-                                redirect={ROUTE_PATH.BLOG}
-                                title={blog.title}
-                                blackColor={true}
-                            />
-                            <h1>
-                                {blog.title}
-                            </h1>
-                            {/* <div className={styles.blogImg}
+        <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify(articleSchema)
+                }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify(breadcrumbSchema)
+                }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify(webpageSchema)
+                }}
+            />
+            <ClientLayout>
+                <div className={`${styles.blogSlugContainer} padding-common`}>
+                    <div className="flex flex-col lg:flex-row gap-5">
+                        {/* Main content - chiếm 75% trên desktop, toàn bộ trên mobile */}
+                        <div className="w-full lg:w-3/4">
+                            <div className="space-y-6 flex flex-col gap-3">
+                                <BreadcrumbCommon
+                                    breadcrumb={"Tin tức"}
+                                    redirect={ROUTE_PATH.BLOG}
+                                    title={blog.title}
+                                    blackColor={true}
+                                />
+                                <h1>
+                                    {blog.title}
+                                </h1>
+                                {/* <div className={styles.blogImg}
                                 style={{ backgroundImage: `url(${configImageURL(blog.image)})` }}
                             ></div> */}
 
-                            <div className={styles.blogImg}>
-                                <Image src={configImageURL(blog.image)} alt={blog.title} fill loading="lazy" />
-                            </div>
-                            <TocBlog tocItems={tocItemsLength} />
-                            <div className="tiny-style">
-                                <article
-                                    className="prose max-w-none"
-                                    dangerouslySetInnerHTML={{ __html: updatedContent }}
-                                />
+                                <div className={styles.blogImg}>
+                                    <Image src={configImageURL(blog.image)} alt={blog.title} fill loading="lazy" />
+                                </div>
+                                <TocBlog tocItems={tocItemsLength} />
+                                <div className="tiny-style">
+                                    <article
+                                        className="prose max-w-none"
+                                        dangerouslySetInnerHTML={{ __html: updatedContent }}
+                                    />
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    {/* Sidebar - chiếm 25% trên desktop, toàn bộ trên mobile */}
-                    <div className="w-full lg:w-1/4">
-                        <RelationBlogComponent relatedBlogs={relatedBlogs} />
+                        {/* Sidebar - chiếm 25% trên desktop, toàn bộ trên mobile */}
+                        <div className="w-full lg:w-1/4">
+                            <RelationBlogComponent relatedBlogs={relatedBlogs} />
+                        </div>
                     </div>
                 </div>
-            </div>
-        </ClientLayout >
+            </ClientLayout>
+        </>
     )
 }
 

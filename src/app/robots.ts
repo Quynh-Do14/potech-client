@@ -1,9 +1,10 @@
 import { MetadataRoute } from 'next'
 
+// ✅ Đúng cách
 export default function robots(): MetadataRoute.Robots {
     return {
         rules: [
-            // Chặn hoàn toàn các AI crawlers không mong muốn - ĐẶT ĐẦU TIÊN
+            // AI Crawlers
             {
                 userAgent: [
                     'GPTBot',
@@ -16,7 +17,7 @@ export default function robots(): MetadataRoute.Robots {
                 ],
                 disallow: '/',
             },
-            // Rule cho Googlebot
+            // Googlebot
             {
                 userAgent: 'Googlebot',
                 allow: [
@@ -24,6 +25,15 @@ export default function robots(): MetadataRoute.Robots {
                     '/tin-tuc/',
                     '/san-pham/',
                     '/dai-ly/',
+                    '/gioi-thieu',
+                    '/lien-he',
+                    '/chinh-sach/chinh-sach-bao-hanh-doi-tra-hang',
+                    '/chinh-sach/chinh-sach-bao-mat',
+                    '/chinh-sach/chinh-sach-giao-hang',
+                    '/chinh-sach/chinh-sach-mua-hang',
+                    '/chinh-sach/chinh-sach-thanh-toan',
+                    '/chinh-sach/thong-tin-ve-dieu-kien-giao-dich-chung',
+
                 ],
                 disallow: [
                     '/api/',
@@ -34,12 +44,12 @@ export default function robots(): MetadataRoute.Robots {
                     '/user/',
                 ],
             },
-            // Rule cho Google-Extended (AI crawler của Google)
+            // Google-Extended (AI crawler của Google)
             {
                 userAgent: 'Google-Extended',
-                allow: '/', // Cho phép crawl nếu muốn
+                disallow: '/', // Chặn nếu không muốn AI của Google crawl
             },
-            // Rule mặc định cho tất cả user agents khác
+            // Default rule
             {
                 userAgent: '*',
                 allow: [
@@ -47,6 +57,14 @@ export default function robots(): MetadataRoute.Robots {
                     '/tin-tuc/',
                     '/san-pham/',
                     '/dai-ly/',
+                    '/gioi-thieu',
+                    '/lien-he',
+                    '/chinh-sach/chinh-sach-bao-hanh-doi-tra-hang',
+                    '/chinh-sach/chinh-sach-bao-mat',
+                    '/chinh-sach/chinh-sach-giao-hang',
+                    '/chinh-sach/chinh-sach-mua-hang',
+                    '/chinh-sach/chinh-sach-thanh-toan',
+                    '/chinh-sach/thong-tin-ve-dieu-kien-giao-dich-chung',
                 ],
                 disallow: [
                     '/api/',
@@ -58,7 +76,6 @@ export default function robots(): MetadataRoute.Robots {
                 ],
             },
         ],
-        sitemap: 'https://potechvietnam.vn/sitemap.xml',
-        // host: 'https://potechvietnam.vn', // Xóa dòng này vì không phải chuẩn robots.txt
+        sitemap: 'https://rimo.vn/sitemap.xml',
     }
 }

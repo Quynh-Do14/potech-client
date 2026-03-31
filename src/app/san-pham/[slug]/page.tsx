@@ -18,35 +18,94 @@ type Props = {
 };
 const baseURL = process.env.NEXT_PUBLIC_API_URL;
 const publicURL = process.env.NEXT_PUBLIC_PUBLIC_URL;
-export async function generateMetadata
-    ({ params }: Props): Promise<Metadata> {
-    const product: ProductInterface = await fetch(`${baseURL}${Endpoint.Product.GetById}/${params.slug}`, {
-        cache: 'no-store', // Tắt cache
-    }).then((res) => res.json());
-    const productUrl = `${publicURL}/${ROUTE_PATH.PRODUCT}/${params.slug}`;
-    const keywordConvert = product && product.keyword.map(item => item.keyword)
+async function getProduct(slug: string): Promise<ProductInterface> {
+    const response = await fetch(`${baseURL}${Endpoint.Product.GetById}/${slug}`, {
+        next: { revalidate: 3600 },
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch product');
+    }
+
+    return response.json();
+}
+
+// ✅ Metadata - chỉ chứa metadata, không có schema
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+    const product = await getProduct(params.slug);
+    const productUrl = `${publicURL}${ROUTE_PATH.PRODUCT}/${product.slug}`;
+
+    const keywordConvert = product?.keyword?.map(item => item.keyword) || [];
     const keywords: string[] = [
         product.name,
         product.category_name,
         product.brand_name,
-    ].filter((item): item is string => Boolean(item)).concat(keywordConvert)
+    ].filter((item): item is string => Boolean(item)).concat(keywordConvert);
 
+    return {
+        title: product.name,
+        description: product.short_description,
+        keywords: keywords,
+        openGraph: {
+            title: product.name,
+            description: product.short_description,
+            images: [{
+                url: configImageURL(product.image),
+                alt: product.name,
+            }],
+            type: 'website',
+            url: productUrl,
+            siteName: publicURL,
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title: product.name,
+            description: product.short_description,
+            images: [{
+                url: configImageURL(product.image),
+                alt: product.name,
+            }],
+        },
+        alternates: {
+            canonical: productUrl,
+        },
+        robots: {
+            index: true,
+            follow: true,
+            'max-image-preview': 'large',
+            'max-snippet': -1,
+        },
+    };
+}
+
+// ✅ Component chính - nơi tạo và hiển thị JSON-LD
+const ProductSlugContent = async ({ params }: Props) => {
+    // Fetch dữ liệu trực tiếp trong component
+    const dataDetail = await getProduct(params.slug);
+    const productUrl = `${publicURL}${ROUTE_PATH.PRODUCT}/${dataDetail.slug}`;
+
+    // ✅ Tạo schema ngay trong component với dữ liệu đã fetch
     const productSchema = {
         "@context": "https://schema.org",
         "@type": "Product",
-        "@id": productUrl,    // ✅ Nhất quán
-        "url": productUrl,    // ✅ Nhất quán
-        "name": product.name,
-        "description": product.short_description || product.description,
-        "image": configImageURL(product.image),
+        "@id": productUrl,
+        "url": productUrl,
+        "name": dataDetail.name,
+        "description": dataDetail.short_description || dataDetail.description,
+        "image": configImageURL(dataDetail.image),
+        "category": dataDetail.category_name,
         "offers": {
             "@type": "Offer",
-            "url": productUrl, // ✅ Nhất quán
+            "url": productUrl,
             "priceCurrency": "VND",
-            "price": product.price?.toString(),
+            "price": dataDetail.price?.toString(),
             "priceValidUntil": new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-            // ❓ "availability": "https://schema.org/InStock", // Xem phần 2
-            // ❓ "itemCondition": "https://schema.org/NewCondition" // Xem phần 3
+            "itemCondition": "https://schema.org/NewCondition",
+            "availability": "https://schema.org/InStock",
+            "seller": {
+                "@type": "Organization",
+                "name": "Công ty TNHH Thương Mại XNK Nội Thất Ô Tô Quang Minh"
+            }
         },
     };
 
@@ -64,160 +123,146 @@ export async function generateMetadata
                 "@type": "ListItem",
                 "position": 2,
                 "name": "Sản phẩm",
-                "item": `${publicURL}/${ROUTE_PATH.PRODUCT}` // ✅ Nhất quán
+                "item": `${publicURL}${ROUTE_PATH.PRODUCT}`
             },
             {
                 "@type": "ListItem",
                 "position": 3,
-                "name": product.name,
-                "item": productUrl // ✅ Nhất quán
+                "name": dataDetail.name,
+                "item": productUrl
             }
         ]
     };
 
-    return {
-        title: `${product.name}`,
-        description: product.short_description,
-        keywords: keywords,
-        openGraph: {
-            title: `${product.name}`,
-            description: product.short_description,
-            images: [{
-                url: configImageURL(product.image),
-                alt: product.name,
-            }],
-            type: 'website',
-            url: productUrl,
-            siteName: publicURL,
+    const webpageSchema = {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "@id": productUrl,
+        "url": productUrl,
+        "name": dataDetail.name,
+        "description": dataDetail.short_description,
+        "isPartOf": {
+            "@type": "WebSite",
+            "@id": `${publicURL}/#website`,
+            "url": publicURL,
+            "name": 'PotechVietNam'
         },
-        twitter: {
-            card: 'summary_large_image',
-            title: `${product.name}`,
-            description: product.short_description,
-            images: [{
-                url: configImageURL(product.image),
-                alt: product.name,
-            }],
-        },
-
-        alternates: {
-            canonical: productUrl,
-        },
-
-        robots: {
-            index: true,
-            follow: true,
-            'max-image-preview': 'large',
-            'max-snippet': -1,
-        },
-        other: {
-            'application/ld+json': JSON.stringify([productSchema, breadcrumbSchema]),
-            'product:price:amount': product.price?.toString(),
-            'product:price:currency': 'VND',
-            'product:original_price': product.price_sale?.toString() || '',
-            'product:sale_price': product.price?.toString() || '',
-            'product:brand': 'Rimo',
-            'og:updated_time': new Date().toISOString(),
+        "primaryImageOfPage": {
+            "@type": "ImageObject",
+            "url": configImageURL(dataDetail.image),
+            "caption": dataDetail.name,
         }
     };
-}
-
-const ProductSlugContent = async ({ params }: Props) => {
-    const dataDetail: ProductInterface = await fetch(`${baseURL}${Endpoint.Product.GetById}/${params.slug}`, {
-        cache: 'no-store', // Tắt cache
-    }).then((res) =>
-        res.json()
-    );
 
     return (
-        <ClientLayout>
-            <div className={styles.productContainer}>
-                <div className={`${styles.productContent} padding-common`} >
-                    <BreadcrumbCommon
-                        breadcrumb={"Sản phẩm"}
-                        redirect={ROUTE_PATH.PRODUCT}
-                        title={dataDetail.name}
-                        blackColor={true}
-                    />
-                    <div className={`${styles.content}`}>
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
-                            {/* Column 1: Gallery */}
-                            <div className="w-full">
-                                <GalleryComponent slides={dataDetail.images} />
-                            </div>
-
-                            {/* Column 2: Product Info */}
-                            <div className={styles.productInfo}>
-                                <h1>{dataDetail.name}</h1>
-                                <div className="space-y-4">
-                                    {/* Giá sản phẩm */}
-                                    <div className="flex items-center gap-2">
-                                        <span className="text-2xl font-bold text-red-600">
-                                            {formatCurrency(Number(dataDetail.price))}đ
-                                        </span>
-                                        {Number(dataDetail.price_sale) ? (
-                                            <span className="text-lg text-gray-500 line-through">
-                                                {formatCurrency(Number(dataDetail.price_sale))}đ
-                                            </span>
-                                        ) : null}
-                                    </div>
-                                </div>
-                                <div className="flex">
-                                    <div className={styles.categoryTag}>
-                                        {dataDetail.category_name}
-                                    </div>
+        <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify(productSchema)
+                }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify(breadcrumbSchema)
+                }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify(webpageSchema)
+                }}
+            />
+            <ClientLayout>
+                <div className={styles.productContainer}>
+                    <div className={`${styles.productContent} padding-common`} >
+                        <BreadcrumbCommon
+                            breadcrumb={"Sản phẩm"}
+                            redirect={ROUTE_PATH.PRODUCT}
+                            title={dataDetail.name}
+                            blackColor={true}
+                        />
+                        <div className={`${styles.content}`}>
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+                                {/* Column 1: Gallery */}
+                                <div className="w-full">
+                                    <GalleryComponent slides={dataDetail.images} />
                                 </div>
 
-                                <ul className={styles.featureList}>
-                                    {dataDetail.characteristicProduct.map((feature, index) => (
-                                        <li key={index} className={styles.featureItem}>
-                                            <span className={styles.featureIcon}>
-                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                                                    <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
-                                                        stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                                </svg>
+                                {/* Column 2: Product Info */}
+                                <div className={styles.productInfo}>
+                                    <h1>{dataDetail.name}</h1>
+                                    <div className="space-y-4">
+                                        {/* Giá sản phẩm */}
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-2xl font-bold text-red-600">
+                                                {formatCurrency(Number(dataDetail.price))}đ
                                             </span>
-                                            <span className={styles.featureText}>{feature.characteristic_name}</span>
-                                        </li>
-                                    ))}
-                                </ul>
+                                            {Number(dataDetail.price_sale) ? (
+                                                <span className="text-lg text-gray-500 line-through">
+                                                    {formatCurrency(Number(dataDetail.price_sale))}đ
+                                                </span>
+                                            ) : null}
+                                        </div>
+                                    </div>
+                                    <div className="flex">
+                                        <div className={styles.categoryTag}>
+                                            {dataDetail.category_name}
+                                        </div>
+                                    </div>
+
+                                    <ul className={styles.featureList}>
+                                        {dataDetail.characteristicProduct.map((feature, index) => (
+                                            <li key={index} className={styles.featureItem}>
+                                                <span className={styles.featureIcon}>
+                                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                                        <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
+                                                            stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                                    </svg>
+                                                </span>
+                                                <span className={styles.featureText}>{feature.characteristic_name}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div className={`${styles.content} ${styles.gridContent}`}>
-                        <div className={styles.gridContentDescription}>
+                        <div className={`${styles.content} ${styles.gridContent}`}>
+                            <div className={styles.gridContentDescription}>
+                                <div className={styles.specificationHeader}>
+                                    <div className={styles.title}>Mô tả sản phẩm</div>
+                                </div>
+                                <div className="tiny-style">
+                                    <article
+                                        className="prose max-w-none"
+                                        dangerouslySetInnerHTML={{ __html: dataDetail.description }}
+                                    />
+                                </div>
+                            </div>
+                            <div className={styles.gridContentFigure}>
+                                <div className={styles.specificationHeader}>
+                                    <div className={styles.title}>Thông số sản phẩm</div>
+                                </div>
+                                <ProductAdvantageComponent product={dataDetail.productFigure} />
+                            </div>
+                        </div>
+                        <div className={`${styles.content}`}>
                             <div className={styles.specificationHeader}>
-                                <div className={styles.title}>Mô tả sản phẩm</div>
+                                <div className={styles.title}>Sản phẩm tương tự</div>
                             </div>
-                            <div className="tiny-style">
-                                <article
-                                    className="prose max-w-none"
-                                    dangerouslySetInnerHTML={{ __html: dataDetail.description }}
-                                />
-                            </div>
+                            <RelationProductComponent listProduct={dataDetail.sameCategoryProducts} />
                         </div>
-                        <div className={styles.gridContentFigure}>
+                        <div className={`${styles.content}`}>
                             <div className={styles.specificationHeader}>
-                                <div className={styles.title}>Thông số sản phẩm</div>
+                                <div className={styles.title}>Tin tức nổi bật</div>
                             </div>
-                            <ProductAdvantageComponent product={dataDetail.productFigure} />
+                            <BlogInProductSlug />
                         </div>
-                    </div>
-                    <div className={`${styles.content}`}>
-                        <div className={styles.specificationHeader}>
-                            <div className={styles.title}>Sản phẩm tương tự</div>
-                        </div>
-                        <RelationProductComponent listProduct={dataDetail.sameCategoryProducts} />
-                    </div>
-                    <div className={`${styles.content}`}>
-                        <div className={styles.specificationHeader}>
-                            <div className={styles.title}>Tin tức nổi bật</div>
-                        </div>
-                        <BlogInProductSlug />
                     </div>
                 </div>
-            </div>
-        </ClientLayout>
+            </ClientLayout>
+        </>
     )
 }
 
