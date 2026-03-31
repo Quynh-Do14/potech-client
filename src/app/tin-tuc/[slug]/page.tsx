@@ -248,6 +248,7 @@ const BlogSlugPage = async ({ params }: Props) => {
                                 <BreadcrumbCommon
                                     breadcrumb={"Tin tức"}
                                     redirect={ROUTE_PATH.BLOG}
+                                    currentURL={blogUrl}
                                     title={blog.title}
                                     blackColor={true}
                                 />

@@ -181,6 +181,7 @@ const ProductSlugContent = async ({ params }: Props) => {
                             breadcrumb={"Sản phẩm"}
                             redirect={ROUTE_PATH.PRODUCT}
                             title={dataDetail.name}
+                            currentURL={productUrl}
                             blackColor={true}
                         />
                         <div className={`${styles.content}`}>

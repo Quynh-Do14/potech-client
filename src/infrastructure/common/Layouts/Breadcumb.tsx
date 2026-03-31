@@ -1,12 +1,13 @@
 "use client"
-import { Breadcrumb } from 'antd';
+import Link from 'next/link';
 import { CaretRightOutlined } from '@ant-design/icons';
-import { useRouter } from 'next/navigation';
-import styles from '@/assets/styles/components/breadcumb.module.css'
+import styles from '@/assets/styles/components/breadcumb.module.css';
 import { ROUTE_PATH } from '@/core/common/appRouter';
+
 interface BreadcrumbCommonProps {
     breadcrumb: string;
     redirect: string;
+    currentURL?: string;
     title: string;
     blackColor?: boolean;
 }
@@ -14,39 +15,48 @@ interface BreadcrumbCommonProps {
 const BreadcrumbCommon: React.FC<BreadcrumbCommonProps> = ({
     breadcrumb,
     title,
+    currentURL = "",
     redirect,
     blackColor = false,
 }) => {
-    const router = useRouter();
     const fontStyle = blackColor ? styles.font_style_black : styles.font_style_white;
 
     return (
         <div className={styles.breadcumb_container}>
-            <div>
-                {/* Cách 1: Suppress warning bằng cách ignore */}
-                {/* @ts-ignore */}
-                <Breadcrumb
-                    className='flex items-center'
-                    separator={<CaretRightOutlined className={fontStyle} />}
-                    items={[
-                        {
-                            title: 'Trang chủ',
-                            className: fontStyle,
-                            onClick: () => router.push(ROUTE_PATH.HOME_PAGE),
-                        },
-                        ...(breadcrumb ? [{
-                            title: breadcrumb,
-                            className: fontStyle,
-                            onClick: () => router.push(redirect)
-                        }] : []),
-                        {
-                            title: title,
-                            className: fontStyle,
-                        },
-                    ]}
-                />
+            <div className="flex items-center gap-2">
+                {/* Home link */}
+                <Link
+                    href={ROUTE_PATH.HOME_PAGE}
+                    className={fontStyle}
+                >
+                    Trang chủ
+                </Link>
+
+                {/* Separator and breadcrumb (if exists) */}
+                {breadcrumb && (
+                    <>
+                        <CaretRightOutlined className={fontStyle} />
+                        <Link
+                            href={redirect}
+                            className={fontStyle}
+                        >
+                            {breadcrumb}
+                        </Link>
+                    </>
+                )}
+
+                {/* Separator and current title */}
+                {(breadcrumb || title) && (
+                    <>
+                        <CaretRightOutlined className={fontStyle} />
+                        <Link href={currentURL} className={fontStyle}>
+                            {title}
+                        </Link>
+                    </>
+                )}
             </div>
         </div>
     );
 };
-export default BreadcrumbCommon
+
+export default BreadcrumbCommon;
