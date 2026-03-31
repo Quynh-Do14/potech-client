@@ -2,7 +2,7 @@ import React from 'react'
 import styles from '@/assets/styles/pages/blog/blogSkeleton.module.css'
 const BlogSkeleton = () => {
     return (
-        [...Array(6)].map((_, index) => (
+        [...Array(8)].map((_, index) => (
             <div key={index} className={styles.newsCard}>
                 {/* Card Image Skeleton */}
                 <div className={styles.cardImage}>

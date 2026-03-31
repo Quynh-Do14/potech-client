@@ -81,7 +81,7 @@ const ProductContent = () => {
     // Lấy các query parameters
     const search = searchParams?.get('search') || '';
     const page = searchParams?.get('page') || '1';
-    const limit = searchParams?.get('limit') || '10';
+    const limit = searchParams?.get('limit') || '8';
     const category_id = searchParams?.get('category_id') || '';
     const brand_id = searchParams?.get('brand_id') || '';
     const min_price = searchParams?.get('min_price') || '';
@@ -172,7 +172,7 @@ const ProductContent = () => {
 
     useEffect(() => {
         const parsedPage = parseInt(page) || 1;
-        const parsedLimit = parseInt(limit) || 10;
+        const parsedLimit = parseInt(limit) || 8;
         const parsedSearch = search || "";
         const parsedCategory = category_id || "";
         const parsedBrand = brand_id || "";

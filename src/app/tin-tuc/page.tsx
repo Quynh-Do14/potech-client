@@ -37,7 +37,7 @@ const BlogContent = () => {
     // Lấy các query parameters
     const search = searchParams?.get('search') || '';
     const page = searchParams?.get('page') || '1';
-    const limit = searchParams?.get('limit') || '10';
+    const limit = searchParams?.get('limit') || '8';
     const category_id = searchParams?.get('category_id') || '';
 
     const categoryBlogState = useRecoilValue(CategoryBlogState).data
@@ -103,7 +103,7 @@ const BlogContent = () => {
 
     useEffect(() => {
         const parsedPage = parseInt(page) || 1;
-        const parsedLimit = parseInt(limit) || 10;
+        const parsedLimit = parseInt(limit) || 180;
         const parsedSearch = search || "";
         const parsedCategory = category_id || "";
 
