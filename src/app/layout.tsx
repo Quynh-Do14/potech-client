@@ -246,7 +246,7 @@ const productSchema = {
     "offerCount": "5"
   }
 };
-const GA_TRACKING_ID = 'G-KSLD8QEXB8';
+const GA_TRACKING_ID = 'G-TVSE42RYYL';
 export default function RootLayout({
   children,
 }: Readonly<{
