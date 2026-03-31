@@ -32,9 +32,9 @@ let defaultMetadata = {
 };
 
 const keywords = [
-  "Potech",
   "Potech Việt Nam",
   "potechvietnam",
+  "Potech",
   "màn hình android box Potech",
   "android box Potech",
   "màn hình ô tô Potech",
