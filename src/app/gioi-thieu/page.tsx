@@ -16,6 +16,7 @@ const introduceUrl = `${publicURL}${ROUTE_PATH.INTRODUCE}`;
 const keywords = [
     "CÔNG TY TNHH TM XNK NỘI THẤT Ô TÔ QUANG MINH",
     "Công ty TNHH Thương Mại Xuất nhập khẩu Nội thất ô tô Quang Minh",
+    "Potech",
     "Potech Việt Nam",
     "potechvietnam",
     "màn hình android box Potech",
