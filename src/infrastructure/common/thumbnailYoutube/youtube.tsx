@@ -38,6 +38,7 @@ declare global {
             getCurrentTime: () => number;
             getPlayerState: () => number;
             getDuration: () => number;
+            destroy: () => void;
         }
     }
 }
@@ -48,22 +49,30 @@ type Props = {
 const YoutubeVideo = (props: Props) => {
     const { videoId } = props;
     const playerRef = useRef<YT.Player | null>(null);
-
-    const [playerState, setPlayerState] = useState<string>('UNSTARTED');
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
+    const [playerState, setPlayerState] = useState<string>('UNSTARTED');
+
+    // Cleanup interval
+    const clearIntervalIfExists = () => {
+        if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+            intervalRef.current = null;
+        }
+    };
 
     useEffect(() => {
         if (videoId) {
+            // Clear old interval when videoId changes
+            clearIntervalIfExists();
+            
             if (document.querySelector('script[src="https://www.youtube.com/iframe_api"]')) {
-                // Script already exists
-
                 initializePlayer();
                 return;
             }
+            
             const tag = document.createElement('script');
             tag.src = 'https://www.youtube.com/iframe_api';
 
-            // Try to insert after first script tag, fallback to head
             const firstScriptTag = document.getElementsByTagName('script')[0];
             if (firstScriptTag?.parentNode) {
                 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
@@ -72,22 +81,23 @@ const YoutubeVideo = (props: Props) => {
             }
 
             window.onYouTubeIframeAPIReady = initializePlayer;
-
-            return () => {
-                if (intervalRef.current) {
-                    clearInterval(intervalRef.current);
-                }
-            };
         }
-        return
+        
+        // Cleanup on unmount
+        return () => {
+            clearIntervalIfExists();
+            if (playerRef.current) {
+                playerRef.current.destroy();
+            }
+        };
     }, [videoId]);
 
-    // Initialize YouTube player
     const initializePlayer = () => {
         if (!window.YT) {
             console.error('YouTube API not loaded');
             return;
         }
+        
         if (videoId) {
             playerRef.current = new window.YT.Player('youtube-player', {
                 height: '100%',
@@ -101,16 +111,22 @@ const YoutubeVideo = (props: Props) => {
         }
     };
 
-    // When player is ready
     const onPlayerReady = (event: { target: YT.Player }) => {
-
-        // Update current time every second
-        intervalRef.current = setInterval(() => {
-            const time = event.target.getCurrentTime();
-        }, 1000);
+        // Chỉ set interval nếu chưa có
+        if (!intervalRef.current) {
+            intervalRef.current = setInterval(() => {
+                // Chỉ get time nếu player đang ở trạng thái PLAYING hoặc BUFFERING
+                if (playerRef.current) {
+                    const state = playerRef.current.getPlayerState();
+                    if (state === 1 || state === 3) { // PLAYING hoặc BUFFERING
+                        const time = playerRef.current.getCurrentTime();
+                        // Có thể dùng time nếu cần
+                    }
+                }
+            }, 1000);
+        }
     };
 
-    // Handle player state changes
     const onPlayerStateChange = (event: { data: number }) => {
         const states = {
             0: 'ENDED',
@@ -121,10 +137,25 @@ const YoutubeVideo = (props: Props) => {
         };
         const newState = states[event.data as keyof typeof states] || 'UNKNOWN';
         setPlayerState(newState);
+        
+        // Xóa interval khi video kết thúc hoặc pause
+        if (newState === 'ENDED' || newState === 'PAUSED') {
+            clearIntervalIfExists();
+        }
+        // Tạo lại interval khi play (nếu chưa có)
+        else if (newState === 'PLAYING' && !intervalRef.current) {
+            intervalRef.current = setInterval(() => {
+                if (playerRef.current) {
+                    const currentState = playerRef.current.getPlayerState();
+                    if (currentState === 1 || currentState === 3) {
+                        const time = playerRef.current.getCurrentTime();
+                    }
+                }
+            }, 1000);
+        }
+        
         console.log("Player state changed to:", newState);
     };
-
-
 
     return (
         <div className="video-container">
