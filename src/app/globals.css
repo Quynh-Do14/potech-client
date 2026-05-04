@@ -107,7 +107,6 @@
 ::-webkit-scrollbar {
   width: 8px;
   height: 4px;
-  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-track {
