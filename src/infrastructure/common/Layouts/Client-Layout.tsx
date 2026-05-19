@@ -25,7 +25,7 @@ const ClientLayout = ({ ...props }: any) => {
                     data-tooltip="Facebook POTECH">
                     <Image src={facebook} alt='POTECH' />
                 </a>
-                <a href="https://m.me/109804934943900"
+                <a href="https://m.me/potech.vietnam"
                     target='_blank'
                     rel="noopener noreferrer"
                     className='social-item'
