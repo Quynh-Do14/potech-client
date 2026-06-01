@@ -100,13 +100,17 @@ const ProductContent = (props: Props) => {
                     return (
                         <div className={styles.goldContainer} key={key}>
                             {/* Gold & Black Header */}
-                            <h2 className={styles.sectionTitle}>
-                                {category.name}
-                            </h2>
+                            {
+                                productFromCategory.length > 0 &&
+                                <h2 className={styles.sectionTitle}>
+                                    {category.name}
+                                </h2>
+                            }
+
 
                             {/* Gold & Black Gallery Grid */}
                             <div className={gridStyle}>
-                                {productFromCategory.slice(0, 4).map((item, index) => (
+                                {productFromCategory.length > 0 && productFromCategory.slice(0, 4).map((item, index) => (
                                     <Link
                                         href={`${ROUTE_PATH.PRODUCT}/${item.slug}`}
                                         key={item.id}
