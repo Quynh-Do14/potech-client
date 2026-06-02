@@ -20,7 +20,8 @@ const baseURL = process.env.NEXT_PUBLIC_API_URL;
 const publicURL = process.env.NEXT_PUBLIC_PUBLIC_URL;
 async function getProduct(slug: string): Promise<ProductInterface> {
     const response = await fetch(`${baseURL}${Endpoint.Product.GetById}/${slug}`, {
-        next: { revalidate: 3600 },
+        // next: { revalidate: 3600 },
+        cache: 'no-store', // Tắt cache
     });
 
     if (!response.ok) {
@@ -188,7 +189,11 @@ const ProductSlugContent = async ({ params }: Props) => {
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
                                 {/* Column 1: Gallery */}
                                 <div className="w-full">
-                                    <GalleryComponent slides={dataDetail.images} />
+                                    <GalleryComponent
+                                        productName={dataDetail.name}
+                                        slides={dataDetail.images}
+                                        avatarImage={dataDetail.image}
+                                    />
                                 </div>
 
                                 {/* Column 2: Product Info */}
