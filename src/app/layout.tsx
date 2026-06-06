@@ -40,16 +40,14 @@ const keywords = [
   "màn hình ô tô Potech",
   "android box ô tô",
   "android box Potech",
-  "màn hình giải trí ô tô",
+  "màn hình androidbox",
+  "màn hình androidbox ô tô",
   "đầu android ô tô",
   "màn hình cảm ứng ô tô",
   "android box thông minh",
-  "giải pháp giải trí ô tô",
-  "nâng cấp hệ thống giải trí xe hơi",
   "Potech chính hãng",
   "phụ kiện ô tô Potech",
   "hệ sinh thái Quang Minh",
-  "thương hiệu phụ kiện ô tô",
 ];
 
 // Tạo async function để fetch metadata
