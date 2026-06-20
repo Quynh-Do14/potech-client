@@ -172,7 +172,7 @@ const AgencyContent = () => {
                     String(provinceSelected).split('-')[0],
                     () => { }
                 ).then((res) => {
-                    setListDistrict(res.districts);
+                    setListDistrict(res.wards);
                 })
             }
             catch (error) {
@@ -257,7 +257,7 @@ const AgencyContent = () => {
                                     valueName='name'
                                     labelName='name'
                                     value={districtSelected}
-                                    label={'Quận/Huyện'} />
+                                    label={'Phường/Xã'} />
                             </div>
                             <div className="sm:col-span-3">
                                 <SelectSearchCommon

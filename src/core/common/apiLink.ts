@@ -83,7 +83,7 @@ export class Endpoint {
         static Delete = "/users"
     }
     static APIDistrict = class {
-        static Get = "https://provinces.open-api.vn/api/v1/p/"
+        static Get = "https://provinces.open-api.vn/api/v2/p/"
     }
     static Video = class {
         static Get = "/video"
