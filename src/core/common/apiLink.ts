@@ -112,4 +112,11 @@ export class Endpoint {
         static Update = "/content-page"
         static Delete = "/content-page"
     }
+    static SEOProduct = class {
+        static Get = "/seo-product"
+        static GetBySlug = "/seo-product"
+        static Add = "/seo-product"
+        static Update = "/seo-product"
+        static Delete = "/seo-product"
+    }
 }

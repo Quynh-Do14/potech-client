@@ -1,453 +1,327 @@
-'use client'
-import React, { useState, useEffect, Suspense, useLayoutEffect } from "react";
-import productService from "@/infrastructure/repository/product/product.service";
-import { configImageURL, convertSlug, formatCurrencyVND, splitTakeId } from "@/infrastructure/helper/helper";
-import Link from "next/link";
-import { ROUTE_PATH } from "@/core/common/appRouter";
-import styles from "@/assets/styles/pages/product/product.module.css"
+import React from "react";
+import styles from "@/assets/styles/pages/product/product.module.css";
 import ClientLayout from "@/infrastructure/common/Layouts/Client-Layout";
-import BreadcrumbCommon from "@/infrastructure/common/Layouts/Breadcumb";
-import InputSearchCommon from "@/infrastructure/common/input/input-search-common";
-import SelectSearchCommon from "@/infrastructure/common/input/select-search-common";
-import ButtonCommon from "@/infrastructure/common/button/button-common";
-import { useRecoilValue } from "recoil";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { ProductInterface, ProductParams } from "@/infrastructure/interface/product/product.interface";
-import { CategoryProductState } from "@/core/common/atoms/category/categoryState";
-import Image from "next/image";
-import { BrandState } from "@/core/common/atoms/brand/brandState";
-import { PaginationNoSizeCommon } from "@/infrastructure/common/pagination/PaginationNoSize";
-import SkeletonProduct from "@/app/san-pham/skeleton";
+import ProductList from "./components/product-list";
+import { Metadata } from "next";
+import { ROUTE_PATH } from "@/core/common/appRouter";
+import { Endpoint } from "@/core/common/apiLink";
+import { SEOProductInterface } from "@/infrastructure/interface/seo-product/seoProduct.interface";
+import { configImageURL } from "@/infrastructure/helper/helper";
+import { notFound } from "next/navigation";
 
-type ParamsType = {
-    slug: string
+type Props = {
+    params: { slug: string };
 };
 
-const priceRanges = [
+const baseURL = process.env.NEXT_PUBLIC_API_URL;
+const publicURL = process.env.NEXT_PUBLIC_PUBLIC_URL;
 
-    {
-        "id": 2,
-        "name": "0 - 5,000,000",
-        "range": "0-5000000"
-    },
-    {
-        "id": 3,
-        "name": "5,000,000 - 10,000,000",
-        "range": "5000000-10000000"
-    },
-    {
-        "id": 4,
-        "name": "10,000,000 - 20,000,000",
-        "range": "10000000-20000000"
-    },
-    {
-        "id": 5,
-        "name": "20,000,000 - 50,000,000",
-        "range": "20000000-50000000"
-    },
-    {
-        "id": 6,
-        "name": "50,000,000 - 100,000,000",
-        "range": "50000000-100000000"
-    },
-    {
-        "id": 7,
-        "name": "100,000,000 - 200,000,000",
-        "range": "100000000-200000000"
-    },
-    {
-        "id": 8,
-        "name": "Trên 200,000,000",
-        "range": "200000000-999999999999"
-    }
-]
+// Định nghĩa fallback data
+const FALLBACK_DATA = {
+    title: 'Sản phẩm',
+    content: 'Nội dung đang được cập nhật',
+    description: 'Sản phẩm của POTECHVIETNAM - Phụ kiện ô tô chính hãng',
+    slug: '',
+};
 
-const ProductContent = () => {
-    const [listProduct, setListProduct] = useState<Array<ProductInterface>>([])
-    const [searchText, setSearchText] = useState<string>("");
-    const [totalPage, setTotalPage] = useState<number>(0);
-    const [total, setTotal] = useState<number>(0);
-    const [currentPage, setCurrentPage] = useState<number>(1);
-    const [totalElement, setTotalElement] = useState<number>(0);
-    const [pageSize, setPageSize] = useState<number>(10);
-    const [loading, setLoading] = useState<boolean>(false);
-    const [initialLoading, setInitialLoading] = useState<boolean>(true);
-    const [categoryId, setCategoryId] = useState<string>("");
-    const [categoryName, setCategoryName] = useState<string>("");
-    const [rangePrice, setRangePrice] = useState<string>("");
-    const [minPrice, setMinPrice] = useState<number>(0);
-    const [maxPrice, setMaxPrice] = useState<number>(999999999999);
-    const [brandId, setBrandId] = useState<string>("");
+// Cache product data để tái sử dụng
+let cachedProduct: SEOProductInterface | null = null;
 
-    const params: ParamsType = useParams();
-    const router = useRouter(); // Từ next/navigation
-    const searchParams = useSearchParams(); // Dùng useSearchParams thay vì router.query
+async function getProduct(slug: string): Promise<SEOProductInterface | null> {
+    try {
+        const response = await fetch(`${baseURL}${Endpoint.SEOProduct.GetBySlug}/${slug}`, {
+            cache: 'no-store',
+        });
 
-    // Lấy các query parameters
-    const search = searchParams?.get('search') || '';
-    const page = searchParams?.get('page') || '1';
-    const limit = searchParams?.get('limit') || '10';
-    const category_id = searchParams?.get('category_id') || '';
-    const brand_id = searchParams?.get('brand_id') || '';
-    const min_price = searchParams?.get('min_price') || '';
-    const max_price = searchParams?.get('max_price') || '';
-
-    const categoryProductState = useRecoilValue(CategoryProductState).data
-    const brandState = useRecoilValue(BrandState).data
-
-    const onGetListProductAsync = async ({ name = searchText, limit = pageSize, page = currentPage, category_id = categoryId, brand_id = brandId, min = minPrice, max = maxPrice }) => {
-        const param: ProductParams = {
-            page: page,
-            limit: limit,
-            search: name,
-            category_id: category_id,
-            brand_id: brand_id,
-            min_price: min,
-            max_price: max,
-        }
-        try {
-            await productService.GetProduct(
-                param,
-                setLoading
-            ).then((res) => {
-                setListProduct(res.data);
-                setTotalElement(res.limit);
-                setTotalPage(res.totalPages);
-                setTotal(res.total);
-            })
-        }
-        catch (error) {
-            console.error(error)
-        }
-    }
-
-    const onSearch = async (name = searchText, limit = pageSize, page = 1, category_id = categoryId, brand_id = brandId, min = minPrice, max = maxPrice) => {
-        await onGetListProductAsync({ name: name, limit: limit, page: page, category_id: category_id, brand_id: brand_id, min: min, max: max }).then(_ => { });
-    };
-
-
-    const onSearchParam = async () => {
-        // Tạo URL mới với search params
-        const params = new URLSearchParams(searchParams?.toString() || '');
-        params.set('search', searchText);
-        // params.set('category_id', categoryId);
-        params.set('brand_id', brandId);
-        params.set('min_price', String(minPrice));
-        params.set('max_price', String(maxPrice));
-        params.set('page', '1'); // Reset về trang 1 khi search
-        params.delete('category_id');
-
-        if (categoryId) {
-            router.push(`${ROUTE_PATH.CATEGORY}/${categoryName}?${params.toString()}`);
-        } else {
-            router.push(`${ROUTE_PATH.PRODUCT}?${params.toString()}`);
+        if (!response.ok) {
+            return null;
         }
 
-        await onSearch(searchText, pageSize, 1, categoryId, brandId).then(_ => { });
+        const data = await response.json();
+
+        // Kiểm tra dữ liệu có hợp lệ không
+        if (!data || !data.title) {
+            return null;
+        }
+
+        cachedProduct = data;
+        return data;
+    } catch (error) {
+        console.error('Error fetching product:', error);
+        return null;
+    }
+}
+
+// Hàm tạo meta description fallback
+function generateDescription(product: SEOProductInterface | null): string {
+    if (!product) {
+        return 'Sản phẩm phụ kiện ô tô chất lượng cao tại POTECHVIETNAM';
     }
 
-    const onChangeSearchText = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchText(e.target.value);
-    };
-
-    const onChangeCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const value = e.target.value || ""
-        setCategoryId(value);
-        const result = categoryProductState.find(item => String(item.id) === String(value))
-        setCategoryName(String(result?.slug))
-    };
-
-    const onChangeBrand = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setBrandId(e.target.value);
-    };
-
-    const onChangeRangePrice = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const value = e.target.value;
-        setRangePrice(value);
-        console.log('value', value);
-        const min = value.split('-')[0];
-        const max = value.split('-')[1];
-        setMinPrice(Number(min));
-        setMaxPrice(Number(max));
-    };
-
-    const onChangePage = async (page: number) => {
-        setCurrentPage(page);
-
-        // Cập nhật params với page mới
-        const params = new URLSearchParams(searchParams?.toString() || '');
-        params.set('page', page.toString());
-        router.push(`${ROUTE_PATH.PRODUCT}?${params.toString()}`);
-
-        await onSearch(searchText, pageSize, page, categoryId, brandId).then(_ => { });
+    if (product.content) {
+        // Loại bỏ HTML tags và lấy text thuần
+        const plainText = product.content.replace(/<[^>]*>/g, '');
+        const truncated = plainText.length > 160
+            ? plainText.slice(0, 160) + '...'
+            : plainText;
+        return `${product.title} - ${truncated}`;
     }
 
+    return `${product.title} - Sản phẩm phụ kiện ô tô chất lượng cao tại POTECHVIETNAM`;
+}
 
-    useEffect(() => {
-        if (!categoryProductState || categoryProductState.length === 0) return;
+// ✅ Metadata với fallback
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+    const product = await getProduct(params.slug);
+    const productUrl = `${publicURL}${ROUTE_PATH.PRODUCT}`;
 
-        const fetchData = async () => {
+    // Nếu không có sản phẩm, trả về metadata mặc định
+    if (!product) {
+        return {
+            title: 'Sản phẩm | POTECHVIETNAM - Phụ kiện ô tô chính hãng',
+            description: 'Sản phẩm phụ kiện ô tô chất lượng cao tại POTECHVIETNAM',
+            robots: {
+                index: true,
+                follow: true,
+            },
+            alternates: {
+                canonical: productUrl,
+            },
+        };
+    }
 
-            const parsedPage = parseInt(page) || 1;
-            const parsedLimit = parseInt(limit) || 10;
-            const parsedSearch = search || "";
-            // const parsedCategory = category_id || "";
-            const parsedBrand = brand_id || "";
-            const parsedMinPrice = parseInt(min_price as string) || 0;
-            const parsedMaxPrice = parseInt(max_price as string) || 999999999999;
-            // Tìm category dựa trên slug từ URL
-            let currentCategoryId = categoryId;
-            let currentCategoryName = categoryName;
+    const description = generateDescription(product);
+    // const keywords = generateKeywords(product);
 
-            // Nếu đang ở trang category detail
-            if (params.slug) {
-                const categoryRes = categoryProductState.find(
-                    item => String(item.slug) === String(params.slug)
-                );
+    return {
+        title: `${product.title}`,
+        description: description,
+        keywords: product.title,
 
-                if (categoryRes) {
-                    currentCategoryId = String(categoryRes.id);
-                    currentCategoryName = String(categoryRes.slug);
-                    setCategoryId(currentCategoryId);
-                    setCategoryName(currentCategoryName);
+        openGraph: {
+            title: `${product.title}`,
+            description: description,
+            images: [
+                {
+                    url: configImageURL('/uploads/potech-logo.jpg'),
+                    width: 1200,
+                    height: 630,
+                    alt: product.title || 'Sản phẩm POTECHVIETNAM',
                 }
+            ],
+            type: 'website',
+            url: productUrl,
+            siteName: 'POTECHVIETNAM - Phụ kiện ô tô',
+            locale: 'vi_VN',
+        },
+
+        twitter: {
+            card: 'summary_large_image',
+            title: `${product.title}`,
+            description: description,
+            images: [
+                {
+                    url: configImageURL('/uploads/potech-logo.jpg'),
+                    alt: product.title || 'Sản phẩm POTECHVIETNAM',
+                }
+            ],
+        },
+
+        alternates: {
+            canonical: productUrl,
+        },
+
+        robots: {
+            index: true,
+            follow: true,
+            'max-image-preview': 'large',
+            'max-snippet': -1,
+            'max-video-preview': -1,
+        },
+
+        verification: {
+            google: process.env.GOOGLE_VERIFICATION,
+        },
+
+        category: product.title,
+        authors: [{ name: 'POTECHVIETNAM' }],
+    };
+}
+
+// Component ProductPage
+const ProductPage = async ({ params }: Props) => {
+    const dataDetail = await getProduct(params.slug);
+    const productUrl = `${publicURL}${ROUTE_PATH.PRODUCT}`;
+
+    const imageUrl = configImageURL('/uploads/POTECHVIETNAM-logo.png');
+
+    const productName = dataDetail?.title || FALLBACK_DATA.title;
+    const productContent = dataDetail?.content || FALLBACK_DATA.content;
+    const productDescription = dataDetail?.content
+        ? dataDetail.content.replace(/<[^>]*>/g, '').slice(0, 200)
+        : FALLBACK_DATA.description;
+
+    // ✅ Schema Product
+    const productSchema = {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "@id": productUrl,
+        "url": productUrl,
+        "name": productName,
+        "description": productDescription,
+        "image": imageUrl,
+        "sku": params.slug,
+        "brand": {
+            "@type": "Brand",
+            "name": "POTECHVIETNAM"
+        },
+        "category": dataDetail?.title || "Phụ kiện ô tô",
+        "offers": {
+            "@type": "Offer",
+            "url": productUrl,
+            "priceCurrency": "VND",
+            // "price": dataDetail.price.toString(),
+            "priceValidUntil": new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+            "itemCondition": "https://schema.org/NewCondition",
+            "availability": "https://schema.org/InStock",
+            "seller": {
+                "@type": "Organization",
+                "name": "Công ty TNHH Thương Mại XNK Nội Thất Ô Tô Quang Minh"
             }
-
-            setSearchText(parsedSearch);
-            setCurrentPage(parsedPage);
-            setPageSize(parsedLimit);
-            setMinPrice(parsedMinPrice);
-            setMaxPrice(parsedMaxPrice);
-            setRangePrice(`${parsedMinPrice}-${parsedMaxPrice}`)
-
-            onSearch(parsedSearch, parsedLimit, parsedPage, currentCategoryId, parsedBrand);
         }
-        fetchData();
-    }, [search, page, limit, params.slug, categoryProductState, brand_id]);
+    };
 
-    const onReset = () => {
-        setSearchText('');
-        setCategoryId('');
-        setBrandId('');
-        setMinPrice(0);
-        setMaxPrice(999999999999);
-        setRangePrice('');
-        setCurrentPage(1);
-        router.push(`${ROUTE_PATH.PRODUCT}`);
-    }
+    // ✅ Schema Breadcrumb - có fallback
+    const breadcrumbSchema = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Trang chủ",
+                "item": publicURL
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Sản phẩm",
+                "item": `${publicURL}${ROUTE_PATH.PRODUCT}`
+            },
+            ...(dataDetail?.title ? [{
+                "@type": "ListItem",
+                "position": 3,
+                "name": dataDetail.title || "Danh mục",
+                "item": `${publicURL}${ROUTE_PATH.CATEGORY}/${dataDetail.slug}`
+            }] : []),
+            {
+                "@type": "ListItem",
+                "position": dataDetail?.slug ? 4 : 3,
+                "name": productName,
+                "item": productUrl
+            }
+        ]
+    };
 
-    useLayoutEffect(() => {
-        setInitialLoading(false);
-    });
+    // ✅ Schema WebPage
+    const webpageSchema = {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "@id": productUrl,
+        "url": productUrl,
+        "name": productName,
+        "description": productDescription,
+        "isPartOf": {
+            "@type": "WebSite",
+            "@id": `${publicURL}/#website`,
+            "url": publicURL,
+            "name": "POTECHVIETNAM - Phụ kiện ô tô"
+        },
+        "primaryImageOfPage": {
+            "@type": "ImageObject",
+            "url": imageUrl,
+            "caption": productName,
+            "width": "1200",
+            "height": "630"
+        },
+        "about": {
+            "@type": "Thing",
+            "name": dataDetail?.title || "Phụ kiện ô tô"
+        }
+    };
+
+    // ✅ Schema Article - giữ nguyên nhưng không hiển thị UI
+    const articleSchema = dataDetail?.content ? {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "@id": `${productUrl}#article`,
+        "url": productUrl,
+        "headline": `${productName}`,
+        "description": productDescription,
+        "image": imageUrl,
+        "author": {
+            "@type": "Organization",
+            "name": "POTECHVIETNAM"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "POTECHVIETNAM - Phụ kiện ô tô",
+            "logo": {
+                "@type": "ImageObject",
+                "url": configImageURL('/uploads/POTECHVIETNAM-logo.png')
+            }
+        },
+        "datePublished": dataDetail.created_at || new Date().toISOString(),
+        "dateModified": dataDetail.updated_at || new Date().toISOString(),
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": productUrl
+        },
+        "articleBody": dataDetail.content || productName,
+        "keywords": dataDetail.title
+    } : null;
 
     return (
         <ClientLayout>
+            {/* JSON-LD Schemas */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(webpageSchema) }}
+            />
+            {articleSchema && (
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+                />
+            )}
+
             <div className={styles.productSection}>
-                <div className={`padding-common`}>
-                    <BreadcrumbCommon
-                        breadcrumb={"Sản phẩm"}
-                        redirect={ROUTE_PATH.PRODUCT}
-                        title={"Danh sách sản phẩm"}
-                        blackColor={true}
-                    />
-                    <div className={styles.productContent}>
-                        <div className="pageHeader">
-                            <div className="badge">
-                                <span className="badgeText">Sản phẩm</span>
-                            </div>
-                            <h1 className="headerTitle">
-                                <span className="highlight">Danh Sách</span> Sản Phẩm
-                            </h1>
-                        </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-2">
-                            {/* Search Input */}
-                            <div className="sm:col-span-3">
-                                <InputSearchCommon
-                                    placeholder={'Tìm kiếm tin tức'}
-                                    value={searchText}
-                                    onChange={onChangeSearchText}
-                                    disabled={false}
-                                />
-                            </div>
-
-                            {/* Category Select */}
-                            <div className="sm:col-span-3">
-                                <SelectSearchCommon
-                                    listDataOfItem={categoryProductState}
-                                    onChange={onChangeCategory}
-                                    label={"Danh mục sản phẩm"}
-                                    value={categoryId}
-                                />
-                            </div>
-
-                            <div className="sm:col-span-2">
-                                <SelectSearchCommon
-                                    listDataOfItem={brandState}
-                                    onChange={onChangeBrand}
-                                    label={"Thương hiệu"}
-                                    value={brandId}
-                                />
-                            </div>
-
-                            <div className="sm:col-span-2">
-                                <SelectSearchCommon
-                                    listDataOfItem={priceRanges}
-                                    onChange={onChangeRangePrice}
-                                    label={"Khoảng giá"}
-                                    value={rangePrice}
-                                    labelName="name"
-                                    valueName="range"
-                                />
-                            </div>
-
-                            {/* Search Button */}
-                            <div className="sm:col-span-2">
-                                <ButtonCommon
-                                    onClick={onSearchParam}
-                                    title={'Tìm kiếm'}
+                <ProductList title={dataDetail?.title} />
+                {
+                    dataDetail?.content &&
+                    <div className="bg-white">
+                        <div className={`padding-common`}>
+                            <div className="tiny-style">
+                                <article
+                                    className="prose max-w-none"
+                                    dangerouslySetInnerHTML={{ __html: dataDetail.content }}
                                 />
                             </div>
                         </div>
-
-                        {/* Loading State */}
-                        {
-                            initialLoading || loading ? (
-                                <SkeletonProduct />
-                            ) : listProduct.length > 0 ? (
-                                /* Data State */
-                                <div className={styles.goldGrid}>
-                                    {listProduct.map((item, index) => (
-                                        <Link
-                                            href={`${ROUTE_PATH.PRODUCT}/${item.slug}`}
-                                            key={item.id}
-                                            className={styles.goldCard}
-                                            style={{ animationDelay: `${index * 0.1}s` }}
-                                        >
-                                            {/* Gold Sale Badge */}
-                                            {Number(item.price_sale) !== 0 ? (
-                                                <div className={styles.goldSaleBadge}>
-                                                    <span className={styles.goldBadgeText}>GIẢM GIÁ</span>
-                                                    <div className={styles.goldBadgeCorner}></div>
-                                                </div>
-                                            ) : null}
-
-                                            {/* Card Media with Gold Border */}
-                                            <div className={styles.cardGoldMedia}>
-                                                <div className={styles.goldMediaWrapper}>
-                                                    <div className={styles.goldCardImage}>
-                                                        <Image src={configImageURL(item.image)} alt={item.name} fill />
-                                                    </div>
-                                                    <div className={styles.goldImageOverlay}></div>
-                                                    <div className={styles.goldMediaBorder}></div>
-
-                                                    {/* Quick View Button Gold Style */}
-                                                    <button
-                                                        className={styles.goldQuickViewBtn}
-                                                        onClick={(e) => {
-                                                            e.preventDefault();
-                                                            // Handle quick view logic here
-                                                        }}
-                                                    >
-                                                        <svg className={styles.goldEyeIcon} viewBox="0 0 24 24" fill="none">
-                                                            <path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z" stroke="currentColor" strokeWidth="2" />
-                                                            <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2" />
-                                                        </svg>
-                                                        <span>Xem chi tiết</span>
-                                                    </button>
-                                                </div>
-                                            </div>
-
-                                            {/* Card Content Gold & Black */}
-                                            <div className={styles.cardGoldContent}>
-                                                <div className={styles.goldContentWrapper}>
-                                                    <h3 className={styles.goldCardTitle}>{item.name}</h3>
-
-                                                    <div className={styles.goldFeatures}>
-                                                        <span className={styles.goldFeatureChip}>
-                                                            {item.category_name}
-                                                        </span>
-                                                    </div>
-
-                                                    {/* Price Section Gold Style */}
-                                                    <div className={styles.goldPriceSection}>
-                                                        {Number(item.price_sale) ? (
-                                                            <>
-                                                                <div className={styles.goldPriceRow}>
-                                                                    <span className={styles.goldCurrentPrice}>
-                                                                        {formatCurrencyVND(Number(item.price_sale))}
-                                                                    </span>
-                                                                    <span className={styles.goldDiscountBadge}>
-                                                                        <span className={styles.discountIcon}>🔥</span>
-                                                                        Tiết kiệm {Math.round((1 - Number(item.price_sale) / Number(item.price)) * 100)}%
-                                                                    </span>
-                                                                </div>
-                                                                <div className={styles.goldOriginalPriceWrapper}>
-                                                                    <span className={styles.goldOriginalPrice}>
-                                                                        {formatCurrencyVND(Number(item.price))}
-                                                                    </span>
-                                                                </div>
-                                                            </>
-                                                        ) : (
-                                                            <div className={styles.goldPriceRow}>
-                                                                <span className={styles.goldNormalPrice}>
-                                                                    {formatCurrencyVND(Number(item.price))}
-                                                                </span>
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                    {/* Gold Action Button */}
-
-                                                    {/* Gold Corner Accents */}
-                                                    <div className={styles.goldCornerTl}></div>
-                                                    <div className={styles.goldCornerTr}></div>
-                                                    <div className={styles.goldCornerBl}></div>
-                                                    <div className={styles.goldCornerBr}></div>
-                                                </div>
-                                            </div>
-
-                                        </Link>
-                                    ))}
-                                </div>
-                            ) : (
-                                <div className={styles.galleryContainer}>
-                                    <div className={styles.noDataContainer}>
-                                        <div className={styles.noDataIcon}>
-                                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                                                <circle cx="12" cy="12" r="10" />
-                                                <line x1="8" y1="8" x2="16" y2="16" />
-                                                <line x1="16" y1="8" x2="8" y2="16" />
-                                            </svg>
-                                        </div>
-                                        <h3 className={styles.noDataTitle}>Không tìm thấy sản phẩm</h3>
-                                        <p className={styles.noDataDescription}>
-                                            Không có sản phẩm nào phù hợp với tìm kiếm của bạn.
-                                        </p>
-                                        <ButtonCommon
-                                            onClick={onReset}
-                                            title={'Xóa bộ lọc'}
-                                        />
-                                    </div>
-                                </div>
-                            )}
                     </div>
-                    <PaginationNoSizeCommon
-                        total={total}
-                        currentPage={Number(page)}
-                        onChangePage={onChangePage}
-                        pageSize={pageSize}
-                    />
-                </div>
+                }
+
             </div>
+
         </ClientLayout>
-
-    );
-};
-
-const ProductPage = () => {
-    return (
-        <Suspense fallback={<SkeletonProduct />}>
-            <ProductContent />
-        </Suspense>
     );
 };
 
