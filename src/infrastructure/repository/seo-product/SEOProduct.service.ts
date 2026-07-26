@@ -1,8 +1,7 @@
+import RequestService from "@/infrastructure/utils/response";
 import { Endpoint } from "../../../core/common/apiLink";
 import { FailMessage, SuccessMessage } from "../../common/toast/message";
 import { SEOProductInterface, SEOProductParams } from "../../interface/seo-product/seoProduct.interface";
-import { RequestService } from "../../utilities/response";
-
 
 class SEOProductService {
     async GetSEOProduct(params: SEOProductParams, setLoading: Function) {
