@@ -28,7 +28,7 @@ class SEOProductService {
         setLoading(true)
         try {
             return await RequestService
-                .get(`${Endpoint.SEOProduct.GetById}/${id}`)
+                .get(`${Endpoint.SEOProduct.GetBySlug}/${id}`)
                 .then(response => {
                     if (response) {
                         return response
