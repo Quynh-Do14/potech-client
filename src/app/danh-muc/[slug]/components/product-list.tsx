@@ -5,7 +5,6 @@ import { configImageURL, convertSlug, formatCurrencyVND, splitTakeId } from "@/i
 import Link from "next/link";
 import { ROUTE_PATH } from "@/core/common/appRouter";
 import styles from "@/assets/styles/pages/product/product.module.css"
-import ClientLayout from "@/infrastructure/common/Layouts/Client-Layout";
 import BreadcrumbCommon from "@/infrastructure/common/Layouts/Breadcumb";
 import InputSearchCommon from "@/infrastructure/common/input/input-search-common";
 import SelectSearchCommon from "@/infrastructure/common/input/select-search-common";
@@ -63,7 +62,7 @@ const priceRanges = [
 ]
 
 type Props = {
-    title?: string
+    title: string
 }
 const ProductContent = (props: Props) => {
     const { title } = props
@@ -250,7 +249,7 @@ const ProductContent = (props: Props) => {
                 <BreadcrumbCommon
                     breadcrumb={"Sản phẩm"}
                     redirect={ROUTE_PATH.PRODUCT}
-                    title={"Danh sách sản phẩm"}
+                    title={title}
                     blackColor={true}
                 />
                 <div className={styles.productContent}>
