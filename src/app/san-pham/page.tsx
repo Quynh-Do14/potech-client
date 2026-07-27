@@ -104,7 +104,7 @@ function generateKeywords(product: SEOProductInterface | null): string {
 
 // ✅ Metadata với fallback và SEO đầy đủ
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-    const product = await getProduct(params.slug);
+    const product = await getProduct("san-pham");
     const productUrl = `${publicURL}${ROUTE_PATH.PRODUCT}`;
 
     // Nếu không có sản phẩm, trả về metadata mặc định
@@ -127,12 +127,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const keywords = generateKeywords(product);
 
     return {
-        title: `${product.title} | POTECHVIETNAM - Công nghệ chính hãng`,
+        title: `${product.title}` || "Sản phẩm POTECHVIETNAM",
         description: description,
         keywords: keywords,
 
         openGraph: {
-            title: `${product.title} | POTECHVIETNAM - Công nghệ chính hãng`,
+            title: `${product.title}` || "Sản phẩm POTECHVIETNAM",
             description: description,
             images: [
                 {
@@ -150,7 +150,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
         twitter: {
             card: 'summary_large_image',
-            title: `${product.title} | POTECHVIETNAM - Công nghệ chính hãng`,
+            title: `${product.title}` || "Sản phẩm POTECHVIETNAM",
             description: description,
             images: [
                 {
@@ -183,7 +183,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 // Component ProductPage với Schema.org và Article schema
 const ProductPage = async ({ params }: Props) => {
-    const dataDetail = await getProduct(params.slug);
+    const dataDetail = await getProduct("san-pham");
     const productUrl = `${publicURL}${ROUTE_PATH.PRODUCT}`;
 
     // Nếu không có dữ liệu, hiển thị fallback
