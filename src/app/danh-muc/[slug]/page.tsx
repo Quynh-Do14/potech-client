@@ -127,19 +127,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const keywords = generateKeywords(product);
 
     return {
-        title: `${product.title}` || "Sản phẩm POTECHVIETNAM",
+        title: product.title ? product.title : "Sản phẩm POTECHVIETNAM",
         description: description,
         keywords: keywords,
 
         openGraph: {
-            title: `${product.title}` || "Sản phẩm POTECHVIETNAM",
+            title: product.title ? product.title : "Sản phẩm POTECHVIETNAM",
             description: description,
             images: [
                 {
                     url: configImageURL('/uploads/potech-logo.jpg'),
                     width: 1200,
                     height: 630,
-                    alt: product.title || 'Sản phẩm POTECHVIETNAM',
+                    alt: product.title ? product.title : "Sản phẩm POTECHVIETNAM",
                 }
             ],
             type: 'website',
@@ -150,12 +150,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
         twitter: {
             card: 'summary_large_image',
-            title: `${product.title}` || "Sản phẩm POTECHVIETNAM",
+            title: product.title ? product.title : "Sản phẩm POTECHVIETNAM",
             description: description,
             images: [
                 {
                     url: configImageURL('/uploads/potech-logo.jpg'),
-                    alt: product.title || 'Sản phẩm POTECHVIETNAM',
+                    alt: product.title ? product.title : "Sản phẩm POTECHVIETNAM",
                 }
             ],
         },
