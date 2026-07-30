@@ -3,6 +3,7 @@ export interface BannerInterface {
     name: string;
     type?: "HOMEPAGE" | "INTRODUCE" | "AGENCY" | "CONTACT" | "POLICY";
     image: string;
+    url: string
 }
 
 export interface BannerParams {

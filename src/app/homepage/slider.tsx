@@ -20,7 +20,7 @@ import { ROUTE_PATH } from "@/core/common/appRouter";
 
 const FullWidthSlider = () => {
     const [currentSlide, setCurrentSlide] = useState<number>(0);
-    const [listBanner, setListBanner] = useState<Array<string>>([]);
+    const [listBanner, setListBanner] = useState<Array<BannerInterface>>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [mounted, setMounted] = useState(false);
 
@@ -32,8 +32,7 @@ const FullWidthSlider = () => {
                 },
                 setLoading
             ).then((res) => {
-                const listImg = res.data.map((item: BannerInterface) => item.image)
-                setListBanner(listImg);
+                setListBanner(res.data);
             })
         }
         catch (error) {
@@ -161,23 +160,23 @@ const FullWidthSlider = () => {
             `}</style>
 
             {/* Main Slider */}
-            <Link href={ROUTE_PATH.PRODUCT} className="slider-wrapper">
+            <div className="slider-wrapper">
                 <Slider {...settings}>
-                    {listBanner.map((slide: string, index: number) => (
-                        <div key={index} className="slide-item">
+                    {listBanner.map((slide, index: number) => (
+                        <Link href={slide.url ? slide.url : ROUTE_PATH.PRODUCT} key={index} className="slide-item">
                             {/* Background Image with Overlay */}
                             <div
                                 className="slide-background"
                                 style={{
-                                    backgroundImage: `url(${configImageURL(slide)})`,
+                                    backgroundImage: `url(${configImageURL(slide.image)})`,
                                     '--overlay-color': 'rgba(0, 0, 0, 0.4)'
                                 } as React.CSSProperties}
                             >
                             </div>
-                        </div>
+                        </Link>
                     ))}
                 </Slider>
-            </Link>
+            </div>
         </div >
     );
 };
