@@ -296,3 +296,36 @@
     box-shadow: none;
   }
 }
+
+/* Responsive video - bắt tất cả iframe trong .tiny-style */
+.tiny-style iframe {
+  max-width: 100%;
+}
+
+.tiny-style iframe[src*="youtube"],
+.tiny-style iframe[src*="youtu.be"],
+.tiny-style iframe[src*="vimeo"] {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  height: auto;
+}
+
+/* Fallback cho trình duyệt cũ không hỗ trợ aspect-ratio */
+@supports not (aspect-ratio: 16/9) {
+  .tiny-style iframe[src*="youtube"],
+  .tiny-style iframe[src*="youtu.be"],
+  .tiny-style iframe[src*="vimeo"] {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%;
+  }
+  
+  .tiny-style iframe[src*="youtube"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
