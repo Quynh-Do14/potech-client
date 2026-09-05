@@ -217,7 +217,7 @@ const ProductSlugContent = async ({ params }: Props) => {
                                             {dataDetail.category_name}
                                         </div>
                                     </div>
-                                    <div className="flex gap-1.5">
+                                    <div className="flex gap-1">
                                         {
                                             dataDetail.brandProduct.map((item, index) => (
                                                 <div key={index} className={styles.brandTag}>

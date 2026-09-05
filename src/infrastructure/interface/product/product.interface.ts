@@ -18,6 +18,7 @@ export interface ProductInterface {
     productFigure: ProductFigure[]
     sameCategoryProducts: ProductInterface[]
     characteristicProduct: CharacteristicProduct[]
+    brandProduct: BrandProduct[];
     keyword: ProductKeyword[]
     slug: string
 }
@@ -45,6 +46,13 @@ export interface CharacteristicProduct {
     characteristic_id: number,
     product_id: number
 }
+
+export interface BrandProduct {
+    brand_name: string,
+    brand_id: number,
+    product_id: number
+}
+
 export interface ProductKeyword {
     product_id: string
     keyword: string
