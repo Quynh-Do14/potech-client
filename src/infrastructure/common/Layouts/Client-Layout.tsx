@@ -41,7 +41,7 @@ const ClientLayout = ({ ...props }: any) => {
                     data-tooltip="Tiktok POTECH">
                     <Image src={tiktok} alt='POTECH' />
                 </a>
-                <a href="www.youtube.com/@PotechViệtNam"
+                <a href="https://www.youtube.com/@PotechViệtNam"
                     target='_blank'
                     rel="noopener noreferrer"
                     className='social-item'
