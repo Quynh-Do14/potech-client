@@ -62,10 +62,11 @@ const priceRanges = [
 ]
 
 type Props = {
+    name: string
     title: string
 }
 const ProductContent = (props: Props) => {
-    const { title } = props
+    const { name, title } = props
     const [listProduct, setListProduct] = useState<Array<ProductInterface>>([])
     const [searchText, setSearchText] = useState<string>("");
     const [totalPage, setTotalPage] = useState<number>(0);
@@ -249,17 +250,17 @@ const ProductContent = (props: Props) => {
                 <BreadcrumbCommon
                     breadcrumb={"Sản phẩm"}
                     redirect={ROUTE_PATH.PRODUCT}
-                    title={title}
+                    title={name}
                     blackColor={true}
                 />
                 <div className={styles.productContent}>
                     <div className="pageHeader">
-                        <div className="badge">
-                            <span className="badgeText">{title || "Sản phẩm"}</span>
-                        </div>
-                        <h1 className="headerTitle">
-                            <span className="highlight">Danh Sách</span> Sản Phẩm
+                        <h1 className="badge">
+                            <span className="badgeText">{title || name || "Sản phẩm"}</span>
                         </h1>
+                        <div className="headerTitle">
+                            <span className="highlight">Danh Sách</span> Sản Phẩm
+                        </div>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-2">
                         {/* Search Input */}
@@ -444,10 +445,12 @@ const ProductContent = (props: Props) => {
 };
 
 const ProductList = (props: Props) => {
-    const { title } = props
+    const { name, title } = props
     return (
         <Suspense fallback={<SkeletonProduct />}>
-            <ProductContent title={title} />
+            <ProductContent
+                name={name}
+                title={title} />
         </Suspense>
     );
 };

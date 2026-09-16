@@ -36,6 +36,7 @@ export class Endpoint {
     static Category = class {
         static Get = "/category"
         static GetById = "/category"
+        static GetBySlug = "/category/private-slug"
         static Add = "/category"
         static Update = "/category"
         static Delete = "/category"

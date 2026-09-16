@@ -5,8 +5,8 @@ import ProductList from "./components/product-list";
 import { Metadata } from "next";
 import { ROUTE_PATH } from "@/core/common/appRouter";
 import { Endpoint } from "@/core/common/apiLink";
-import { SEOProductInterface } from "@/infrastructure/interface/seo-product/seoProduct.interface";
 import { configImageURL } from "@/infrastructure/helper/helper";
+import { CategoryProductInterface } from "@/infrastructure/interface/category/categoryProduct.interface";
 
 type Props = {
     params: { slug: string };
@@ -18,16 +18,16 @@ const publicURL = process.env.NEXT_PUBLIC_PUBLIC_URL;
 // Định nghĩa fallback data
 const FALLBACK_DATA = {
     title: 'Sản phẩm POTECHVIETNAM',
-    content: 'Sản phẩm công nghệ chất lượng cao tại POTECHVIETNAM',
-    description: 'Sản phẩm POTECHVIETNAM - Công nghệ chính hãng, chất lượng cao, giá tốt nhất thị trường',
+    description: 'Sản phẩm công nghệ chất lượng cao tại POTECHVIETNAM',
+    content: 'Sản phẩm POTECHVIETNAM - Công nghệ chính hãng, chất lượng cao, giá tốt nhất thị trường',
     slug: 'san-pham',
 };
 
 // Cache product data để tái sử dụng
-let cachedProduct: SEOProductInterface | null = null;
+let cachedProduct: CategoryProductInterface | null = null;
 
-async function getProduct(slug: string): Promise<SEOProductInterface> {
-    const response = await fetch(`${baseURL}${Endpoint.SEOProduct.GetBySlug}/${slug}`, {
+async function getProduct(slug: string): Promise<CategoryProductInterface> {
+    const response = await fetch(`${baseURL}${Endpoint.Category.GetBySlug}/${slug}`, {
         cache: 'no-store', // Tắt cache
     });
     if (!response.ok) {
@@ -40,15 +40,15 @@ async function getProduct(slug: string): Promise<SEOProductInterface> {
 }
 
 // Hàm tạo meta description
-function generateDescription(product: SEOProductInterface | null): string {
+function generateDescription(product: CategoryProductInterface | null): string {
     if (!product) {
         return 'Sản phẩm POTECHVIETNAM - Công nghệ chính hãng, chất lượng cao, giá tốt nhất thị trường';
     }
 
-    // Tạo description từ content
-    if (product.content) {
+    // Tạo description từ description
+    if (product.description) {
         // Loại bỏ HTML tags và lấy text thuần
-        const plainText = product.content.replace(/<[^>]*>/g, '');
+        const plainText = product.description.replace(/<[^>]*>/g, '');
         const truncated = plainText.length > 160
             ? plainText.slice(0, 160) + '...'
             : plainText;
@@ -63,7 +63,7 @@ function generateDescription(product: SEOProductInterface | null): string {
 }
 
 // Hàm tạo keywords
-function generateKeywords(product: SEOProductInterface | null): string {
+function generateKeywords(product: CategoryProductInterface | null): string {
     if (!product) {
         return 'Sản phẩm POTECHVIETNAM, công nghệ, POTECHVIETNAM, thiết bị công nghệ, giải pháp công nghệ, sản phẩm chính hãng';
     }
@@ -127,19 +127,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const keywords = generateKeywords(product);
 
     return {
-        title: product.title ? product.title : "Sản phẩm POTECHVIETNAM",
+        title: product.title ? product.title : product.name,
         description: description,
         keywords: keywords,
 
         openGraph: {
-            title: product.title ? product.title : "Sản phẩm POTECHVIETNAM",
+            title: product.title ? product.title : product.name,
             description: description,
             images: [
                 {
                     url: configImageURL('/uploads/potech-logo.jpg'),
                     width: 1200,
                     height: 630,
-                    alt: product.title ? product.title : "Sản phẩm POTECHVIETNAM",
+                    alt: product.title ? product.title : product.name,
                 }
             ],
             type: 'website',
@@ -150,12 +150,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
         twitter: {
             card: 'summary_large_image',
-            title: product.title ? product.title : "Sản phẩm POTECHVIETNAM",
+            title: product.title ? product.title : product.name,
             description: description,
             images: [
                 {
                     url: configImageURL('/uploads/potech-logo.jpg'),
-                    alt: product.title ? product.title : "Sản phẩm POTECHVIETNAM",
+                    alt: product.title ? product.title : product.name,
                 }
             ],
         },
@@ -205,8 +205,8 @@ const ProductPage = async ({ params }: Props) => {
     const imageUrl = configImageURL('/uploads/potech-logo.jpg');
 
     const productName = dataDetail.title || FALLBACK_DATA.title;
-    const productDescription = dataDetail.content
-        ? dataDetail.content.replace(/<[^>]*>/g, '').slice(0, 200)
+    const productDescription = dataDetail.description
+        ? dataDetail.description.replace(/<[^>]*>/g, '').slice(0, 200)
         : FALLBACK_DATA.description;
 
     // ✅ Schema Product - chi tiết hơn
@@ -291,8 +291,8 @@ const ProductPage = async ({ params }: Props) => {
         }
     };
 
-    // ✅ Schema Article - chỉ hiển thị khi có content
-    const articleSchema = dataDetail.content ? {
+    // ✅ Schema Article - chỉ hiển thị khi có description
+    const articleSchema = dataDetail.description ? {
         "@context": "https://schema.org",
         "@type": "Article",
         "@id": `${productUrl}#article`,
@@ -318,7 +318,7 @@ const ProductPage = async ({ params }: Props) => {
             "@type": "WebPage",
             "@id": productUrl
         },
-        "articleBody": dataDetail.content || productName,
+        "articleBody": dataDetail.description || productName,
         "keywords": dataDetail.keyword?.map(item => item.keyword).join(', ') || productName
     } : null;
 
@@ -345,7 +345,10 @@ const ProductPage = async ({ params }: Props) => {
             )}
 
             <div className={styles.productSection}>
-                <ProductList />
+                <ProductList
+                    name={dataDetail.name}
+                    title={dataDetail.title}
+                />
                 {
                     dataDetail?.content &&
                     <div className="bg-white">
