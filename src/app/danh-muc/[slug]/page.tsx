@@ -28,7 +28,7 @@ let cachedProduct: CategoryProductInterface | null = null;
 
 async function getProduct(slug: string): Promise<CategoryProductInterface> {
     const response = await fetch(`${baseURL}${Endpoint.Category.GetBySlug}/${slug}`, {
-        cache: 'no-store', // Tắt cache
+        cache: 'no-store',
     });
     if (!response.ok) {
         throw new Error('Failed to fetch product');
@@ -45,9 +45,7 @@ function generateDescription(product: CategoryProductInterface | null): string {
         return 'Sản phẩm POTECHVIETNAM - Công nghệ chính hãng, chất lượng cao, giá tốt nhất thị trường';
     }
 
-    // Tạo description từ content
     if (product.content) {
-        // Loại bỏ HTML tags và lấy text thuần
         const plainText = product.content.replace(/<[^>]*>/g, '');
         const truncated = plainText.length > 160
             ? plainText.slice(0, 160) + '...'
@@ -55,7 +53,6 @@ function generateDescription(product: CategoryProductInterface | null): string {
         return `${product.title} - ${truncated}`;
     }
 
-    // Tạo description từ các thuộc tính
     const parts = [];
     if (product.title) parts.push(product.title);
 
@@ -70,26 +67,21 @@ function generateKeywords(product: CategoryProductInterface | null): string {
 
     const keywords = new Set<string>();
 
-    // Thêm title
     if (product.title) keywords.add(product.title);
 
-    // Thêm từ khóa từ API
     if (product.keyword && Array.isArray(product.keyword)) {
         product.keyword.forEach(item => {
             if (item.keyword) keywords.add(item.keyword);
         });
     }
 
-    // Thêm từ khóa mở rộng
     if (product.title) {
-        // Tách từ khóa từ title
         const titleWords = product.title.split(' ');
         titleWords.forEach(word => {
             if (word.length > 2) keywords.add(word);
         });
     }
 
-    // Thêm từ khóa mặc định nếu chưa đủ
     if (keywords.size < 5) {
         keywords.add('Sản phẩm POTECHVIETNAM');
         keywords.add('công nghệ');
@@ -107,7 +99,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const product = await getProduct(params.slug);
     const productUrl = `${publicURL}${ROUTE_PATH.PRODUCT}`;
 
-    // Nếu không có sản phẩm, trả về metadata mặc định
     if (!product) {
         return {
             title: 'Sản phẩm POTECHVIETNAM | Công nghệ chính hãng',
@@ -181,7 +172,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
 }
 
-// Component ProductPage với Schema.org và Article schema
+// Component ProductPage - Trang danh sách sản phẩm
 const ProductPage = async ({ params }: Props) => {
     const dataDetail = await getProduct(params.slug);
     const productUrl = `${publicURL}${ROUTE_PATH.PRODUCT}`;
@@ -209,36 +200,52 @@ const ProductPage = async ({ params }: Props) => {
         ? dataDetail.content.replace(/<[^>]*>/g, '').slice(0, 200)
         : FALLBACK_DATA.description;
 
-    // ✅ Schema Product - chi tiết hơn
-    const productSchema = {
+    // ✅ SCHEMA CHÍNH: CollectionPage (chuẩn cho trang danh mục)
+    // KHÔNG có price, review, offers vì đây là trang danh sách, không phải sản phẩm cụ thể
+    const collectionPageSchema = {
         "@context": "https://schema.org",
-        "@type": "Product",
+        "@type": "CollectionPage",
         "@id": productUrl,
         "url": productUrl,
         "name": productName,
         "description": productDescription,
-        "image": imageUrl,
-        "sku": params.slug,
-        "brand": {
-            "@type": "Brand",
-            "name": "POTECHVIETNAM"
+        "isPartOf": {
+            "@type": "WebSite",
+            "@id": `${publicURL}/#website`,
+            "url": publicURL,
+            "name": "POTECHVIETNAM - Công nghệ"
         },
-        "category": "Công nghệ",
-        "offers": {
-            "@type": "Offer",
-            "url": productUrl,
-            "priceCurrency": "VND",
-            "priceValidUntil": new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-            "itemCondition": "https://schema.org/NewCondition",
-            "availability": "https://schema.org/InStock",
-            "seller": {
-                "@type": "Organization",
-                "name": "Công ty TNHH Thương Mại XNK Nội Thất Ô Tô Quang Minh"
-            }
+        "primaryImageOfPage": {
+            "@type": "ImageObject",
+            "url": imageUrl,
+            "caption": productName,
+            "width": "1200",
+            "height": "630"
         },
+        "about": {
+            "@type": "Thing",
+            "name": "Công nghệ"
+        },
+        "inLanguage": "vi-VN"
     };
 
-    // ✅ Schema Breadcrumb - chi tiết hơn
+    // ✅ SCHEMA ItemList: Liệt kê các sản phẩm con trong danh mục (nếu có)
+    // Chỉ chứa position, url, name - KHÔNG có offers/price
+    // const itemListSchema = (dataDetail.products && Array.isArray(dataDetail.products) && dataDetail.products.length > 0) ? {
+    //     "@context": "https://schema.org",
+    //     "@type": "ItemList",
+    //     "@id": `${productUrl}#itemlist`,
+    //     "name": productName,
+    //     "numberOfItems": dataDetail.products.length,
+    //     "itemListElement": dataDetail.products.map((item: any, index: number) => ({
+    //         "@type": "ListItem",
+    //         "position": index + 1,
+    //         "url": `${publicURL}${ROUTE_PATH.PRODUCT}/${item.slug || item.id}`,
+    //         "name": item.title || item.name || `Sản phẩm ${index + 1}`
+    //     }))
+    // } : null;
+
+    // ✅ Schema Breadcrumb - CHỈ 2 cấp vì đây là trang danh mục
     const breadcrumbSchema = {
         "@context": "https://schema.org",
         "@type": "BreadcrumbList",
@@ -254,21 +261,15 @@ const ProductPage = async ({ params }: Props) => {
                 "position": 2,
                 "name": "Sản phẩm",
                 "item": `${publicURL}${ROUTE_PATH.PRODUCT}`
-            },
-            {
-                "@type": "ListItem",
-                "position": 3,
-                "name": productName,
-                "item": productUrl
             }
         ]
     };
 
-    // ✅ Schema WebPage
+    // ✅ Schema WebPage (bổ sung cho CollectionPage)
     const webpageSchema = {
         "@context": "https://schema.org",
         "@type": "WebPage",
-        "@id": productUrl,
+        "@id": `${productUrl}#webpage`,
         "url": productUrl,
         "name": productName,
         "description": productDescription,
@@ -291,43 +292,12 @@ const ProductPage = async ({ params }: Props) => {
         }
     };
 
-    // ✅ Schema Article - chỉ hiển thị khi có content
-    const articleSchema = dataDetail.content ? {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "@id": `${productUrl}#article`,
-        "url": productUrl,
-        "headline": `Bài viết giới thiệu ${productName}`,
-        "description": productDescription,
-        "image": imageUrl,
-        "author": {
-            "@type": "Organization",
-            "name": "POTECHVIETNAM"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "POTECHVIETNAM - Công nghệ",
-            "logo": {
-                "@type": "ImageObject",
-                "url": configImageURL('/uploads/potech-logo.jpg')
-            }
-        },
-        "datePublished": dataDetail.created_at || new Date().toISOString(),
-        "dateModified": dataDetail.updated_at || new Date().toISOString(),
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": productUrl
-        },
-        "articleBody": dataDetail.content || productName,
-        "keywords": dataDetail.keyword?.map(item => item.keyword).join(', ') || productName
-    } : null;
-
     return (
         <ClientLayout>
-            {/* JSON-LD Schemas */}
+            {/* JSON-LD Schemas cho trang danh sách sản phẩm */}
             <script
                 type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionPageSchema) }}
             />
             <script
                 type="application/ld+json"
@@ -337,12 +307,12 @@ const ProductPage = async ({ params }: Props) => {
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(webpageSchema) }}
             />
-            {articleSchema && (
+            {/* {itemListSchema && (
                 <script
                     type="application/ld+json"
-                    dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
                 />
-            )}
+            )} */}
 
             <div className={styles.productSection}>
                 <ProductList
