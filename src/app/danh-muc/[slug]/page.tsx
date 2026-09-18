@@ -97,7 +97,7 @@ function generateKeywords(product: CategoryProductInterface | null): string {
 // ✅ Metadata với fallback và SEO đầy đủ
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const product = await getProduct(params.slug);
-    const productUrl = `${publicURL}${ROUTE_PATH.PRODUCT}`;
+    const productUrl = `${publicURL}${ROUTE_PATH.CATEGORY}/${product.slug}`;
 
     if (!product) {
         return {
@@ -175,7 +175,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 // Component ProductPage - Trang danh sách sản phẩm
 const ProductPage = async ({ params }: Props) => {
     const dataDetail = await getProduct(params.slug);
-    const productUrl = `${publicURL}${ROUTE_PATH.PRODUCT}`;
+    const productUrl = `${publicURL}${ROUTE_PATH.CATEGORY}/${dataDetail.slug}`;
 
     // Nếu không có dữ liệu, hiển thị fallback
     if (!dataDetail) {
@@ -240,7 +240,7 @@ const ProductPage = async ({ params }: Props) => {
     //     "itemListElement": dataDetail.products.map((item: any, index: number) => ({
     //         "@type": "ListItem",
     //         "position": index + 1,
-    //         "url": `${publicURL}${ROUTE_PATH.PRODUCT}/${item.slug || item.id}`,
+    //         "url": `${publicURL}${ROUTE_PATH.CATEGORY}/${dataDetail.slug}/${item.slug || item.id}`,
     //         "name": item.title || item.name || `Sản phẩm ${index + 1}`
     //     }))
     // } : null;
@@ -260,7 +260,7 @@ const ProductPage = async ({ params }: Props) => {
                 "@type": "ListItem",
                 "position": 2,
                 "name": "Sản phẩm",
-                "item": `${publicURL}${ROUTE_PATH.PRODUCT}`
+                "item": `${publicURL}${ROUTE_PATH.CATEGORY}/${dataDetail.slug}`
             }
         ]
     };
