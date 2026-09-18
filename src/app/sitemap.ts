@@ -17,7 +17,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const products: ProductInterface[] = productsRaw.data
 
   // Fetch blogs
-  const blogsRes = await fetch(`${baseURL}${Endpoint.Blog.Get}`, {
+  const blogsRes = await fetch(`${baseURL}${Endpoint.Blog.Get}/link`, {
     next: { revalidate: 3600 }
   })
   const blogsRaw = await blogsRes.json()
