@@ -181,7 +181,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
 }
 
-// Component ProductPage với Schema.org và Article schema
+// Component ProductPage - Trang danh sách sản phẩm (Category Page)
 const ProductPage = async ({ params }: Props) => {
     const dataDetail = await getProduct("san-pham");
     const productUrl = `${publicURL}${ROUTE_PATH.PRODUCT}`;
@@ -209,36 +209,52 @@ const ProductPage = async ({ params }: Props) => {
         ? dataDetail.description.replace(/<[^>]*>/g, '').slice(0, 200)
         : FALLBACK_DATA.description;
 
-    // ✅ Schema Product - chi tiết hơn
-    const productSchema = {
+    // ✅ SCHEMA CHÍNH: CollectionPage (chuẩn cho trang danh mục sản phẩm)
+    // KHÔNG có offers, price, review, aggregateRating vì đây không phải sản phẩm cụ thể
+    const collectionPageSchema = {
         "@context": "https://schema.org",
-        "@type": "Product",
+        "@type": "CollectionPage",
         "@id": productUrl,
         "url": productUrl,
         "name": productName,
         "description": productDescription,
-        "image": imageUrl,
-        "sku": params.slug,
-        "brand": {
-            "@type": "Brand",
-            "name": "POTECHVIETNAM"
+        "isPartOf": {
+            "@type": "WebSite",
+            "@id": `${publicURL}/#website`,
+            "url": publicURL,
+            "name": "POTECHVIETNAM - Công nghệ"
         },
-        "category": "Công nghệ",
-        "offers": {
-            "@type": "Offer",
-            "url": productUrl,
-            "priceCurrency": "VND",
-            "priceValidUntil": new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-            "itemCondition": "https://schema.org/NewCondition",
-            "availability": "https://schema.org/InStock",
-            "seller": {
-                "@type": "Organization",
-                "name": "Công ty TNHH Thương Mại XNK Nội Thất Ô Tô Quang Minh"
-            }
+        "primaryImageOfPage": {
+            "@type": "ImageObject",
+            "url": imageUrl,
+            "caption": productName,
+            "width": "1200",
+            "height": "630"
         },
+        "about": {
+            "@type": "Thing",
+            "name": "Công nghệ"
+        },
+        "inLanguage": "vi-VN"
     };
 
-    // ✅ Schema Breadcrumb - chi tiết hơn
+    // ✅ SCHEMA ItemList: Liệt kê các sản phẩm con trong danh mục (nếu API có trả về)
+    // Chỉ chứa position, url, name - KHÔNG có offers/price
+    // const itemListSchema = (dataDetail.products && Array.isArray(dataDetail.products) && dataDetail.products.length > 0) ? {
+    //     "@context": "https://schema.org",
+    //     "@type": "ItemList",
+    //     "@id": `${productUrl}#itemlist`,
+    //     "name": productName,
+    //     "numberOfItems": dataDetail.products.length,
+    //     "itemListElement": dataDetail.products.map((item: any, index: number) => ({
+    //         "@type": "ListItem",
+    //         "position": index + 1,
+    //         "url": `${publicURL}${ROUTE_PATH.PRODUCT}/${item.slug || item.id}`,
+    //         "name": item.title || item.name || `Sản phẩm ${index + 1}`
+    //     }))
+    // } : null;
+
+    // ✅ Schema Breadcrumb - CHỈ 2 cấp vì đây là trang danh mục
     const breadcrumbSchema = {
         "@context": "https://schema.org",
         "@type": "BreadcrumbList",
@@ -254,21 +270,15 @@ const ProductPage = async ({ params }: Props) => {
                 "position": 2,
                 "name": "Sản phẩm",
                 "item": `${publicURL}${ROUTE_PATH.PRODUCT}`
-            },
-            {
-                "@type": "ListItem",
-                "position": 3,
-                "name": productName,
-                "item": productUrl
             }
         ]
     };
 
-    // ✅ Schema WebPage
+    // ✅ Schema WebPage (bổ sung cho CollectionPage)
     const webpageSchema = {
         "@context": "https://schema.org",
         "@type": "WebPage",
-        "@id": productUrl,
+        "@id": `${productUrl}#webpage`,
         "url": productUrl,
         "name": productName,
         "description": productDescription,
@@ -291,43 +301,12 @@ const ProductPage = async ({ params }: Props) => {
         }
     };
 
-    // ✅ Schema Article - chỉ hiển thị khi có description
-    const articleSchema = dataDetail.description ? {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "@id": `${productUrl}#article`,
-        "url": productUrl,
-        "headline": `Bài viết giới thiệu ${productName}`,
-        "description": productDescription,
-        "image": imageUrl,
-        "author": {
-            "@type": "Organization",
-            "name": "POTECHVIETNAM"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "POTECHVIETNAM - Công nghệ",
-            "logo": {
-                "@type": "ImageObject",
-                "url": configImageURL('/uploads/potech-logo.jpg')
-            }
-        },
-        "datePublished": dataDetail.created_at || new Date().toISOString(),
-        "dateModified": dataDetail.updated_at || new Date().toISOString(),
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": productUrl
-        },
-        "articleBody": dataDetail.description || productName,
-        "keywords": dataDetail.keyword?.map(item => item.keyword).join(', ') || productName
-    } : null;
-
     return (
         <ClientLayout>
-            {/* JSON-LD Schemas */}
+            {/* JSON-LD Schemas cho trang danh sách sản phẩm */}
             <script
                 type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionPageSchema) }}
             />
             <script
                 type="application/ld+json"
@@ -337,12 +316,12 @@ const ProductPage = async ({ params }: Props) => {
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(webpageSchema) }}
             />
-            {articleSchema && (
+            {/* {itemListSchema && (
                 <script
                     type="application/ld+json"
-                    dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
                 />
-            )}
+            )} */}
 
             <div className={styles.productSection}>
                 <ProductList
