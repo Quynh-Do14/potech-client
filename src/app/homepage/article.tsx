@@ -106,13 +106,13 @@ const ArticleSection = (props: Props) => {
                                 </h4>
 
                                 <div className="stats">
-                                    <div className="stat">
+                                    {/* <div className="stat">
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                             <circle cx="12" cy="12" r="10" />
                                             <polyline points="12 6 12 12 16 14" />
                                         </svg>
                                         <span>{convertDateOnlyShow(article.created_at)}</span>
-                                    </div>
+                                    </div> */}
                                     <div className="stat">
                                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                             <circle cx="12" cy="12" r="10"></circle>

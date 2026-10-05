@@ -159,6 +159,7 @@
 .stats {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 16px;
   padding-top: 12px;
   border-top: 1px solid #f0f0f0;
@@ -197,7 +198,6 @@
     grid-template-columns: repeat(2, 1fr); /* 2 columns */
     gap: 20px;
   }
-
 
   .recentContent {
     padding: 16px;
