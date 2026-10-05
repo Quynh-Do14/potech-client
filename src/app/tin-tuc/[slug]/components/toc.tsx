@@ -44,7 +44,8 @@ const TocBlog = ({ tocItems }: Props) => {
                                 <article
                                     id={`tocItem-${item.id}`}
                                     style={{ padding: '2px 0', cursor: "pointer" }}
-                                    dangerouslySetInnerHTML={{ __html: `<strong>${numbering[index]}</strong>. ${item.text}` }}
+                                    // dangerouslySetInnerHTML={{ __html: `<strong>${numbering[index]}</strong>. ${item.text}` }}
+                                    dangerouslySetInnerHTML={{ __html: `${item.text}` }}
                                 />
                             </div>
                         </li>

@@ -13,6 +13,7 @@ export interface BlogInterface {
     related_blogs: BlogInterface[]
     slug: string
     keyword: BlogKeyword[]
+    view_count: number
 }
 
 export interface BlogParams {

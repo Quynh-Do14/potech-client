@@ -201,23 +201,30 @@ const BlogContent = () => {
 
                                                 <div className={styles.stats}>
                                                     <div className={styles.stat}>
+                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                            <circle cx="12" cy="12" r="10" />
+                                                            <polyline points="12 6 12 12 16 14" />
+                                                        </svg>
+                                                        <span>{convertDateOnlyShow(article.created_at)}</span>
+                                                    </div>
+                                                    <div className={styles.stat}>
+                                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                                            <circle cx="12" cy="12" r="10"></circle>
+                                                            <circle cx="12" cy="10" r="3"></circle>
+                                                            <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"></path>
+                                                        </svg>
+                                                        <span>{article.user_name}</span>
+                                                    </div>
+                                                    {/* <div className={styles.stat}>
                                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
                                                             <path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z"
                                                                 stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                                                             <path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z"
                                                                 stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                                                         </svg>
-                                                        <span>1.2K</span>
-                                                    </div>
-                                                    <div className={styles.stat}>
-                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                                                            <path d="M21 11.5C21.1326 12.0523 21 13 21 13C21 13 18 15 12 15C6 15 3 13 3 13C3 13 2.86739 12.0523 3 11.5C3.13261 10.9477 3 10 3 10C3 10 6 8 12 8C18 8 21 10 21 10C21 10 20.8674 10.9477 21 11.5Z"
-                                                                stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                                            <path d="M21 11.5V16.5C21 16.5 18 18.5 12 18.5C6 18.5 3 16.5 3 16.5V11.5"
-                                                                stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                                        </svg>
-                                                        <span>24</span>
-                                                    </div>
+                                                        <span>{article.view_count}</span>
+                                                    </div> */}
+
                                                 </div>
                                             </div>
                                         </Link>

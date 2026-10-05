@@ -107,6 +107,13 @@ const ArticleSection = (props: Props) => {
 
                                 <div className="stats">
                                     <div className="stat">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                            <circle cx="12" cy="12" r="10" />
+                                            <polyline points="12 6 12 12 16 14" />
+                                        </svg>
+                                        <span>{convertDateOnlyShow(article.created_at)}</span>
+                                    </div>
+                                    <div className="stat">
                                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                             <circle cx="12" cy="12" r="10"></circle>
                                             <circle cx="12" cy="10" r="3"></circle>
@@ -114,6 +121,15 @@ const ArticleSection = (props: Props) => {
                                         </svg>
                                         <span>{article.user_name}</span>
                                     </div>
+                                    {/* <div className="stat">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                                            <path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z"
+                                                stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                            <path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z"
+                                                stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                        </svg>
+                                        <span>{article.view_count}</span>
+                                    </div> */}
                                 </div>
                             </div>
                         </Link>
