@@ -9,6 +9,17 @@ import banner from '@/assets/images/banner/Banner-Menu-GIoi-thieu.jpg';
 import { Endpoint } from '@/core/common/apiLink'
 import { ContentPageInterface } from '@/infrastructure/interface/contentPage/contentPage.interface'
 const baseURL = process.env.NEXT_PUBLIC_API_URL;
+const siteURL = process.env.NEXT_PUBLIC_PUBLIC_URL
+export async function generateMetadata() {
+    return {
+        title: 'Chính sách giao hàng',
+        description: 'Chính sách giao hàng tại CÔNG TY TNHH TM XNK NỘI THẤT Ô TÔ QUANG MINH',
+        alternates: {
+            canonical: `${siteURL}${ROUTE_PATH.SHIPPING_DELIVERY_INFO}`,
+        },
+    };
+}
+
 const PolicyPage = async () => {
     const config = await fetch(`${baseURL}${Endpoint.ContentPage.Get}?type=VAN_CHUYEN`, {
         cache: 'no-store', // Tắt cache

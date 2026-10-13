@@ -10,6 +10,19 @@ import { ContentPageInterface } from '@/infrastructure/interface/contentPage/con
 import { Endpoint } from '@/core/common/apiLink'
 
 const baseURL = process.env.NEXT_PUBLIC_API_URL;
+const siteURL = process.env.NEXT_PUBLIC_PUBLIC_URL;
+
+// ✅ Thêm generateMetadata để fix lỗi Non-canonical URL
+export async function generateMetadata() {
+    return {
+        title: 'Chính sách bảo mật',
+        description: 'Chính sách bảo mật tại CÔNG TY TNHH TM XNK NỘI THẤT Ô TÔ QUANG MINH',
+        alternates: {
+            canonical: `${siteURL}${ROUTE_PATH.PRIVACY_POLICY}`,
+        },
+    };
+}
+
 const PolicyPage = async () => {
     const config = await fetch(`${baseURL}${Endpoint.ContentPage.Get}?type=BAO_MAT`, {
         cache: 'no-store', // Tắt cache

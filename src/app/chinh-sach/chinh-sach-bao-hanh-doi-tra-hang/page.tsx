@@ -9,6 +9,19 @@ import banner from '@/assets/images/banner/Banner-Menu-GIoi-thieu.jpg';
 import { ContentPageInterface } from '@/infrastructure/interface/contentPage/contentPage.interface'
 import { Endpoint } from '@/core/common/apiLink'
 const baseURL = process.env.NEXT_PUBLIC_API_URL;
+const siteURL = process.env.NEXT_PUBLIC_PUBLIC_URL;
+
+// ✅ Thêm generateMetadata để fix lỗi Non-canonical URL
+export async function generateMetadata() {
+    return {
+        title: 'Chính sách bảo hành – đổi trả hàng',
+        description: 'Chính sách bảo hành và đổi trả hàng tại CÔNG TY TNHH TM XNK NỘI THẤT Ô TÔ QUANG MINH',
+        alternates: {
+            canonical: `${siteURL}${ROUTE_PATH.WARRANTY_RETURN_POLICY}`,
+        },
+    };
+}
+
 const PolicyPage = async () => {
     const config = await fetch(`${baseURL}${Endpoint.ContentPage.Get}?type=BAO_HANH`, {
         cache: 'no-store', // Tắt cache
