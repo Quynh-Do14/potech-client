@@ -6,6 +6,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { configImageURL } from '@/infrastructure/helper/helper';
 import Image from 'next/image';
+import { ProductInterface } from '@/infrastructure/interface/product/product.interface';
 
 const SlideItem = memo(({ slide, isActive, onClick }: { slide: string, isActive: boolean, onClick: () => void }) => {
     return (
@@ -35,10 +36,11 @@ type Props = {
     productName: string
     avatarImage: string
     slides: string[];
+    item: ProductInterface
 };
 
 const GalleryComponent = (props: Props) => {
-    const { productName, avatarImage, slides } = props;
+    const { productName, avatarImage, slides, item } = props;
     const [currentSlide, setCurrentSlide] = useState<number>(0);
     const [mainImage, setMainImage] = useState<string>(slides[0] || '');
     const mainImageRef = useRef<HTMLDivElement>(null);
@@ -154,6 +156,11 @@ const GalleryComponent = (props: Props) => {
         <div className={styles.galleryContainer} ref={galleryContainerRef}>
             {/* Main Image Section */}
             <div className={`${styles.mainImageContainer}`}>
+                {Number(item.price_sale) !== 0 ? (
+                    <div className={styles.goldSaleBadge}>
+                        -<span className={styles.goldBadgeText}>{Math.round((1 - item.price_sale / item.price) * 100)}%</span>
+                    </div>
+                ) : null}
                 <div
                     className={styles.mainImageWrapper}
                     ref={mainImageRef}

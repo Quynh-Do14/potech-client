@@ -193,6 +193,7 @@ const ProductSlugContent = async ({ params }: Props) => {
                                         productName={dataDetail.name}
                                         slides={dataDetail.images}
                                         avatarImage={dataDetail.image}
+                                        item={dataDetail}
                                     />
                                 </div>
 
@@ -202,14 +203,20 @@ const ProductSlugContent = async ({ params }: Props) => {
                                     <div className="space-y-4">
                                         {/* Giá sản phẩm */}
                                         <div className="flex items-center gap-2">
-                                            <span className="text-2xl font-bold text-red-600">
-                                                {formatCurrency(Number(dataDetail.price))}đ
-                                            </span>
                                             {Number(dataDetail.price_sale) ? (
-                                                <span className="text-lg text-gray-500 line-through">
-                                                    {formatCurrency(Number(dataDetail.price_sale))}đ
+                                                <>
+                                                    <span className="text-2xl font-bold text-red-600">
+                                                        {formatCurrency(Number(dataDetail.price_sale))}đ
+                                                    </span>
+                                                    <span className="text-lg text-gray-500 line-through">
+                                                        {formatCurrency(Number(dataDetail.price))}đ
+                                                    </span>
+                                                </>
+                                            ) : (
+                                                < span className="text-2xl font-bold text-red-600">
+                                                    {formatCurrency(Number(dataDetail.price))}đ
                                                 </span>
-                                            ) : null}
+                                            )}
                                         </div>
                                     </div>
                                     <div className="flex">
@@ -277,7 +284,7 @@ const ProductSlugContent = async ({ params }: Props) => {
                         </div>
                     </div>
                 </div>
-            </ClientLayout>
+            </ClientLayout >
         </>
     )
 }

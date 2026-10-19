@@ -329,7 +329,7 @@ const ProductContent = (props: Props) => {
                                         {/* Gold Sale Badge */}
                                         {Number(item.price_sale) !== 0 ? (
                                             <div className={styles.goldSaleBadge}>
-                                                <span className={styles.goldBadgeText}>GIẢM GIÁ</span>
+                                                -<span className={styles.goldBadgeText}>{Math.round((1 - Number(item.price_sale) / Number(item.price)) * 100)}%</span>
                                                 <div className={styles.goldBadgeCorner}></div>
                                             </div>
                                         ) : null}
@@ -379,10 +379,10 @@ const ProductContent = (props: Props) => {
                                                                 <span className={styles.goldCurrentPrice}>
                                                                     {formatCurrencyVND(Number(item.price_sale))}
                                                                 </span>
-                                                                <span className={styles.goldDiscountBadge}>
+                                                                {/* <span className={styles.goldDiscountBadge}>
                                                                     <span className={styles.discountIcon}>🔥</span>
                                                                     Tiết kiệm {Math.round((1 - Number(item.price_sale) / Number(item.price)) * 100)}%
-                                                                </span>
+                                                                </span> */}
                                                             </div>
                                                             <div className={styles.goldOriginalPriceWrapper}>
                                                                 <span className={styles.goldOriginalPrice}>
