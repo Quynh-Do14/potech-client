@@ -8,7 +8,7 @@ import { configImageURL, convertDateOnlyShow, convertSlug } from '@/infrastructu
 import blogService from '@/infrastructure/repository/blog/blog.service'
 import Image from 'next/image'
 import { BlogInterface } from '@/infrastructure/interface/blog/blog.interface'
-import BlogSkeleton from '@/app/tin-tuc/skeleton';
+import BlogSkeleton from '@/app/tin-tuc/components/skeleton';
 
 const BlogInProductSlug = () => {
     const [listBlog, setListBlog] = useState<Array<BlogInterface>>([])

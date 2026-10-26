@@ -1,164 +1,210 @@
-"use client"
-import BreadcrumbCommon from '@/infrastructure/common/Layouts/Breadcumb'
-import ClientLayout from '@/infrastructure/common/Layouts/Client-Layout'
-import React, { useState } from 'react'
-import styles from '@/assets/styles/pages/contact.module.css'
-import { ROUTE_PATH } from '@/core/common/appRouter'
-import banner from '@/assets/images/banner/banner-daily.jpg';
-import BannerCommon from '@/infrastructure/common/banner/BannerCommon'
-import InputTextCommon from '@/infrastructure/common/input/input-text-common'
-import contactService from '@/infrastructure/repository/contact/contact.service'
-import { useRouter } from 'next/navigation'
+import React from "react";
+import styles from "@/assets/styles/pages/contact/contact.module.css";
+import ClientLayout from "@/infrastructure/common/Layouts/Client-Layout";
+import { Metadata } from "next";
+import { ROUTE_PATH } from "@/core/common/appRouter";
+import { configImageURL } from "@/infrastructure/helper/helper";
+import ContactContent from "./content";
 
-const ContactPage = () => {
-    const [loading, setLoading] = useState<boolean>(false)
-    const [formData, setFormData] = useState({
-        name: '',
-        phone_number: '',
-        email: '',
-        message: '',
-    });
-    const router = useRouter();
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
+type Props = {
+    params: { slug: string };
+};
+
+const publicURL = process.env.NEXT_PUBLIC_PUBLIC_URL;
+
+// ✅ Fallback data SEO cho trang liên hệ
+const FALLBACK_DATA = {
+    title: 'Liên hệ POTECHVIETNAM – Hỗ trợ Phụ kiện Ô tô 24/7',
+    description: 'Liên hệ POTECHVIETNAM để được tư vấn phụ kiện ô tô chính hãng, báo giá và hỗ trợ bảo hành nhanh chóng. Hotline, email và địa chỉ cửa hàng tại đây.',
+    keywords: 'liên hệ POTECHVIETNAM, hotline phụ kiện ô tô, địa chỉ cửa hàng phụ kiện xe hơi, hỗ trợ phụ kiện ô tô, tư vấn phụ kiện xe hơi',
+};
+
+// ✅ Metadata SEO đầy đủ cho trang liên hệ
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+    const contactUrl = `${publicURL}${ROUTE_PATH.CONTACT}`;
+
+    const title = FALLBACK_DATA.title;
+    const description = FALLBACK_DATA.description;
+    const keywords = FALLBACK_DATA.keywords;
+    const imageUrl = configImageURL('/uploads/potech-logo.jpg');
+
+    return {
+        title,
+        description,
+        keywords,
+
+        openGraph: {
+            title,
+            description,
+            images: [
+                {
+                    url: imageUrl,
+                    width: 1200,
+                    height: 630,
+                    alt: title,
+                }
+            ],
+            type: 'website',
+            url: contactUrl,
+            siteName: 'POTECHVIETNAM',
+            locale: 'vi_VN',
+        },
+
+        twitter: {
+            card: 'summary_large_image',
+            title,
+            description,
+            images: [
+                {
+                    url: imageUrl,
+                    alt: title,
+                }
+            ],
+        },
+
+        alternates: {
+            canonical: contactUrl,
+        },
+
+        robots: {
+            index: true,
+            follow: true,
+            'max-image-preview': 'large',
+            'max-snippet': -1,
+            'max-video-preview': -1,
+        },
+
+        verification: {
+            google: process.env.GOOGLE_VERIFICATION,
+        },
+
+        category: 'Liên hệ',
+        authors: [{ name: 'POTECHVIETNAM' }],
+    };
+}
+
+const ContactPage = async ({ params }: Props) => {
+    const contactUrl = `${publicURL}${ROUTE_PATH.CONTACT}`;
+    const imageUrl = configImageURL('/uploads/potech-logo.jpg');
+
+    const pageName = FALLBACK_DATA?.title;
+    const pageDescription = FALLBACK_DATA?.description;
+
+    // ✅ ContactPage Schema
+    const contactPageSchema = {
+        "@context": "https://schema.org",
+        "@type": "ContactPage",
+        "@id": contactUrl,
+        "url": contactUrl,
+        "name": pageName,
+        "description": pageDescription,
+        "isPartOf": {
+            "@type": "WebSite",
+            "@id": `${publicURL}/#website`,
+            "url": publicURL,
+            "name": "POTECHVIETNAM"
+        },
+        "primaryImageOfPage": {
+            "@type": "ImageObject",
+            "url": imageUrl,
+            "caption": pageName,
+            "width": "1200",
+            "height": "630"
+        },
+        "about": {
+            "@type": "Thing",
+            "name": "Liên hệ và hỗ trợ phụ kiện ô tô"
+        },
+        "inLanguage": "vi-VN"
     };
 
-
-    const handleLoginSubmit = async () => {
-        try {
-            const response = await contactService.AddContactAdmin(
-                {
-                    email: formData.email,
-                    phone_number: formData.phone_number,
-                    name: formData.name,
-                    message: formData.message,
-                },
-                () => {
-                    setFormData({
-                        name: '',
-                        phone_number: '',
-                        email: '',
-                        message: '',
-                    })
-                },
-                setLoading
-            );
-
-            if (response) {
-                router.push(ROUTE_PATH.CONTACT);
+    // ✅ Breadcrumb 2 cấp
+    const breadcrumbSchema = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Trang chủ",
+                "item": publicURL
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Liên hệ",
+                "item": contactUrl
             }
-        } catch (error) {
-            console.error('Login error:', error);
+        ]
+    };
+
+    // ✅ WebPage
+    const webpageSchema = {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "@id": `${contactUrl}#webpage`,
+        "url": contactUrl,
+        "name": pageName,
+        "description": pageDescription,
+        "isPartOf": {
+            "@type": "WebSite",
+            "@id": `${publicURL}/#website`,
+            "url": publicURL,
+            "name": "POTECHVIETNAM"
+        },
+        "primaryImageOfPage": {
+            "@type": "ImageObject",
+            "url": imageUrl,
+            "caption": pageName,
+            "width": "1200",
+            "height": "630"
+        },
+        "about": {
+            "@type": "Thing",
+            "name": "Liên hệ và hỗ trợ phụ kiện ô tô"
         }
     };
 
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        handleLoginSubmit()
-
+    // ✅ Organization + ContactPoint (thông tin liên hệ chi tiết)
+    const organizationSchema = {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "POTECHVIETNAM",
+        "url": publicURL,
+        "logo": imageUrl,
+        "contactPoint": [
+            {
+                "@type": "ContactPoint",
+                "telephone": "+84-000-000-000", // TODO: cập nhật hotline thực tế
+                "contactType": "customer service",
+                "areaServed": "VN",
+                "availableLanguage": ["Vietnamese", "English"]
+            }
+        ],
+        "sameAs": []
     };
 
     return (
         <ClientLayout>
-            <BannerCommon
-                type='CONTACT'
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(contactPageSchema) }}
             />
-            <div className={`${styles.contactContainer} padding-common`}>
-                <BreadcrumbCommon
-                    breadcrumb={"Liên hệ"}
-                    redirect={ROUTE_PATH.CONTACT}
-                    title={'CÔNG TY TNHH THƯƠNG MẠI XUẤT NHẬP KHẨU NỘI THẤT Ô TÔ QUANG MINH'}
-                    blackColor={true}
-                />
-                <div>
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3724.1015589978592!2d105.88525!3d21.028622!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135a993964f89e5%3A0x822905422c5ee8c7!2zQ8O0bmcgdHkgVE5ISFhOSyBO4buZaSBUaOG6pXQgT3RvIFF1YW5nIE1pbmg!5e0!3m2!1svi!2sus!4v1727431103522!5m2!1svi!2sus"
-                        style={{ border: 0 }}
-                        allowFullScreen={true}
-                        loading="lazy"
-                        referrerPolicy="no-referrer-when-downgrade"
-                    ></iframe>
-                </div>
-                <div className={styles.contactTitle}>Liên hệ với chúng tôi</div>
-                <form onSubmit={handleSubmit} className={styles.contactForm}>
-                    {/* Email Field */}
-                    <div className={styles.inputGroup}>
-                        <label className={styles.inputLabel}>
-                            <span>Họ tên</span>
-                        </label>
-                        <div className={styles.inputWrapper}>
-                            <input
-                                type="text"
-                                name="name"
-                                value={formData.name}
-                                onChange={handleInputChange}
-                                className={styles.textInput}
-                                placeholder="Nhập họ và tên"
-                                required
-                            />
-                            <div className={styles.inputBorder}></div>
-                        </div>
-                    </div>
-                    <div className={styles.inputGroup}>
-                        <label className={styles.inputLabel}>
-                            <span>Email</span>
-                        </label>
-                        <div className={styles.inputWrapper}>
-                            <input
-                                type="email"
-                                name="email"
-                                value={formData.email}
-                                onChange={handleInputChange}
-                                className={styles.textInput}
-                                placeholder="Nhập Email"
-                                required
-                            />
-                            <div className={styles.inputBorder}></div>
-                        </div>
-                    </div>
-                    <div className={styles.inputGroup}>
-                        <label className={styles.inputLabel}>
-                            <span>Số điện thoại</span>
-                        </label>
-                        <div className={styles.inputWrapper}>
-                            <input
-                                type="tel"
-                                name="phone_number"
-                                value={formData.phone_number}
-                                onChange={handleInputChange}
-                                className={styles.textInput}
-                                placeholder="Nhập số điện thoại"
-                                required
-                            />
-                            <div className={styles.inputBorder}></div>
-                        </div>
-                    </div>
-                    <div className={styles.inputGroup}>
-                        <label className={styles.inputLabel}>
-                            <span>Nội dung lời nhắn</span>
-                        </label>
-                        <div className={styles.inputWrapper}>
-                            <textarea
-                                name="message"
-                                value={formData.message}
-                                onChange={handleInputChange}
-                                className={styles.textInput}
-                                required
-                            />
-                            <div className={styles.inputBorder}></div>
-                        </div>
-                    </div>
-                    <button type='submit' className={styles.submit}>
-                        <span className="btn-text">Gửi liên hệ</span>
-                    </button>
-                </form>
-            </div>
-        </ClientLayout>
-    )
-}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(webpageSchema) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+            />
+            <ContactContent />
+        </ClientLayout >
+    );
+};
 
-export default ContactPage
+export default ContactPage;

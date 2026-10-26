@@ -1,254 +1,204 @@
-'use client'
-
-import { ROUTE_PATH } from '@/core/common/appRouter'
-import BreadcrumbCommon from '@/infrastructure/common/Layouts/Breadcumb'
-import ClientLayout from '@/infrastructure/common/Layouts/Client-Layout'
-import React, { Suspense, useEffect, useLayoutEffect, useState } from 'react'
+import React from "react";
 import styles from "@/assets/styles/pages/blog/blog.module.css";
-import Link from 'next/link';
-import { configImageURL, convertDateOnlyShow, convertSlug } from '@/infrastructure/helper/helper';
-import blogService from '@/infrastructure/repository/blog/blog.service'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { useRecoilValue } from 'recoil';
-import Image from 'next/image'
-import BlogSkeleton from './skeleton'
-import { PaginationNoSizeCommon } from '@/infrastructure/common/pagination/PaginationNoSize'
-import InputSearchCommon from '@/infrastructure/common/input/input-search-common'
-import SelectSearchCommon from '@/infrastructure/common/input/select-search-common'
-import ButtonCommon from '@/infrastructure/common/button/button-common'
-import { CategoryBlogState } from '@/core/common/atoms/category/categoryState'
-import { BlogInterface } from '@/infrastructure/interface/blog/blog.interface'
+import ClientLayout from "@/infrastructure/common/Layouts/Client-Layout";
+import { Metadata } from "next";
+import { ROUTE_PATH } from "@/core/common/appRouter";
+import { configImageURL } from "@/infrastructure/helper/helper";
+import BlogList from "./components/blog-list";
 
-const BlogContent = () => {
-    const [listBlog, setListBlog] = useState<Array<BlogInterface>>([])
-    const [searchText, setSearchText] = useState<string>("");
-    const [totalPage, setTotalPage] = useState<number>(0);
-    const [total, setTotal] = useState<number>(0);
-    const [currentPage, setCurrentPage] = useState<number>(1);
-    const [totalElement, setTotalElement] = useState<number>(0);
-    const [pageSize, setPageSize] = useState<number>(8);
-    const [loading, setLoading] = useState<boolean>(false);
-    const [categoryId, setCategoryId] = useState<string>("");
-    const [initialLoading, setInitialLoading] = useState<boolean>(true);
+type Props = {
+    params: { slug: string };
+};
 
-    const router = useRouter(); // Từ next/navigation
-    const searchParams = useSearchParams(); // Dùng useSearchParams thay vì router.query
+const baseURL = process.env.NEXT_PUBLIC_API_URL;
+const publicURL = process.env.NEXT_PUBLIC_PUBLIC_URL;
 
-    // Lấy các query parameters
-    const search = searchParams?.get('search') || '';
-    const page = searchParams?.get('page') || '1';
-    const limit = searchParams?.get('limit') || '8';
-    const category_id = searchParams?.get('category_id') || '';
+// Định nghĩa fallback data cho trang tin tức
+const FALLBACK_DATA = {
+    title: 'Tin tức POTECHVIETNAM',
+    description: 'Tin tức POTECHVIETNAM - Cập nhật tin tức, bài viết, kiến thức về phụ kiện ô tô tại POTECHVIETNAM',
+    keywords: 'tin tức POTECHVIETNAM, blog POTECHVIETNAM, kiến thức phụ kiện ô tô, POTECHVIETNAM, phụ kiện xe hơi, kinh nghiệm ô tô',
+};
+// ✅ Metadata SEO đầy đủ cho trang danh sách tin tức
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+    const blogUrl = `${publicURL}${ROUTE_PATH.BLOG}`;
 
-    const categoryBlogState = useRecoilValue(CategoryBlogState).data
+    const title = FALLBACK_DATA.title;
+    const description = FALLBACK_DATA.description;
+    const keywords = FALLBACK_DATA.keywords;
+    const imageUrl = configImageURL('/uploads/potech-logo.jpg');
 
-    const onGetListBlogAsync = async ({ name = searchText, limit = pageSize, page = currentPage, category_id = categoryId }) => {
-        const param = {
-            page: page,
-            limit: limit,
-            search: name,
-            category_id: category_id
-        }
-        try {
-            await blogService.GetBlog(
-                param,
-                setLoading
-            ).then((res) => {
-                setListBlog(res.data);
-                setTotalElement(res.limit);
-                setTotalPage(res.totalPages);
-                setTotal(res.total);
-            })
-        }
-        catch (error) {
-            console.error(error)
-        }
-    }
+    return {
+        title,
+        description,
+        keywords,
 
-    const onSearch = async (name = searchText, limit = pageSize, page = 1, category_id = categoryId) => {
-        await onGetListBlogAsync({ name: name, limit: limit, page: page, category_id: category_id }).then(_ => { });
+        openGraph: {
+            title,
+            description,
+            images: [
+                {
+                    url: imageUrl,
+                    width: 1200,
+                    height: 630,
+                    alt: title,
+                }
+            ],
+            type: 'website',
+            url: blogUrl,
+            siteName: 'Tin tức POTECHVIETNAM',
+            locale: 'vi_VN',
+        },
+
+        twitter: {
+            card: 'summary_large_image',
+            title,
+            description,
+            images: [
+                {
+                    url: imageUrl,
+                    alt: title,
+                }
+            ],
+        },
+
+        alternates: {
+            canonical: blogUrl,
+        },
+
+        robots: {
+            index: true,
+            follow: true,
+            'max-image-preview': 'large',
+            'max-snippet': -1,
+            'max-video-preview': -1,
+        },
+
+        verification: {
+            google: process.env.GOOGLE_VERIFICATION,
+        },
+
+        category: 'Tin tức POTECHVIETNAM',
+        authors: [{ name: 'POTECHVIETNAM' }],
     };
-
-
-    const onSearchParam = async () => {
-        // Tạo URL mới với search params
-        const params = new URLSearchParams(searchParams?.toString() || '');
-        params.set('search', searchText);
-        params.set('category_id', categoryId);
-        params.set('page', '1'); // Reset về trang 1 khi search
-        router.push(`${ROUTE_PATH.BLOG}?${params.toString()}`);
-
-        await onSearch(searchText, pageSize, 1, categoryId).then(_ => { });
-    }
-
-    const onChangeSearchText = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchText(e.target.value);
-    };
-
-    const onChangeCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setCategoryId(e.target.value);
-    };
-
-    const onChangePage = async (page: number) => {
-        setCurrentPage(page);
-
-        // Cập nhật params với page mới
-        const params = new URLSearchParams(searchParams?.toString() || '');
-        params.set('page', page.toString());
-        router.push(`${ROUTE_PATH.BLOG}?${params.toString()}`);
-
-        await onSearch(searchText, pageSize, page, categoryId).then(_ => { });
-    }
-
-
-    useEffect(() => {
-        const parsedPage = parseInt(page) || 1;
-        const parsedLimit = parseInt(limit) || 180;
-        const parsedSearch = search || "";
-        const parsedCategory = category_id || "";
-
-        setSearchText(parsedSearch);
-        setCurrentPage(parsedPage);
-        setPageSize(parsedLimit);
-        setCategoryId(parsedCategory);
-
-        onSearch(parsedSearch, parsedLimit, parsedPage, parsedCategory);
-    }, [search, page, limit, category_id]); // Theo dõi các giá trị từ searchParams
-
-    useLayoutEffect(() => {
-        setInitialLoading(false);
-    });
-    return (
-        <ClientLayout>
-            <div className={styles.blogContainer}>
-                <div className='padding-common'>
-                    <BreadcrumbCommon
-                        breadcrumb={"Tin tức"}
-                        redirect={ROUTE_PATH.BLOG}
-                        title={"Tin tức mới nhất"}
-                        blackColor={true}
-                    />
-                    <div className={styles.newsArticleContainer}>
-                        {/* Header */}
-                        <div className={styles.newsHeader}>
-                            <div className={styles.articleBadge}>
-                                <span className={styles.badgeText}>TIN TỨC & BÀI VIẾT</span>
-                            </div>
-                            <h1 className={styles.articleTitle}>
-                                <span className={styles.highlight}>Tin Tức</span> Mới Nhất
-                            </h1>
-                        </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-2">
-                            {/* Search Input - 5/12 columns on desktop, full on mobile */}
-                            <div className="sm:col-span-5">
-                                <InputSearchCommon
-                                    placeholder={'Tìm kiếm tin tức'}
-                                    value={searchText}
-                                    onChange={onChangeSearchText}
-                                    disabled={false}
-                                />
-                            </div>
-
-                            {/* Category Select - 4/12 columns on desktop, full on mobile */}
-                            <div className="sm:col-span-4">
-                                <SelectSearchCommon
-                                    listDataOfItem={categoryBlogState}
-                                    onChange={onChangeCategory}
-                                    label={"Danh mục tin tức"}
-                                    value={categoryId}
-                                />
-                            </div>
-
-                            {/* Search Button - 3/12 columns on desktop, full on mobile */}
-                            <div className="sm:col-span-3">
-                                <ButtonCommon
-                                    onClick={onSearchParam}
-                                    title={'Tìm kiếm'}
-                                />
-                            </div>
-                        </div>
-                        {/* News Grid */}
-                        <div className={styles.recentGrid}>
-                            {loading || initialLoading
-                                ?
-                                <BlogSkeleton />
-                                :
-                                listBlog.map((article, index) => (
-                                    <article key={index} className={styles.recentCard}>
-                                        <Link
-                                            href={`${ROUTE_PATH.BLOG}/${article?.slug}.html`}
-                                            className={styles.recentLink}
-                                        >
-                                            <div className={styles.recentImage}>
-                                                <Image
-                                                    src={configImageURL(article.image)}
-                                                    alt={article.title}
-                                                    fill
-                                                    className={styles.recentImg}
-                                                />
-                                            </div>
-
-                                            <div className={styles.recentContent}>
-                                                <div className={styles.articleMeta}>
-                                                    <span className={styles.category}>{article.category_name}</span>
-                                                    <span className={styles.divider}>•</span>
-                                                    <span className={styles.date}>{convertDateOnlyShow(article.created_at)}</span>
-                                                </div>
-
-                                                <h4 className={styles.recentTitle}>
-                                                    {article.title}
-                                                </h4>
-
-                                                <div className={styles.stats}>
-                                                    {/* <div className={styles.stat}>
-                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                                            <circle cx="12" cy="12" r="10" />
-                                                            <polyline points="12 6 12 12 16 14" />
-                                                        </svg>
-                                                        <span>{convertDateOnlyShow(article.created_at)}</span>
-                                                    </div> */}
-                                                    <div className={styles.stat}>
-                                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                                            <circle cx="12" cy="12" r="10"></circle>
-                                                            <circle cx="12" cy="10" r="3"></circle>
-                                                            <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"></path>
-                                                        </svg>
-                                                        <span>{article.user_name}</span>
-                                                    </div>
-                                                    {/* <div className={styles.stat}>
-                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                                                            <path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z"
-                                                                stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                                            <path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z"
-                                                                stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                                        </svg>
-                                                        <span>{article.view_count}</span>
-                                                    </div> */}
-
-                                                </div>
-                                            </div>
-                                        </Link>
-                                    </article>
-                                ))}
-                        </div>
-                        <PaginationNoSizeCommon
-                            total={total}
-                            currentPage={Number(page)}
-                            onChangePage={onChangePage}
-                            pageSize={pageSize}
-                        />
-                    </div>
-                </div>
-            </div>
-        </ClientLayout>
-    )
 }
 
-const BlogPage = () => {
+// Component BlogPage - Trang danh sách tin tức / blog
+const BlogPage = async ({ params }: Props) => {
+    const blogUrl = `${publicURL}${ROUTE_PATH.BLOG}`;
+    const imageUrl = configImageURL('/uploads/potech-logo.jpg');
+
+    const blogName = FALLBACK_DATA?.title;
+    const blogDescription = FALLBACK_DATA?.description
+
+    // ✅ CollectionPage (trang danh mục tin tức)
+    const collectionPageSchema = {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "@id": blogUrl,
+        "url": blogUrl,
+        "name": blogName,
+        "description": blogDescription,
+        "isPartOf": {
+            "@type": "WebSite",
+            "@id": `${publicURL}/#website`,
+            "url": publicURL,
+            "name": "Tin tức POTECHVIETNAM"
+        },
+        "primaryImageOfPage": {
+            "@type": "ImageObject",
+            "url": imageUrl,
+            "caption": blogName,
+            "width": "1200",
+            "height": "630"
+        },
+        "about": {
+            "@type": "Thing",
+            "name": "Tin tức phụ kiện ô tô"
+        },
+        "inLanguage": "vi-VN"
+    };
+
+    // ✅ Breadcrumb 2 cấp
+    const breadcrumbSchema = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Trang chủ",
+                "item": publicURL
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Tin tức",
+                "item": blogUrl
+            }
+        ]
+    };
+
+    // ✅ WebPage
+    const webpageSchema = {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "@id": `${blogUrl}#webpage`,
+        "url": blogUrl,
+        "name": blogName,
+        "description": blogDescription,
+        "isPartOf": {
+            "@type": "WebSite",
+            "@id": `${publicURL}/#website`,
+            "url": publicURL,
+            "name": "Tin tức POTECHVIETNAM"
+        },
+        "primaryImageOfPage": {
+            "@type": "ImageObject",
+            "url": imageUrl,
+            "caption": blogName,
+            "width": "1200",
+            "height": "630"
+        },
+        "about": {
+            "@type": "Thing",
+            "name": "Tin tức phụ kiện ô tô"
+        }
+    };
+
+    // ✅ Organization (thương hiệu) - bổ sung cho SEO
+    const organizationSchema = {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "POTECHVIETNAM",
+        "url": publicURL,
+        "logo": imageUrl,
+        "sameAs": []
+    };
+
     return (
-        <Suspense fallback={<BlogSkeleton />}>
-            <BlogContent />
-        </Suspense>
+        <ClientLayout>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionPageSchema) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(webpageSchema) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+            />
+
+            <div className={styles.productSection}>
+                <BlogList />
+            </div>
+        </ClientLayout>
     );
 };
 
